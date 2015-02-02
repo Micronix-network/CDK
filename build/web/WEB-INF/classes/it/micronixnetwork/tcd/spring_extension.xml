@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"> -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+<!--  TEST  -->
+
+ <bean id="testTask" class="it.micronixnetwork.gaf.test.TestTask">
+ <property name="detail" value="true" />
+ <property name="runners">
+     <list>
+     </list>
+  </property>
+
+ </bean>
+
+	<bean id="tcdEngineService" class="it.micronixnetwork.tcd.service.EngineServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="tcdCarrierService" class="it.micronixnetwork.tcd.service.CarrierServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="tcdLogService" class="it.micronixnetwork.tcd.service.LogServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="tcdModelService" class="it.micronixnetwork.tcd.service.ModelServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+</beans>

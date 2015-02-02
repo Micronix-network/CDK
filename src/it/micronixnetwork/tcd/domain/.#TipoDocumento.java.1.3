@@ -1,0 +1,138 @@
+package it.micronixnetwork.tcd.domain;
+
+import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
+import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
+import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.SelectRenderer;
+import it.micronixnetwork.application.plugin.crude.annotation.ToView;
+import it.micronixnetwork.gaf.domain.Published;
+import it.micronixnetwork.gaf.util.StringUtil;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+
+
+/**
+ * The persistent class for the TipiDocumento database table.
+ *
+ */
+@Entity
+@Table(name="tipidocumento")
+public class TipoDocumento implements Serializable,Published {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@ToView
+	@InputField
+	@SearchField(filtered = false,listed=true)
+	public String id;
+
+	@ToView
+	@InputField
+	@SearchField(filtered = true)
+	public String descrizione;
+
+	@ToView(rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@InputField
+	@SelectRenderer(list = "#{'Active':'true','Disabled':'false'}")
+	@SearchField(filtered = true,rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@FieldDirective(tableCellStyle="width:30px;text-align:center",column=2)
+	public Boolean toFax;
+
+	@ToView(rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@InputField
+	@SelectRenderer(list = "#{'Active':'true','Disabled':'false'}")
+	@SearchField(filtered = true,rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@FieldDirective(tableCellStyle="width:30px;text-align:center",column=2)
+	public Boolean toEmail;
+
+	@ToView(rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@InputField
+	@SelectRenderer(list = "#{'Active':'true','Disabled':'false'}")
+	@SearchField(filtered = true,rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@FieldDirective(tableCellStyle="width:30px;text-align:center",column=2)
+	public Boolean toArchive;
+
+	@ToView(rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@InputField
+	@SelectRenderer(list = "#{'Active':'true','Disabled':'false'}")
+	@SearchField(filtered = true,rule="#{\"true\":{'Active','img_green'}, \"false\":{'Disabled','img_red'}}")
+	@FieldDirective(tableCellStyle="width:30px;text-align:center",column=2)
+	public Boolean toPrinter;
+
+	public String tagREGexp = "INV-(.*)/--"; //primo tipo usato per i test iniziali
+
+	public TipoDocumento() {
+	}
+
+	public String getId() {
+		return this.id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getDescrizione() {
+		return this.descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+	public void setToEmail(Boolean toEmail) {
+	    this.toEmail = toEmail;
+	}
+
+	public void setToFax(Boolean toFax) {
+	    this.toFax = toFax;
+	}
+
+	public Boolean getToEmail() {
+	    return toEmail;
+	}
+
+	public Boolean getToFax() {
+	    return toFax;
+	}
+
+	public void setToArchive(Boolean toArchive) {
+	    this.toArchive = toArchive;
+	}
+
+	public void setToPrinter(Boolean toPrinter) {
+	    this.toPrinter = toPrinter;
+	}
+
+	public Boolean getToArchive() {
+	    return toArchive;
+	}
+
+	public Boolean getToPrinter() {
+	    return toPrinter;
+	}
+
+	public String getTagREGexp() {
+		if (this.tagREGexp==null)
+			this.tagREGexp="INV-(.*)/--";
+		return tagREGexp;
+	}
+
+	public void setTagREGexp(String tagREGexp) {
+		this.tagREGexp = tagREGexp;
+	}
+	
+	@Override
+	public String toString() {
+	    if(StringUtil.EmptyOrNull(descrizione))
+		return id;
+	    return descrizione;
+	}
+
+}
