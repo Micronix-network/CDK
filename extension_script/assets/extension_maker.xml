@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--replaceregexp byline="true"
+		        match="BUILD_DATE = '([0-9\.]+)'" 
+		        replace="BUILD_DATE = '${tdate}'">
+		        <fileset dir="src/my/package">
+		            <include name="Application.java" />
+		        </fileset>
+		    </replaceregexp-->
+
+<project name="Extension Maker">
+	<property file="assets/properties/gas.properties" />
+	<property name="app.name" value="" />
+	<property name="build.dir" value="../build/web/WEB-INF/classes" />
+	<property name="src.dir" value="../src" />
+	<property name="dist.dir" value="extensions" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="assets/ant/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+
+	<taskdef resource="com/sardak/antform/taskdefs.properties" classpath="assets/ant/antform.jar" />
+
+	<target name="version_set" unless="version">
+		<property name="version" value="0.00" />
+	</target>
+
+	<target name="versioning" if="prjname" depends="version_set">
+		<echo message="Versione ${version} del plugin" />
+
+		<tstamp>
+			<format property="tdate" pattern="MM.dd.yyyy hh:mm" />
+		</tstamp>
+
+		<math datatype="float" result="calc" operation="+" operand1="${version}" operand2="0.011" />
+
+		<echo message="Nuova versione ${calc} del plugin" />
+
+		<propertyregex property="new_ver" input="${calc}" regexp="([0-9]\.[0-9][0-9])[0-9]*" select="\1" casesensitive="false" />
+
+		<echo message="Nuova versione ${new_ver} del plugin" />
+		<propertyset id="tdate" />
+
+		<echo>Updating version to current datetime: ${tdate}</echo>
+
+
+		<property name="work_version" value="${new_ver}" />
+
+		<antform title="Plugin ${prjname}" stylesheet="style.test" image="logo.png" width="500" height="300">
+			<label>Aggiorno la versione ${version} o creo la nuova versione ${new_ver} ?</label>
+			<radioSelectionProperty label="Versione: " property="work_version" values="${version},${new_ver}" columns="2" />
+			<controlbar>
+				<button label="ANNULLA" type="cancel" />
+				<button label="VERSIONA" type="ok" target="do_version" />
+			</controlbar>
+		</antform>
+	</target>
+
+
+	<target name="do_version">
+		<echo message="${work_version}" />
+
+		<fail unless="work_version" message="version not setted" />
+
+		<propertyfile file="assets/properties/${prjname}.properties">
+			<entry key="version" value="${work_version}" />
+		</propertyfile>
+
+		<if>
+			<equals arg1="${work_version}" arg2="${new_ver}" />
+			<then>
+				<mkdir dir="${dist.dir}/${prjname}/ver_${work_version}" />
+				<antcall target="${prjname}" />
+			</then>
+			<else>
+				<delete dir="${dist.dir}/${prjname}/ver_${work_version}" includeemptydirs="true" />
+				<antcall target="${prjname}" />
+			</else>
+		</if>
+                
+		<antcall target="jar" />
+	</target>
+
+	<target name="jar" description="crea il jar del plugin" if="prjname">
+		<echo message="Deploying ${prjname} plugin JAR" />
+		<echo message="Versione ${work_version} del plugin" />
+		<mkdir dir="${dist.dir}/${prjname}/ver_${work_version}" />
+		<copy todir="${dist.dir}/${prjname}/ver_${work_version}" includeEmptyDirs="yes">
+			<fileset dir="${build.dir}/">
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.class" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.properties" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.xml" />
+				<exclude name="it/micronixnetwork/application/plugin/${prjname}/**/dev.xml" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.jsp" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.ftl" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.js" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.css" />
+				<include name="**/${prjname}.tld" />
+				<include name="**/${prjname}.png" />
+				<include name="${prjname}*_plugin.xml" />
+			</fileset>
+		</copy>
+		<copy file="${build.dir}/struts-plugin_${prjname}.xml" tofile="${dist.dir}/${prjname}/ver_${work_version}/struts-plugin.xml" failonerror="false" />
+		<jar jarfile="${dist.dir}/${prjname}/ver_${work_version}/${prjname}_plugin_${work_version}.jar">
+			<fileset dir="${dist.dir}/${prjname}/ver_${work_version}">
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.class" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.properties" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.xml" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.jsp" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.xsl" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.ftl" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.js" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.css" />
+				<include name="**/${prjname}.png" />
+				<include name="**/${prjname}.tld" />
+				<include name="struts-plugin.xml" />
+			</fileset>
+
+			<manifest>
+				<attribute name="Implementation-Vendor" value="Micronixnet" />
+				<attribute name="Implementation-Title" value="${app.name} plugin" />
+				<attribute name="Implementation-Version" value="${version}" />
+			</manifest>
+		</jar>
+		<delete dir="${dist.dir}/${prjname}/ver_${work_version}" includeemptydirs="true">
+			<exclude name="**/*.jar" />
+		</delete>
+                <copy file="assets/${prjname}.readme" tofile="${dist.dir}/${prjname}/ver_${work_version}/${prjname}.readme" failonerror="false"/>
+		<antcall target="sql" />
+	</target>
+
+	<target name="sql" description="copia eventuali script sql">
+		<echo message="Export sql script per ${prjname} plugin" />
+		<mkdir dir="${dist.dir}/${prjname}/ver_${work_version}/sql" />
+		<copy todir="${dist.dir}/${prjname}/ver_${work_version}/sql" includeEmptyDirs="yes">
+			<fileset dir="sql/${prjname}/" erroronmissingdir="false">
+				<patternset>
+					<include name="**/*.sql" />
+				</patternset>
+			</fileset>
+		</copy>
+		<antcall target="man" />
+	</target>
+
+	<target name="man" description="Aggiunge file di aiuto e documentazione">
+		<echo message="Export documentazione per ${prjname} plugin" />
+		<mkdir dir="${dist.dir}/${prjname}/ver_${work_version}/info" />
+		<copy todir="${dist.dir}/${prjname}/ver_${work_version}/info" includeEmptyDirs="yes">
+			<fileset dir="man/${prjname}/" erroronmissingdir="false">
+				<patternset>
+					<include name="**/*" />
+				</patternset>
+			</fileset>
+		</copy>
+		<antcall target="src" />
+	</target>
+
+	<target name="src" description="Copia del sorgente">
+		<echo message="Export souce ${prjname} ves. ${work_version} plugin" />
+		<mkdir dir="${dist.dir}/${prjname}/ver_${work_version}/src/java/" />
+		<copy todir="${dist.dir}/${prjname}/ver_${work_version}/src/java/" includeEmptyDirs="yes">
+			<fileset dir="${src.dir}/">
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.java" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.properties" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.xml" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.css" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.xsl" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.ftl" />
+				<include name="it/micronixnetwork/application/plugin/${prjname}/**/*.js" />
+				<include name="**/${prjname}.tld" />
+				<include name="**/${prjname}.png" />
+				<include name="${prjname}*_plugin.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="init" description="Inizializzazione dist plugin">
+		<property file="assets/properties/${prjname}.properties" />
+		<antcall target="versioning" />
+	</target>
+
+</project>

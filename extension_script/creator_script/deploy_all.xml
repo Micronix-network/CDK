@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="deploy_extensions" basedir=".." default="all">
+	<target name="all" description="ext_description">
+		<ant  antfile = "extension_script/barchart_builder.xml" target = "deploy_to_GAS" inheritall="false"/> 
+		<ant  antfile = "extension_script/gauge_builder.xml" target = "deploy_to_GAS" inheritall="false"/> 
+		<ant  antfile = "extension_script/membership_builder.xml" target = "deploy_to_GAS" inheritall="false"/>
+		<ant  antfile = "extension_script/crude_builder.xml" target = "deploy_to_GAS" inheritall="false"/>
+		<ant  antfile = "extension_script/fragment_builder.xml" target = "deploy_to_GAS" inheritall="false"/>
+	</target>
+</project>

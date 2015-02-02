@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="crude_extension" basedir="." default="init">
+	
+	<import file="assets/extension_maker.xml" />
+	<property name="prjname" value="crude" />
+	
+	<target name="crude" description="ext_description">
+            <mkdir dir="${dist.dir}/crude/ver_${work_version}/crude_dep" />
+		<copy todir="${dist.dir}/crude/ver_${work_version}/crude_dep" includeEmptyDirs="yes">
+			<fileset dir="assets/crude_dep">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+	
+</project>

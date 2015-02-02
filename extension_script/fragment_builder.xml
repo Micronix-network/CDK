@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="fragment_extension" basedir="." default="init">
+	
+	<import file="assets/extension_maker.xml" />
+	<property name="prjname" value="fragment" />
+	
+	<target name="fragment" description="ext_description">
+	</target>
+	
+</project>

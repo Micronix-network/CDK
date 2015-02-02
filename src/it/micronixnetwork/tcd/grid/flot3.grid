@@ -1,0 +1,108 @@
+<#assign gui_theme=themeName!'default'/>
+<#assign ctx= request.contextPath/>
+
+<#assign east_size='300'/>
+
+<#if layoutConfigLoader.getLayoutZone(cards_domain,'east_zone')??>
+	<#assign east_size=layoutConfigLoader.getLayoutZone(cards_domain,'east_zone').width!'0'/>
+</#if>
+
+<#assign east_south_size='300'/>
+
+<#if layoutConfigLoader.getLayoutZone(cards_domain,'east_south_zone')??>
+	<#assign east_south_size=layoutConfigLoader.getLayoutZone(cards_domain,'east_south_zone').height!'0'/>
+</#if>
+
+<script type="text/javascript" src="/${gui_theme}/js/jquery.layout.js"></script>
+<link rel="stylesheet" type="text/css" href="/${gui_theme}/css/layout-plg.css">
+
+<style type="text/css">
+	.pane {}
+</style>
+
+<div id="dynamic_layout" style="height:${contentHeight}px">
+    <@gaf.placeCards  zone="center_zone" layout="${cards_domain}" className="pane ui-layout-center"/>
+    <div class="ui-layout-east">
+        <@gaf.placeCards  zone="east_center_zone" layout="${cards_domain}" className="pane ui-layout-center"/>
+        <@gaf.placeCards  zone="east_south_zone" layout="${cards_domain}" className="pane ui-layout-south"/>
+    </div>
+</div>
+
+
+<script type="text/javascript"> 
+        listen=false;
+	$lay_out_float=$('#dynamic_layout').layout({
+		minSize:			100	// ALL panes
+		,east__size:			${east_size}
+		,stateManagement__enabled:	true
+		, spacing_open:			3
+		,spacing_closed:		3
+		,hideTogglerOnSlide: 		true
+		,center__onresize_end : function(){
+			jQuery.cardsStack.trigger("layout_resize");	
+                    }
+		,east__onresize_end: function(pane, $Pane){
+                    var layout_state=$('#dynamic_layout').layout().state;
+                    if(listen){
+                        jQuery.ajax({ 
+                            type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+                            data: "optType=2&zoneName=east_zone&layout=${cards_domain}&zoneWidth="+layout_state.east.size,
+                            success: function(msg){}
+                        });
+                    }
+		}
+		//east Sidebar options
+		,east__childOptions:{
+                    minSize:			50	// ALL panes
+		    ,spacing_open:		3
+		    ,spacing_closed:		3
+                    ,south__size:		${east_south_size}
+                    ,hideTogglerOnSlide: 	true
+                    ,center__onresize_end: function (pane, $Pane) {
+			jQuery.cardsStack.trigger("layout_resize");	
+				}
+                    ,south__onresize_end: function (pane, $Pane) {
+                        if(listen){
+                            jQuery.ajax({ 
+                                type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+                                data: "optType=2&zoneName=east_south_zone&layout=${cards_domain}&zoneHeight="+$Pane.height(),
+                                success: function(msg){}
+                            });
+                        }
+                    }	
+		}
+        });
+
+	var contentTopBottomSpace=$('.page-grid-content').outerHeight()-$('.page-grid-content').height();
+	var cdelta_height=cdrawer_height+$('.page-header').outerHeight()+contentTopBottomSpace;
+	var _$resize_lock_var;
+	var $lay_out_float;
+	
+	function resize_layout(){
+		var content_height=${contentHeight}-cdrawer_height-contentTopBottomSpace;
+		var browser_heigth=$(window).height()-cdelta_height;
+		if(browser_heigth>content_height){
+			$('#dynamic_layout').outerHeight(browser_heigth);
+			
+		}else{
+			$('#dynamic_layout').outerHeight(content_height);
+		}
+		if($lay_out_float!=null) $lay_out_float.resizeAll();
+	}
+	
+	$(document).ready(function(){ 
+	 	 resize_layout();
+	 	 
+		 $(window).resize(function() {
+		    clearTimeout(_$resize_lock_var);
+		    _$resize_lock_var = setTimeout(resize_layout, 500);   
+		 });
+                 
+                 listen=true;
+	 });
+	 
+</script>
+
+	
+        
+

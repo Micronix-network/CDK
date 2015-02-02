@@ -1,0 +1,196 @@
+<#assign north_size='0'/>
+<#assign south_size='0'/>
+<#assign east_size='0'/>
+<#assign west_size='0'/>
+<#assign west_closed='true'/>
+<#assign east_closed='true'/>
+<#assign north_closed='true'/>
+<#assign south_closed='true'/>
+
+<#if action.layoutConfigLoader.getLayoutZone(cards_domain,'north_zone')??>
+	<#assign north_size=action.layoutConfigLoader.getLayoutZone(cards_domain,'north_zone').height!'0'/>
+	<#assign north_closed=action.layoutConfigLoader.getLayoutZone(cards_domain,'north_zone').closed!'true'/>
+</#if>
+
+<#if action.layoutConfigLoader.getLayoutZone(cards_domain,'south_zone')??>
+	<#assign south_size=action.layoutConfigLoader.getLayoutZone(cards_domain,'south_zone').height!'0'/>
+	<#assign south_closed=action.layoutConfigLoader.getLayoutZone(cards_domain,'south_zone').closed!'true'/>
+</#if>
+
+<#if action.layoutConfigLoader.getLayoutZone(cards_domain,'east_zone')??>
+	<#assign east_size=action.layoutConfigLoader.getLayoutZone(cards_domain,'east_zone').width!'0'/>
+	<#assign east_closed=action.layoutConfigLoader.getLayoutZone(cards_domain,'east_zone').closed!'true'/>
+</#if>
+
+<#if action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone')??>
+	<#assign west_size=action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone').width!'0'/>
+	<#assign west_closed=action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone').closed!'true'/>
+</#if>
+
+
+<style>
+
+
+</style>
+
+<div id="dynamic_layout" style="height:${contentHeight}px;filter: alpha(opacity=50);opacity:0.0">
+	<@gaf.placeCards  zone="west_zone" layout="${cards_domain}" className="ui-layout-west"/>
+	<@gaf.placeCards  zone="est_zone" layout="${cards_domain}" className="ui-layout-est"/>
+	<@gaf.placeCards  zone="center_zone" layout="${cards_domain}" className="ui-layout-center"/>
+	<@gaf.placeCards  zone="north_zone" layout="${cards_domain}" className="ui-layout-north"/>
+	<@gaf.placeCards  zone="south_zone" layout="${cards_domain}" className="ui-layout-south"/>
+</div>	
+
+<script type="text/javascript">
+	// $(document).ready(function(){ 
+		 $('#dynamic_layout').layout({
+			   defaults: {
+				     fxSpeed:               "fast",
+				     spacing_closed:        4,
+				     initClosed:            true,
+				     spacing_open : 4
+				   }
+				,  north: {
+					 size : ${north_size},
+					 resizable : false,
+					 closable:false,
+					 initClosed: ${north_closed},
+				     onresize_end : function(){
+				    	var layout_state=$('#dynamic_layout').layout().getState();
+				    	jQuery.ajax({ 
+				    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+				    		data: "optType=2&zoneName=north_zone&layout=${cards_domain}&zoneHeight="+layout_state.north.size,
+				    		success: function(msg){
+				 					//alert( "Data Saved: " + msg );
+				 				}
+				 		});
+				     },
+				     onclose_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=north_zone&layout=${cards_domain}&zoneClosed=true",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     },
+				     onopen_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=north_zone&layout=${cards_domain}&zoneClosed=false",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     }
+				   }
+				,  south: {
+					size : ${south_size},
+					resizable : false,
+					closable:false,
+					initClosed: ${south_closed},
+				    onresize_end : function(){
+				    	  var layout_state=$('#dynamic_layout').layout().getState();
+					    	jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=south_zone&layout=${cards_domain}&zoneHeight="+layout_state.south.size,
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+				    	  },
+				     onclose_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=south_zone&layout=${cards_domain}&zoneClosed=true",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     },
+				     onopen_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=south_zone&layout=${cards_domain}&zoneClosed=false",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     }
+				   }
+				,  east: {
+					  size : ${east_size},
+					  resizable : false,
+					  closable:false,
+					  initClosed: ${east_closed},
+				      onresize_end : function(){
+				    	  var layout_state=$('#dynamic_layout').layout().getState();
+					    	jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=east_zone&layout=${cards_domain}&zoneWidth="+layout_state.east.size,
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+				    	  },
+				     onclose_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=east_zone&layout=${cards_domain}&zoneClosed=true",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     },
+				     onopen_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=east_zone&layout=${cards_domain}&zoneClosed=false",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     }
+				   }
+				,  west: {
+					  size : ${west_size},
+					  resizable : false,
+					  closable:false,
+					  initClosed: ${west_closed},
+				      onresize_end : function(){
+				    	  var layout_state=$('#dynamic_layout').layout().getState();
+					    	jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=west_zone&layout=${cards_domain}&zoneWidth="+layout_state.west.size,
+					    		success: function(msg){
+					    				//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+				      },
+				     onclose_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=west_zone&layout=${cards_domain}&zoneClosed=true",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     },
+				     onopen_end : function(){
+				    	 jQuery.ajax({ 
+					    		type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+					    		data: "optType=2&zoneName=west_zone&layout=${cards_domain}&zoneClosed=false",
+					    		success: function(msg){
+					 					//alert( "Data Saved: " + msg );
+					 				}
+					 		});
+					     }
+				   }
+				});
+		 $('#dynamic_layout').animate({opacity:1.0},1000);
+	// });
+</script>
+
+	
+        
+
