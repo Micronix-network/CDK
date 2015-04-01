@@ -68,8 +68,7 @@ padding:4px;
 }
 
 .${cardId}_page {
-	position: absolute;
-    top: 0;
+    position: absolute;
     left: 0;
     width: 100%;
     -webkit-transition: all 0.4s ease-in-out;

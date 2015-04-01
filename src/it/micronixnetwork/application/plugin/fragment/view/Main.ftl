@@ -1,9 +1,8 @@
 <#assign external_file = action.getCardParam('external_file')!'false'/>
 
 <style>
-.${cardId}_fragment_error{
+.fragment_error{
 		background-color: rgba(255, 0, 0, 0.05);
-                overflow-x: scroll;  
 		min-height:100px;
 		font-size: 14px;
 		margin-left:5px;
@@ -20,7 +19,6 @@
 		-moz-box-shadow: inset 0 0 3px #aaa;
 		-webkit-box-shadow: inset 0 0 3px #aaa;
 		box-shadow: inner 0 0 3px #aaa;
-                
 }
 
 </style>
@@ -39,7 +37,7 @@
 </#if> 
 <#recover>		
 	  	<h1>Error: fragment loading</h1>
-	  	<div class="${cardId}_fragment_error">${.error}</div>
+	  	<div class="fragment_error">${.error}</div>
 	</div>
 </#attempt>
 

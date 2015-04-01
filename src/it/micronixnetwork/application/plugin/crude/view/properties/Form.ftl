@@ -3,7 +3,7 @@
 <#assign yes_noHash = {'false':'${action.getText("yes.or.no.no", "No")}','true':'${action.getText("yes.or.no.yes", "Yes")}'}/>
 <#assign activeHash={'true': '${action.getText("generic.properties.dialog.active", "Active")}', 'false': '${action.getText("generic.properties.dialog.inactive", "Inactive")}'}/>
 <#assign activeHash={'5':'5','10':'10', '15':'15', '20':'20', '30':'30', '50':'50', '80':'80', '100':'100'}/> 
-<#assign appRoles=allRoles/>
+<#assign appRoles=allRoles!{}/>
  
 <style type="text/css">
 #propstabs-5_${cardId} .CodeMirror-scroll {

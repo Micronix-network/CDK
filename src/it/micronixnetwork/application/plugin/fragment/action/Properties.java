@@ -14,7 +14,7 @@ public class Properties extends RetriveProperties {
     private static final long serialVersionUID = -2911508196730073594L;
     
     public List<String> getFragments() throws ServiceException {
-	File baseDirectory=new File(getApplicationPath()+"/WEB-INF/view/fragments");
+	File baseDirectory=new File(getApplicationPath()+"WEB-INF/view/fragments");
 	debug(baseDirectory.getAbsolutePath());
 	//return new ArrayList<File>();
 	List<String> result=new ArrayList<String>();

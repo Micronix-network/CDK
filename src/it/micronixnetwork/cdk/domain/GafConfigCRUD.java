@@ -1,4 +1,4 @@
-package it.micronixnetwork.tcd.domain;
+package it.micronixnetwork.cdk.domain;
 
 import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "gaf_configs")
-public class GafConfigCrud implements Published{
+public class GafConfigCRUD implements Published{
 
 
 	@Id
