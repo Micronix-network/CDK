@@ -1,114 +1,132 @@
+<#macro notify_observer crud_observers event_name cardId="${cardId}" >
+    <#list crud_observers?split(",") as observer>
+    try{
+        ${observer}_controller_event('${cardId}',$(this),'${event_name}');
+    }catch(err){
+        //console.log(err)
+    };
+    </#list>
+</#macro>
+
 <#macro objDelete prototype cardId="${cardId}" >		
-	<#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
-	$('#${cardId}_delete_button').click(function(){
-			// Controllo presenza checkbox selezionati
-			active=false;
-		  	$('.${cardId}_${prototypeName}_selectable').each(function(){
-		  	  if($(this).attr('checked')=='checked'){
-		  		  active=true;
-		  	  };
-		  	  return !active;
-		  	});
-		  	if(active){
-				${cardId}_show_overlay(true,'search_ui');
-				var card_width=$("#${cardId}_card").width();
-				$trg=$('#${cardId}_remove_object_confirm_dialog');
-				var left=(card_width-$trg.width())/2;
-				$trg.css('left',left);
-				$trg.animate({top: "0"}, 500);
-		  	}
-			return false;
-		});
-	
-		$('#${cardId}_${prototypeName}_object_delete_cancel_button').click(function(){
-			$('#${cardId}_remove_object_confirm_dialog').animate({top: "-100%"}, 500,function(){
-				${cardId}_show_overlay(false,'search_ui');
-			});
-		});
-	
-		$('#${cardId}_${prototypeName}_object_delete_apply_button').click(function(){
-			${cardId}_set_list_message("");
-			$('#${cardId}_remove_object_confirm_dialog').animate({top: "-100%"}, 500,function(){
-				${cardId}_show_overlay(false,'search_ui');
-				$('#${cardId}_remove_object_action').show();
-				clearForm($('#${cardId}_remove_object_form'));
-				addHiddenToForm($('#${cardId}_remove_object_form'),'targetClass','${prototype}');
-				$('.${cardId}_${prototypeName}_selectable').each(function(){
-			  	  if($(this).attr('checked')=='checked'){
-			  		${cardId}_fillPrimarykeyData($(this).parent().parent().parent('tr'),$('#${cardId}_remove_object_form'));
-			  	  };
-				});
-				callEvent("${cardId}_remove_object_refresh");
-			});
-		});
+    <#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
+    $('#${cardId}_delete_button').click(function(){
+        // Controllo presenza checkbox selezionati
+        active=false;
+        $('.${cardId}_${prototypeName}_selectable').each(function(){
+          if($(this).attr('checked')=='checked'){
+                  active=true;
+          };
+          return !active;
+        });
+        if(active){
+            ${cardId}_show_overlay(true,'search_ui');
+            var card_width=$("#${cardId}_card").width();
+            $trg=$('#${cardId}_remove_object_confirm_dialog');
+            var left=(card_width-$trg.width())/2;
+            $trg.css('left',left);
+            $trg.animate({top: "0"}, 500);
+        }
+        return false;
+    });
+
+    $('#${cardId}_${prototypeName}_object_delete_cancel_button').click(function(){
+        $('#${cardId}_remove_object_confirm_dialog').animate({top: "-100%"}, 500,function(){
+                ${cardId}_show_overlay(false,'search_ui');
+        });
+    });
+
+    $('#${cardId}_${prototypeName}_object_delete_apply_button').click(function(){
+        ${cardId}_set_list_message("");
+        $('#${cardId}_remove_object_confirm_dialog').animate({top: "-100%"}, 500,function(){
+            ${cardId}_show_overlay(false,'search_ui');
+            $('#${cardId}_remove_object_action').show();
+            clearForm($('#${cardId}_remove_object_form'));
+            addHiddenToForm($('#${cardId}_remove_object_form'),'targetClass','${prototype}');
+            $('.${cardId}_${prototypeName}_selectable').each(function(){
+              if($(this).attr('checked')=='checked'){
+                    ${cardId}_fillPrimarykeyData($(this).parent().parent().parent('tr'),$('#${cardId}_remove_object_form'));
+              };
+            });
+            callEvent("${cardId}_remove_object_refresh");
+        });
+    });
 
 		
 </#macro>	
 
-<#macro objInsert prototype cardId="${cardId}" >		
-	<#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
-	$('#${cardId}_create_button').click(function(){
-			$('#${cardId}_${prototypeName}_new_ui_new_object_action').show();
-			clearForm($('#${cardId}_get_object_form'));
-			copyForm($("#${cardId}_get_object_form"), $("#${cardId}_${prototypeName}_form"));
-			//addHiddenToForm($('#${cardId}_get_object_form'),'targetClass','${prototype}');
-			$('#${cardId}_${prototypeName}_new_ui_insert_object_action_content').empty();
-			$('#${cardId}_${prototypeName}_new_ui_get_obj_action_content').empty();
-			$('#${cardId}_${prototypeName}_new_ui_insert_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash"><@s.text name="crude.form.rquired"/></span>');
-			callEvent("${cardId}_${prototypeName}_new_ui_new_object_refresh");
-			${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${prototypeName}_new_object_pane'), 'right');
-			$('#${cardId}_${prototypeName}_form [name="inCreate"]').val('true');
-		});
+<#macro objInsert prototype cardId="${cardId}" save_and_go=false>		
+    <#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
+    <#if save_and_go>
+    $('#${cardId}_create_button').click(function(){
+        clearForm($('#${cardId}_get_object_form'));
+        copyForm($("#${cardId}_get_object_form"), $("#${cardId}_${prototypeName}_form"));
+        callEvent("${cardId}_${prototypeName}_new_ui_new_object_refresh");
+        });
+    <#else>
+    $('#${cardId}_create_button').click(function(){
+        $('#${cardId}_${prototypeName}_new_ui_new_object_action').show();
+        clearForm($('#${cardId}_get_object_form'));
+        copyForm($("#${cardId}_get_object_form"), $("#${cardId}_${prototypeName}_form"));
+        //addHiddenToForm($('#${cardId}_get_object_form'),'targetClass','${prototype}');
+        $('#${cardId}_${prototypeName}_new_ui_insert_object_action_content').empty();
+        $('#${cardId}_${prototypeName}_new_ui_get_obj_action_content').empty();
+        $('#${cardId}_${prototypeName}_new_ui_insert_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
+        callEvent("${cardId}_${prototypeName}_new_ui_new_object_refresh");
+        ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${prototypeName}_new_object_pane'), 'right');
+        $('#${cardId}_${prototypeName}_form [name="inCreate"]').val('true');
+    });
+    </#if>
 		
-		$('#${cardId}_${prototypeName}_new_cancel_button,#${cardId}_${prototypeName}_new_end_button').click(function(){
-			   ${cardId}_slideToPage($('#${cardId}_${prototypeName}_new_object_pane'),$('#${cardId}_list_slide'), 'left');
-		});
+    $('#${cardId}_${prototypeName}_new_cancel_button,#${cardId}_${prototypeName}_new_end_button').click(function(){
+        ${cardId}_slideToPage($('#${cardId}_${prototypeName}_new_object_pane'),$('#${cardId}_list_slide'), 'left');
+    });
 		
-		$('#${cardId}_${prototypeName}_new_update_button').click(function(){
-			$('#${cardId}_${prototypeName}_new_ui_update_object_action').show();
-			clearForm($("#${cardId}_object_form_post"));
-			copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
-			addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
-			callEvent("${cardId}_${prototypeName}_new_ui_update_object_refresh");
-		});
+    $('#${cardId}_${prototypeName}_new_update_button').click(function(){
+        $('#${cardId}_${prototypeName}_new_ui_update_object_action').show();
+        clearForm($("#${cardId}_object_form_post"));
+        copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
+        addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
+        callEvent("${cardId}_${prototypeName}_new_ui_update_object_refresh");
+    });
 		
-		$('#${cardId}_${prototypeName}_new_save_button').click(function(){
-			$('#${cardId}_${prototypeName}_new_ui_insert_object_action').show();
-			clearForm($("#${cardId}_object_form_post"));
-			copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
-			addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
-			callEvent("${cardId}_${prototypeName}_new_ui_insert_object_refresh");
-		});
+    $('#${cardId}_${prototypeName}_new_save_button').click(function(){
+        $('#${cardId}_${prototypeName}_new_ui_insert_object_action').show();
+        clearForm($("#${cardId}_object_form_post"));
+        copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
+        addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
+        callEvent("${cardId}_${prototypeName}_new_ui_insert_object_refresh");
+    });
 </#macro>	
 
 <#macro objUpdate prototype cardId="${cardId}" directEdit="false">		
-	<#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
-	$('#${cardId}_${prototypeName}_info_cancel_button').click(function(){
-			$('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
-			$('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
-			<#if directEdit="false">
-				callEvent("${cardId}_${prototypeName}_view_ui_info_object_refresh");
-			<#else>
-				${cardId}_slideToPage($('#${cardId}_${prototypeName}_view_object_pane'),$('#${cardId}_list_slide'), 'left');
-			</#if>
-		});
+    <#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
+    $('#${cardId}_${prototypeName}_info_cancel_button').click(function(){
+        $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
+        $('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
+        <#if directEdit="false">
+                callEvent("${cardId}_${prototypeName}_view_ui_info_object_refresh");
+        <#else>
+                ${cardId}_slideToPage($('#${cardId}_${prototypeName}_view_object_pane'),$('#${cardId}_list_slide'), 'left');
+        </#if>
+    });
 		
-		$('#${cardId}_${prototypeName}_info_modify_button').click(function(){
-			$('#${cardId}_${prototypeName}_view_ui_info_obj_action').hide();
-			$('#${cardId}_${prototypeName}_view_ui_info_obj_action_content').empty();
-			$('#${cardId}_${prototypeName}_view_ui_get_obj_action').show();
-			$('#${cardId}_${prototypeName}_view_ui_update_object_action').show();
-			$('#${cardId}_${prototypeName}_view_ui_update_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash"><@s.text name="crude.form.rquired"/></span>');
-			callEvent("${cardId}_${prototypeName}_view_ui_get_object_refresh");
-		});
+    $('#${cardId}_${prototypeName}_info_modify_button').click(function(){
+        $('#${cardId}_${prototypeName}_view_ui_info_obj_action').hide();
+        $('#${cardId}_${prototypeName}_view_ui_info_obj_action_content').empty();
+        $('#${cardId}_${prototypeName}_view_ui_get_obj_action').show();
+        $('#${cardId}_${prototypeName}_view_ui_update_object_action').show();
+        $('#${cardId}_${prototypeName}_view_ui_update_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
+        callEvent("${cardId}_${prototypeName}_view_ui_get_object_refresh");
+    });
 		
-		$('#${cardId}_${prototypeName}_info_update_button').click(function(){
-			clearForm($("#${cardId}_object_form_post"));
-			$("#${cardId}_view_main_object_form .right_input_multiselect.TakeOver option").attr("selected", "selected");
-			copyForm($("#${cardId}_object_form_post"), $("#${cardId}_view_ui_form"));
-			addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
-			callEvent("${cardId}_${prototypeName}_view_ui_update_object_refresh");
-		});
+    $('#${cardId}_${prototypeName}_info_update_button').click(function(){
+        clearForm($("#${cardId}_object_form_post"));
+        $("#${cardId}_view_main_object_form .right_input_multiselect.TakeOver option").attr("selected", "selected");
+        copyForm($("#${cardId}_object_form_post"), $("#${cardId}_view_ui_form"));
+        addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
+        callEvent("${cardId}_${prototypeName}_view_ui_update_object_refresh");
+    });
 </#macro>	
 
 <#macro formatFunctions cardId="${cardId}">		
@@ -116,95 +134,94 @@
  * Formatta un campo di input di tipo valuta
  */
 function ${cardId}_inputCurrencyFormat(input) {
-	// Trasformazione in numero del contenuto dell'input
-	toProcess = input.val();
-	last = toProcess[toProcess.length - 1];
-	numValue = unformatNumber(toProcess, '.', ',');
-	value = formatCurrency(numValue, '.', ',', 2, true);
-	if (last == ',')
-		value += ',';
-	input.val(value);
+    // Trasformazione in numero del contenuto dell'input
+    toProcess = input.val();
+    last = toProcess[toProcess.length - 1];
+    numValue = unformatNumber(toProcess, '.', ',');
+    value = formatCurrency(numValue, '.', ',', 2, true);
+    if (last == ',')
+            value += ',';
+    input.val(value);
 };
 
 /**
  * Formatta un campo di input di tipo data
  */
 function ${cardId}_inputDateFormat(input) {
-	toProcess = input.val();
-	input.val(toProcess);
+    toProcess = input.val();
+    input.val(toProcess);
 };
 
 /**
  * Formatta un campo di input di tipo reale
  */
 function ${cardId}_inputRealFormat(input) {
-	toProcess = input.val();
-	last = toProcess[toProcess.length - 1];
-	numValue = unformatNumber(toProcess, '.', ',');
-	value = formatCurrency(numValue, '.', ',', null, true);
-	if (last == ',')
-		value += ',';
-	input.val(value);
+    toProcess = input.val();
+    last = toProcess[toProcess.length - 1];
+    numValue = unformatNumber(toProcess, '.', ',');
+    value = formatCurrency(numValue, '.', ',', null, true);
+    if (last == ',')
+            value += ',';
+    input.val(value);
 };
 
 /**
  * Formatta un campo di input di tipo intero
  */
 function ${cardId}_inputIntegerFormat(input) {
-	value = ${cardId}_forceDigit(input.val());
-	input.val(value);
+    value = ${cardId}_forceDigit(input.val());
+    input.val(value);
 };
 
 /**
  * Elimina da un testo tutto quello che non è un numero
  */
 function ${cardId}_forceDigit(text) {
-	regexp = new RegExp("[^\\d-]", "g");
-	result = text.replace(regexp, '');
-	return result;
+    regexp = new RegExp("[^\\d-]", "g");
+    result = text.replace(regexp, '');
+    return result;
 };
 
 /**
  * controllo di abilitazione alla formattazione di un input
  */
 function ${cardId}_checkKey(e) {
-	var e = window.event || e;
-	var keyUnicode = e.charCode || e.keyCode;
-	if (e !== undefined) {
-		switch (keyUnicode) {
-		case 16:
-			break; // Shift
-		case 17:
-			break; // Ctrl
-		case 18:
-			break; // Alt
-		case 27:
-			input.val('');
-			break; // Esc: clear entry
-		case 35:
-			break; // End
-		case 36:
-			break; // Home
-		case 37:
-			break; // cursor left
-		case 38:
-			break;// cursor up
-		case 39:
-			break;// cursor right
-		case 40:
-			break;// cursor down
-		case 78:
-			break; // N (Opera 9.63+ maps the "." from the number key section
-					// to the "N" key too!) (See:
-					// http://unixpapa.com/js/key.html search for ". Del")
-		default: {
-			return true;
-		}
-		}
-	}
-	return false;
+    var e = window.event || e;
+    var keyUnicode = e.charCode || e.keyCode;
+    if (e !== undefined) {
+        switch (keyUnicode) {
+            case 16:
+                break; // Shift
+            case 17:
+                break; // Ctrl
+            case 18:
+                break; // Alt
+            case 27:
+                input.val('');
+                break; // Esc: clear entry
+            case 35:
+                break; // End
+            case 36:
+                break; // Home
+            case 37:
+                break; // cursor left
+            case 38:
+                break;// cursor up
+            case 39:
+                break;// cursor right
+            case 40:
+                break;// cursor down
+            case 78:
+                break;  // N (Opera 9.63+ maps the "." from the number key section
+                        // to the "N" key too!) (See:
+                        // http://unixpapa.com/js/key.html search for ". Del")
+            default: {
+                return true;
+            }
+        }
+    }
+    return false;
 };
-
 </#macro>
 
 <#macro filterEvents prototype cardId="${cardId}" >		
@@ -250,13 +267,13 @@ function ${cardId}_checkKey(e) {
 * attiva e disattiva il div di copertura per la funzione modale dei dialog
 */
 function ${cardId}_show_overlay(flag,view){
-			if(flag){
-				$('#${cardId}_overlay_'+view).css('visibility','visible');
-				$('#${cardId}_overlay_'+view).css('opacity','1');
-			}else{
-				$('#${cardId}_overlay_'+view).css('visibility','hidden');
-				$('#${cardId}_overlay_'+view).css('opacity','0');
-			}
+    if(flag){
+            $('#${cardId}_overlay_'+view).css('visibility','visible');
+            $('#${cardId}_overlay_'+view).css('opacity','1');
+    }else{
+            $('#${cardId}_overlay_'+view).css('visibility','hidden');
+            $('#${cardId}_overlay_'+view).css('opacity','0');
+    }
 }
 
 /**
@@ -285,18 +302,14 @@ function ${cardId}_fillPrimarykeyData($ele,$form){
 
 function ${cardId}_set_list_message(msg){
 	if(msg==null){
-		<@s.i18n name="${prototype}"> 
-		msg='<@s.text name="${prototypeName}.list.message"/>';
-		</@s.i18n>
+		msg='${action.getText(prototypeName+".list.message")}';
 	}
 	$('#${cardId}_list_slide_message').html('<span id="${cardId}_event_message" class="${cardId}_event_message">'+msg+'</span>');
 }
 
 function ${cardId}_set_list_error_message(msg){
 	if(msg==null){
-		<@s.i18n name="${prototype}"> 
-		msg='<@s.text name="${prototypeName}.list.message"/>';
-		</@s.i18n>
+		msg='${action.getText(prototypeName+".list.message")}';
 	}
 	$('#${cardId}_list_slide_message').html('<span id="${cardId}_event_message" style="color:red" class="${cardId}_event_message animated flash">'+msg+'</span>');
 }
@@ -349,6 +362,30 @@ function ${cardId}_on_layout_resize(){
 	${cardId}_resizeList();
 	${cardId}_resizeView();
 	${cardId}_resizeNew();
+}
+
+function ${cardId}_load_detail(id,direct_edit){
+    clearForm($('#${cardId}_view_object_form'));
+    addHiddenToForm($('#${cardId}_view_object_form'),'targetClass','${prototype}');
+    addHiddenToForm($('#${cardId}_view_object_form'),"idObj['id']",id);
+    ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${prototypeName}_view_object_pane'), 'right');
+    $('#${cardId}_${prototypeName}_view_ui_get_obj_action').show();
+    if(direct_edit){
+        $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
+        $('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
+        callEvent("${cardId}_${prototypeName}_view_ui_info_object_refresh");
+    }
+    else{
+        $('#${cardId}_${prototypeName}_view_ui_info_obj_action').hide();
+        $('#${cardId}_${prototypeName}_view_ui_get_obj_action').show();
+        $('#${cardId}_${prototypeName}_view_ui_update_object_action_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
+        callEvent("${cardId}_${prototypeName}_view_ui_get_object_refresh");
+    }
+}
+
+function ${cardId}_contentRefresh(){
+    callEvent('${cardId}_${prototypeName}_find_refresh');
+    return false;
 }
 
 </#macro>

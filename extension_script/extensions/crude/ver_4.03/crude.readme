@@ -1,0 +1,9 @@
+Versione 4
+
+Versione 4.02
+proprties/Form.ftl
+<#assign appRoles=allRoles/> => <#assign appRoles=allRoles!{}/>
+
+Versione 4.03
+proprties/Form.ftl
+<#assign appRoles=allRoles/> => <#assign appRoles=allRoles![]/>

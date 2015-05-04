@@ -5,8 +5,7 @@
  */
 package it.micronixnetwork.cdk.domain;
 
-import it.micronixnetwork.gaf.domain.Published;
-import java.io.Serializable;
+import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "parametri")
 
-public class Parametri implements Published {
+public class Parametri implements ViewModel {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,34 +33,9 @@ public class Parametri implements Published {
     @Column(name = "Tipo")
     public String tipo;
 
-    public Parametri() {
-    }
-
-    
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Parametri)) {
-            return false;
-        }
-        Parametri other = (Parametri) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
-        return "it.micronixnetwork.consweb.domain.Parametri[ id=" + id + " ]";
+        return "[ " + descrizione + " ]";
     }
     
 }

@@ -1,6 +1,5 @@
 package it.micronixnetwork.application.plugin.defaultcheckin.domain;
 
-import it.micronixnetwork.gaf.domain.Published;
 import it.micronixnetwork.gaf.domain.RoledUser;
 import java.io.Serializable;
 

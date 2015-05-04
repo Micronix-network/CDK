@@ -229,7 +229,7 @@ display:none;
 	padding-right: 5px;
 	padding-bottom: 2px;
 	padding-top: 2px;
-	border: 1px solid rgba(0, 0, 255, 0.05);
+	border-bottom: 1px solid rgba(0, 0, 255, 0.05);
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -247,7 +247,7 @@ display:none;
 }
 
 .${cardId}_gbtable {
-	font-size: 10px;
+	font-size: 11px;
 	font-weight: 400;
 	color: #444;
 }
@@ -267,7 +267,7 @@ display:none;
 }
 
 .${cardId}_gbtable tbody tr.highlight{
-	background-color: #3879D9;
+	background-color: rgba(56,121,217,.5);
 	color:white;
 }
 
@@ -335,8 +335,9 @@ display:none;
 }
 
 .${cardId}_cbp-mc-form p{
-	margin-bottom:0;
-	margin-top:7px;
+    margin-bottom:0;
+    margin-top:7px;
+    height:25px;
 }
 
 .${cardId}_cbp-mc-form input:focus,

@@ -6,7 +6,7 @@ import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 import it.micronixnetwork.application.plugin.crude.annotation.ValidField;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextAreaRenderer;
-import it.micronixnetwork.gaf.domain.Published;
+import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "gaf_configs")
-public class GafConfigCRUD implements Published{
+public class GafConfigCRUD implements ViewModel{
 
 
 	@Id

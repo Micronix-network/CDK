@@ -1,5 +1,37 @@
 @CHARSET "US-ASCII";
 
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 11px;
+	background: transparent;
+	height: 100%;
+	background: crimson;
+	color: #fff;
+	font-weight: 300;
+	font-family: sans-serif, Arial;
+	min-width: 995px;
+	width:100%
+}
+
+.mp-level{
+    
+    background: #b5161b;
+}
+
+#user_card{
+    background-color:#8c2226;
+}
+
+.mp-menu ul li > a{
+    
+    border-bottom:  1px solid #444;
+}
+
+
+
 .pin{
 	border-radius: 12px;
 	-webkit-border-radius: 12px;
