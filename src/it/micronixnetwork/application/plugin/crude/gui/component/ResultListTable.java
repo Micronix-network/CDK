@@ -2,7 +2,7 @@ package it.micronixnetwork.application.plugin.crude.gui.component;
 
 import it.micronixnetwork.application.plugin.crude.annotation.Computed;
 import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
-import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.helper.FieldUtil;
 import it.micronixnetwork.application.plugin.crude.helper.Format;
 import it.micronixnetwork.gaf.domain.RoledUser;
@@ -84,13 +84,13 @@ public class ResultListTable extends CrudView {
 	    writer.write("<tr>");
 	    if (abyCheck) {
 		writer.write("<th class=\"\" align=\"center\" style=\"\">");
-		writer.write("<span id=\"" + getId() + "_sel_all_button\" style=\"\" class=\""+cardId+"_selall_btn\"><span>Sel</span></span>");
+		writer.write("<span id=\"" + getId() + "_sel_all_button\" style=\"\" class=\"" + cardId + "_image_btn "+cardId+"_selall_btn\"><span>Sel</span></span>");
 		writer.write("</th>");
 	    }
 	    int colSpan = 0;
 	    for (String field_key : fields.keySet()) {
 		Field field = fields.get(field_key);
-		SearchField sfa = field.getAnnotation(SearchField.class);
+		ToList sfa = field.getAnnotation(ToList.class);
 		if (sfa != null) {
 		    List sfaRoles = StringUtil.stringToList(sfa.roles());
 		    if (sfa.listed() && checkRole(roles, sfaRoles) && !sfa.hidden()) {
@@ -146,7 +146,7 @@ public class ResultListTable extends CrudView {
 		for (String field_key : fields.keySet()) {
 		    Field field = fields.get(field_key);
 		    Object fieldValue = FieldUtil.retriveFieldValue(field_key, row);
-		    SearchField sfa = field.getAnnotation(SearchField.class);
+		    ToList sfa = field.getAnnotation(ToList.class);
 		    FieldStyleDirective fdir = field.getAnnotation(FieldStyleDirective.class);
 		    String cellStyle = "";
 		    if (fdir != null) {
@@ -198,7 +198,7 @@ public class ResultListTable extends CrudView {
 
 	for (String field_key : fields.keySet()) {
 	    Field field = fields.get(field_key);
-	    SearchField sfa = field.getAnnotation(SearchField.class);
+	    ToList sfa = field.getAnnotation(ToList.class);
 	    FieldStyleDirective fdir = field.getAnnotation(FieldStyleDirective.class);
 	    String cellStyle = "";
 	    if (fdir != null) {
@@ -257,7 +257,7 @@ public class ResultListTable extends CrudView {
 	}
     }
 
-    private void drawTH(Writer writer, SearchField sfa, List<String> orderby, String field_key) throws IOException {
+    private void drawTH(Writer writer, ToList sfa, List<String> orderby, String field_key) throws IOException {
 	String cardId = (String) stack.findValue("cardId");
 	String tbAlias = (String) stack.findValue("tbAlias");
 	if (tbAlias == null)
@@ -319,6 +319,13 @@ public class ResultListTable extends CrudView {
 
 	writer.write("<td class=\"" + cardId + "_pagination_msg\">");
 	writer.write(getText(resultMessage, resultMessage, new String[] { String.valueOf(total) }));
+        if (pages > 1){
+            long from=((actualPage-1)*pageSize)+1;
+            long to=actualPage<pages?((actualPage)*pageSize):total;
+            writer.write("<span class=\"" + cardId + "_fromTo\">");
+            writer.write(getText("paginazione.fromto", "- from <b>{0}</b> to <b>{1}</b>", new String[] { String.valueOf(from),String.valueOf(to) }));
+            writer.write("</span>");
+        }
 	writer.write("</td>");
 
 	// Comando di back

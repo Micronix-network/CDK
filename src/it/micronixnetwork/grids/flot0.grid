@@ -1,0 +1,92 @@
+<#assign gui_theme=themeName!'default'/>
+<#assign ctx= request.contextPath/>
+
+<#assign west_size='300'/>
+<#assign west_closed='false'/>
+
+<#if action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone')??>
+    <#assign west_size=action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone').width!'0'/>
+    <#assign west_closed=action.layoutConfigLoader.getLayoutZone(cards_domain,'west_zone').closed!'true'/>
+</#if>
+
+<script type="text/javascript" src="/${gui_theme}/js/jquery.layout.js"></script>
+<link rel="stylesheet" type="text/css" href="/${gui_theme}/css/layout-plg.css">
+
+<style type="text/css">
+    .pane {
+        display:none; /* will appear when layout inits */
+    }
+</style>
+
+<div id="dynamic_layout">
+	<@gaf.placeCards  zone="west_zone" layout="${cards_domain}" className="pane ui-layout-west"/>
+        <div id="left_panel" class="pane ui-layout-center">
+        <@gaf.placeCards zone="center_zone" layout="${cards_domain}" style="heigth:80%"/>
+        <@gaf.placeCards zone="center_zone_bottom" layout="${cards_domain}" style="heigth:20%"/>
+        </div>
+</div>	
+
+<script type="text/javascript">
+	var contentTopBottomSpace=$('.page-grid-content').outerHeight()-$('.page-grid-content').height();
+	var cdelta_height=$('.page-header').outerHeight()+contentTopBottomSpace;
+	var _$resize_lock_var;
+	var $lay_out_float;
+	
+	function resize_layout(){
+            var content_height=${contentHeight}-contentTopBottomSpace;
+            var browser_heigth=$(window).height()-cdelta_height;
+            if(browser_heigth>content_height){
+                $('#dynamic_layout').outerHeight(browser_heigth);
+            }else{
+                $('#dynamic_layout').outerHeight(content_height);
+            }
+            
+            $('#left_panel').outerHeight($('#dynamic_layout').height());
+            
+            var left_h=$('#left_panel').height()-6;
+            
+            var part=left_h/100;
+            
+            var center_h=part*70;
+             var center_bottom_h=part*30;
+             
+             console.log(part+" h1:"+center_h+" h2:"+center_bottom_h)
+            
+            $('#center_zone').height(center_h);
+            $('#center_zone_bottom').height(center_bottom_h);
+            
+            if($lay_out_float!=null) $lay_out_float.resizeAll();
+	}
+	
+	$(document).ready(function(){ 
+            resize_layout();
+            $lay_out_float=$('#dynamic_layout').layout({
+                defaults: {fxSpeed:"fast",spacing_closed:3,spacing_open:3}
+                ,center: {
+                    onresize_end : function(){
+                        jQuery.cardsStack.trigger("layout_resize");	
+                    },
+                }
+                ,west: {
+                    size : ${west_size},
+                    onresize_end : function(){
+                        var layout_state=$('#dynamic_layout').layout().state;
+                        jQuery.ajax({ 
+                            type: "POST",url: "${action.calcAction('updateLayout',null,null)}",
+                            data: "optType=2&zoneName=west_zone&layout=${cards_domain}&zoneWidth="+layout_state.west.size,
+                            success: function(msg){}
+                        });
+                    },
+                }
+            });
+
+            $(window).resize(function() {
+               clearTimeout(_$resize_lock_var);
+               _$resize_lock_var = setTimeout(resize_layout, 500);   
+            });
+	 });
+</script>
+
+	
+        
+

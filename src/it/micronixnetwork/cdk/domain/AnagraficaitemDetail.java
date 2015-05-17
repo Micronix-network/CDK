@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "anagraficaitem")
 
-public class Anagraficaitem implements ViewModel {
+public class AnagraficaitemDetail implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id

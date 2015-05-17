@@ -17,4 +17,6 @@ public @interface SelectRenderer {
     String map() default "nill";
     String viewRule() default "nill";
     String startValue() default "nill";
+    String dependFrom() default "nill";
+    String activeOnChange() default "";
 }

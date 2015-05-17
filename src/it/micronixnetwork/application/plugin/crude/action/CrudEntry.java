@@ -28,10 +28,6 @@ public class CrudEntry extends CrudAction {
 	} catch (Throwable e) {
 	    info("TragetClass is void or not assignable");
 	}
-
-	if (target != null) {
-	    formModel = createFormModel(target);
-	}
 	return SUCCESS;
     }
 

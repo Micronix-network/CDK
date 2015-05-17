@@ -7,7 +7,6 @@ import it.micronixnetwork.application.plugin.crude.exception.CrudException;
 import it.micronixnetwork.application.plugin.crude.helper.FieldUtil;
 import it.micronixnetwork.application.plugin.crude.helper.Format;
 import it.micronixnetwork.application.plugin.crude.helper.QueryAutoCompose;
-import it.micronixnetwork.application.plugin.crude.model.FormModel;
 import it.micronixnetwork.application.plugin.crude.model.Message;
 import it.micronixnetwork.application.plugin.crude.service.CrudeService;
 import it.micronixnetwork.application.plugin.crude.service.DroolsService;
@@ -91,12 +90,6 @@ public abstract class CrudAction extends CardAction {
 
     public void setOperation(String operation) {
         this.operation = operation;
-    }
-
-    protected FormModel formModel;
-
-    public FormModel getFormModel() {
-        return formModel;
     }
 
     public void setPtype(int ptype) {
@@ -283,20 +276,6 @@ public abstract class CrudAction extends CardAction {
         }
     }
 
-    protected FormModel createFormModel(Class clazz) {
-        FormModel model = new FormModel();
-        if (clazz != null && clazz.isAnnotationPresent(Form.class)) {
-            Form f = (Form) clazz.getAnnotation(Form.class);
-            model.setWidth(f.width());
-            model.setHeight(f.height());
-            model.setType(f.type());
-        } else {
-            model.setWidth(500);
-            model.setHeight(400);
-            model.setType("s");
-        }
-        return model;
-    }
 
     protected Object ognlEvaluation(String rule, Object model) {
         Object result = null;

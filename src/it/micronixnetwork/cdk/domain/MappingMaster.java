@@ -5,6 +5,7 @@
  */
 package it.micronixnetwork.cdk.domain;
 
+import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import java.io.Serializable;
@@ -18,25 +19,28 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "anagraficalayout")
+@Table(name = "anagraficaitem")
 
-public class Anagraficalayout implements ViewModel {
-    
+public class MappingMaster implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id
+    @Column(name = "CodiceItem")
     @ToList(filtered = true)
-    @Column(name = "CodiceLayout")
+    @FieldStyleDirective(tableCellStyle = "width:70px")
     public String id;
-   
+    
     @ToList(filtered = true)
-    @Column(name = "DescrizioneLayout")
-    public String descrizioneLayout;
+    @Column(name = "DescrizioneItem")
+    public String descrizioneItem;
     
+    @Column(name = "ItemDescription")
+    public String itemDescription;
     
-    @Column(name = "LayoutDescription")
-    public String layoutDescription;
-
+    @Column(name = "TipoItem")
+    @ToList(filtered = true,filterRule="#{'d':'Derivato','b':'Base'}")
+    @FieldStyleDirective(tableCellStyle = "width:30px;text-align:center")
+    public String tipoItem;
 
     @Override
     public String toString() {

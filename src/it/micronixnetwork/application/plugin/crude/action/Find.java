@@ -83,7 +83,9 @@ public class Find extends CrudAction {
 	    page = 1;
 	if (size == null)
 	    size = 20;
-	
+	if (size == -1)
+	    size = null;
+        
 	Integer limit = null;
 
 	try {

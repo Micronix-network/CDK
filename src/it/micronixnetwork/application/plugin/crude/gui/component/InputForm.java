@@ -101,11 +101,9 @@ public class InputForm extends CrudView {
 		}
 
 		if (!skip) {
-		    if (CrudAction.OP_UPDATE.equals(mod)) {
-			if (field.isAnnotationPresent(Id.class)) {
-			    writer.write("<input type=\"hidden\"   name=\"objState['" + field_key + "']\" value=\"" + (value != null ? value : "") + "\"/>");
-			}
-		    }
+		    if (CrudAction.OP_UPDATE.equals(mod) && field.isAnnotationPresent(Id.class)) {
+			writer.write("<input type=\"hidden\"   name=\"objState['" + field_key + "']\" value=\"" + (value != null ? value : "") + "\"/>");
+		    }else{
 		    if (renderizable(field, user.getRoles(), mod)) {
 			FieldRenderer renderer = rendererFactory.produce(targetClass, field_key, field);
 			if (renderer != null) {
@@ -129,7 +127,7 @@ public class InputForm extends CrudView {
 			    }
 			}
 		    }
-
+                    }
 		}
 	    }
 

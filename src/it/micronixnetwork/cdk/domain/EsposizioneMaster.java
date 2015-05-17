@@ -5,7 +5,7 @@
  */
 package it.micronixnetwork.cdk.domain;
 
-import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.model.AutoCreate;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import javax.persistence.Column;
@@ -29,14 +29,14 @@ public class EsposizioneMaster implements ViewModel, AutoCreate {
     @Column(name = "IdLayout")
     public Integer id;
     
-    @SearchField
+    @ToList
     @Column(name = "CodiceLayout")
     public String codiceLayout;
     
     @Column(name = "CodiceOggetto")
     public String codiceOggetto;
     
-    @SearchField(filtered = true)
+    @ToList(filtered = true)
     @Column(name = "Descrizione")
     public String descrizione;
     

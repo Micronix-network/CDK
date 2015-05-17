@@ -36,7 +36,6 @@ public class AziendaDetail implements ViewModel{
     @Column(name = "IdAzienda")
     public Integer id;
     
-    
     @ToView
     @ToInput
     @Column(name = "CodiceAzienda")
@@ -130,9 +129,6 @@ public class AziendaDetail implements ViewModel{
     @Column(name = "ValutaBase")
     @FieldStyleDirective(group=2)
     public String valutaBase;
-    
-    
-
 
     @Override
     public String toString() {

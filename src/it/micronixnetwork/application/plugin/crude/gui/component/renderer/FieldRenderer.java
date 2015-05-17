@@ -14,6 +14,9 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public abstract class FieldRenderer {
     
+    protected static final String TIP_FIELD="tooltip";
+    protected static final String INPUT_FIELD="_input_field";
+    
     public static final String HIDDEN_FIELD="********";
 
     protected final Field field;

@@ -55,7 +55,7 @@ public class Contributors extends FieldRenderer {
 	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(""+getCardId(stack)+"_full_label", stack,true));
 	html.append("<div style=\"border: 1px solid silver\">");	
-	html.append("<select id=\""+getCardId(stack)+"_"+fieldName+"\" name=\"objState['" + fieldName + "']\"  class=\"tooltip right_input_multiselect multiselect\" style=\"" + getFieldStyle(field) + "\" size=\"6\" multiple=\"true\">");
+	html.append("<select id=\""+getCardId(stack)+"_"+fieldName+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" right_input_multiselect multiselect\" style=\"" + getFieldStyle(field) + "\" size=\"6\" multiple=\"true\">");
 	if (values != null && values instanceof LinkedHashMap) {
 	    for (Object label : ((LinkedHashMap) values).keySet()) {
 		html.append(writeOption(contribClass, label, ((LinkedHashMap) values).get(label), fieldValue, stack));

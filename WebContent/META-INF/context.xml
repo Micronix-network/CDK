@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiResourceLocking="false" crossContext="true" debug="1" path="/CDK" privileged="true" reloadable="true" useHttpOnly="true">
   <!-- DS applicativo -->
-  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/app" password="" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/cdk?useUnicode=true" username="root" validationQuery="select 1"/>
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/app" password="cdk" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/cdk?useUnicode=true" username="cdk" validationQuery="select 1"/>
 </Context>

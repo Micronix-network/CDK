@@ -66,8 +66,6 @@ public class GetChild extends CrudAction {
             throw new ActionException("Classe dell'oggetto non caricabile");
         }
 
-        formModel = createFormModel(clazz);
-
         return SUCCESS;
     }
 

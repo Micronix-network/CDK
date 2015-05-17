@@ -5,7 +5,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import it.micronixnetwork.application.plugin.crude.annotation.Children;
 import it.micronixnetwork.application.plugin.crude.annotation.GlobalFilter;
 import it.micronixnetwork.application.plugin.crude.annotation.Owner;
-import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Text;
 import it.micronixnetwork.application.plugin.crude.helper.FieldUtil;
@@ -94,7 +94,7 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
     }
 
     @Override
-    public void update(RoledUser user, Class cls, Object obj) throws ServiceException {
+    public Object update(RoledUser user, Class cls, Object obj) throws ServiceException {
         Session session = getCurrentSession();
 
         // Assert
@@ -108,7 +108,7 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
         Object e = (Object) session.get(cls, (Serializable) id);
 
         if (e == null) {
-            throw new ServiceException("L'oggetto di tipo: " + cls.getCanonicalName() + " non esiste");
+            throw new ServiceException("L'oggetto di tipo: " + cls.getCanonicalName() + "con ID: ("+id+") non esiste");
         }
 
         if (e instanceof Traceable) {
@@ -131,13 +131,14 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
             } else {
                 ((Traceable) toInsert).version = ((Traceable) e).version + 1;
             }
-            session.save(toInsert);
+            return session.save(toInsert);
         } else {
             // modifica valori oggetto marcati in input (Tranne l'id)
             fillObject(obj, e);
 
             // Aggiornamento dati
             session.update(e);
+            return id;
         }
 
     }
@@ -220,8 +221,8 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
             Class fieldType = field.getType();
             Class collectionType = null;
 
-            if (field.isAnnotationPresent(SearchField.class)) {
-                SearchField sfa = field.getAnnotation(SearchField.class);
+            if (field.isAnnotationPresent(ToList.class)) {
+                ToList sfa = field.getAnnotation(ToList.class);
                 if (sfa.filtered() && sfa.fixValue().equals("nill")) {
                     if (Collection.class.isAssignableFrom(fieldType)) {
                         ParameterizedType type = (ParameterizedType) field.getGenericType();
@@ -300,7 +301,7 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
                     if (sfa.descendant()) {
                         direc = "desc";
                     }
-                    if (!(orderBy.contains(toOrd + " desc") || orderBy.contains(toOrd + " asc"))) {
+                    if (!(orderBy.contains(toOrd + " desc") || orderBy.contains(toOrd + " asc") || orderBy.contains(toOrd + " none"))) {
                         orderBy.add(toOrd + " " + direc);
                     }
                 }

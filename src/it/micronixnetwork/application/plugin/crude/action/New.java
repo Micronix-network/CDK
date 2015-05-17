@@ -49,11 +49,14 @@ public class New extends CrudAction {
             throw new ActionException("Classe dell'oggetto non caricabile");
         }
 
-        formModel = createFormModel(clazz);
-
         //Nel caso di inserimento automatico
         
         String saveAndGo=getCardParam("save_and_go","false");
+        String crud_type=getCardParam("gui_type","n");
+        
+        if(crud_type.equals("l")){
+            saveAndGo="true";
+        }
         
         target = compose(clazz, filters, true);
         

@@ -22,7 +22,7 @@ public class TextArea extends FieldRenderer {
 	StringBuffer html=new StringBuffer();
 	int height = textArea.height();
 	html.append(writeLabel(""+getCardId(stack)+"_full_label",stack,true));
-	html.append("<textarea class=\"tooltip "+getCardId(stack)+"_right_input_area\" style=\"height: " + height + "px;"+getFieldStyle(field)+"\" name=\"objState['" + fieldName + "']\">" + (fieldValue != null ? fieldValue : "") + "</textarea>");
+	html.append("<textarea class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_area\" style=\"height: " + height + "px;"+getFieldStyle(field)+"\" name=\"objState['" + fieldName + "']\">" + (fieldValue != null ? fieldValue : "") + "</textarea>");
 	return html;
     }
     

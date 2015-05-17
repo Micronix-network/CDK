@@ -16,7 +16,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 /**
  * Command per la rimozione di una lista di righe dal DB
- *
  * @author kobo
  *
  */

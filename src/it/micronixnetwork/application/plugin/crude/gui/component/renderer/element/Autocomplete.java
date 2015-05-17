@@ -29,7 +29,7 @@ public class Autocomplete extends FieldRenderer {
 	    result.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	    String autocId=calcInputId(stack);
 	    result.append(writeLabel(null, stack,true));
-	    result.append("<input id=\""+autocId+"\" class=\"tooltip "+getCardId(stack)+"_right_input_row\" style=\"" + getFieldStyle(field) + "\"");
+	    result.append("<input id=\""+autocId+"\" class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_row\" style=\"" + getFieldStyle(field) + "\"");
 	    if(!autoc.viewRule().equals("nill")){
 		Object valueLabel=stack.findValue(autoc.viewRule());
 		if(valueLabel!=null){
@@ -37,8 +37,8 @@ public class Autocomplete extends FieldRenderer {
 		}
 	    }else{
 		if(fieldValue!=null){
-			result.append("value=\""+fieldValue+"\"");
-		    }
+                    result.append("value=\""+fieldValue+"\"");
+		}
 	    }
 	    result.append(">");
 	    result.append("<input type=\"hidden\" id=\""+autocId+"_id\" name=\"objState['" + fieldName + "']\"");

@@ -1,4 +1,5 @@
 <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
+<#assign direct_edit=action.getCardParam('direct_edit')!'false'/>
 <style>
 
 </style>
@@ -6,6 +7,8 @@
 <#import "macro/validation.ftl" as valid>
 
 <script type="text/javascript">
+    
+    var ${cardId}_chaged_values=false;
 	
     function ${cardId}_${targetClassName}_${uiid}_prepareRetriveChild($pkele,child,fieldName){
         var $getChildForm=$('#${cardId}_${uiid}_get_object_child_form');
@@ -18,34 +21,29 @@
         }
     }	
 	
-    $(document).ready(function(){	
-	
+    $(document).ready(function(){
+        
         if($('#${cardId}_card').width()<806){
             $('#${cardId}_card .${cardId}_cbp-mc-column').width('100%');
         }
 
         <#if operation='update'>
-            $('#${cardId}_${targetClassName}_new_save_button').hide();
+            $('.${cardId}_view_button').hide();
             $('#${cardId}_${targetClassName}_new_update_button').show();
             $('#${cardId}_${targetClassName}_new_end_button').show();
-            $('#${cardId}_${targetClassName}_new_cancel_button').hide();
-            $('#${cardId}_${targetClassName}_info_modify_button').hide();
-            $('#${cardId}_${targetClassName}_info_list_button').hide();
             $('#${cardId}_${targetClassName}_info_update_button').show();
             $('#${cardId}_${targetClassName}_info_cancel_button').show();
-            $('.${cardId}_${uiid}_form_resultRow').hover(function () {$(this).addClass('highlight');}, function () {$(this).removeClass('highlight');});
+            $('.${cardId}_${uiid}_form_resultRow').hover(function () {$(this).addClass('highlight');}, function () {$(this).removeClass('highlight');});  
         </#if>
         <#if operation='view'>
+            $('.${cardId}_view_button').hide();
             $('#${cardId}_${targetClassName}_info_modify_button').show();
-            $('#${cardId}_${targetClassName}_info_update_button').hide();
             $('#${cardId}_${targetClassName}_info_list_button').show();
-            $('#${cardId}_${targetClassName}_info_cancel_button').hide();
         </#if>
 		
         <#if operation='insert'>
+            $('.${cardId}_insert_button').hide();
             $('#${cardId}_${targetClassName}_new_save_button').show();
-            $('#${cardId}_${targetClassName}_new_update_button').hide();
-            $('#${cardId}_${targetClassName}_new_end_button').hide();
             $('#${cardId}_${targetClassName}_new_cancel_button').show();
         </#if>
 		
@@ -53,13 +51,18 @@
 
 	<@valid.clientValidation/>
 	
-	// Colorazione alternata righe tabella
-	$('.${cardId}_children_table tbody tr:odd').addClass('odd');
-	$('.${cardId}_children_table tbody tr:even').addClass('even');
+	// Colorazione alternata righe tabella dei figli
+	$('.${cardId}_children_table tbody tr:odd').addClass('${cardId}_odd');
+	$('.${cardId}_children_table tbody tr:even').addClass('${cardId}_even');
+        
+        //Gestione check modifica valori
+        $('.${cardId}_input_field').change(function(){
+                ${cardId}_chaged_values=true;
+        });
+        
 
 });		
 </script>
-
 <#if target??>
     <div class="${cardId}_form_title" style="">
         <#if operation='update' || operation='view'>
@@ -173,7 +176,6 @@
             });
 
     });
-		
 		
     $('.${cardId}_${uiid}_form_resultRow').click(function(){
             ${cardId}_show_overlay(true,'${uiid}');

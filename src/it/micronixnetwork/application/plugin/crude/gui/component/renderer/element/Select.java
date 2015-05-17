@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.opensymphony.xwork2.util.ValueStack;
+import it.micronixnetwork.gaf.util.StringUtil;
 
 public class Select extends FieldRenderer {
 
@@ -55,7 +56,7 @@ public class Select extends FieldRenderer {
 	    String selectId=cardId + "_" + uiid +"_"+targetClass.getSimpleName()+"_"+suffix+"_input";
 	    
 	    result.append(writeLabel(null, stack,true));
-	    result.append("<select id=\""+selectId+"\" name=\"objState['" + fieldName + "']\"  class=\"tooltip "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
+	    result.append("<select id=\""+selectId+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
 	    if (values != null && values instanceof LinkedHashMap) {
 		if (startValue_option != null) {
 		    result.append(writeOption(startValue_option.get(0), startValue_option.get(1), fieldValue, stack));
@@ -67,13 +68,29 @@ public class Select extends FieldRenderer {
 	    result.append("</select>");
 	    result.append("</p>");
 	    AsincInfo asincInfo = (AsincInfo) field.getAnnotation(AsincInfo.class);
-	    if (asincInfo != null) {
-		result.append("<script type=\"text/javascript\">");
-		result.append("$('#"+selectId+"').change(function(){");
-		result.append(cardId + "_show_info('" + fieldName + "',$(this).val(),'" + targetClass.getName() + "','" + uiid + "');");
-		result.append("})");
-		result.append("</script>");
-	    }
+            List<String> activeOnChange=StringUtil.stringToList(select.activeOnChange());
+            String depend= select.dependFrom();
+            result.append("<script type=\"text/javascript\">");
+            result.append("$('#"+selectId+"').change(function(){");
+            if(asincInfo != null){
+                result.append("try{");
+                result.append(cardId + "_show_info('" + fieldName + "',$(this).val(),'" + targetClass.getName() + "','" + uiid + "');");
+                result.append("}catch(error){alert(error);}");
+            }
+            if(activeOnChange.size()>0){
+                for (String  fieldName: activeOnChange) {
+                    result.append("try{");
+                    result.append(cardId + "_active_"+fieldName+"('" + fieldName + "',$(this).val(),'" + targetClass.getName() + "','" + uiid + "');");
+                    result.append("}catch(error){alert(error);}");
+                }
+            }
+            result.append("});");
+            if(!depend.equals("nill")){
+                result.append("function "+cardId + "_active_"+fieldName+"(fieldName,value,targetClass,uiid){");
+                result.append("};");
+            }
+            result.append("</script>");
+	    
 	}
 	return result;
     }

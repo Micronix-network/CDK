@@ -42,7 +42,7 @@ public interface CrudeService {
 	 * Modifica i dati di un oggetto del dominio
 	 * @param comm
 	 */
-	void update(RoledUser user,Class cls,Object obj) throws ServiceException;
+	Object update(RoledUser user,Class cls,Object obj) throws ServiceException;
 	
 	/**
 	 * Rimuove i dati di stato di una lista di oggetti del dominio

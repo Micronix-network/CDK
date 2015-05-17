@@ -58,8 +58,6 @@ public class Get extends CrudAction {
             throw new ActionException("Objcet class not loadable");
         }
 
-        formModel = createFormModel(clazz);
-
         childNames = childFields(clazz);
 
         return SUCCESS;

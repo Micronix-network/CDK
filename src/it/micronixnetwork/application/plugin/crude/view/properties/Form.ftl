@@ -1,9 +1,9 @@
 <#import "/template/gaf/macro/properties.ftl" as prop>
 
 <#assign yes_noHash = {'false':'${action.getText("yes.or.no.no", "No")}','true':'${action.getText("yes.or.no.yes", "Yes")}'}/>
-<#assign typeHash = {'n':'Normale','l':'Solo Lista','d':'Solo Dettaglio'}/>
+<#assign typeHash = {'n':'Tutto in uno','l':'Master','d':'Dettaglio'}/>
 <#assign activeHash={'true': '${action.getText("generic.properties.dialog.active", "Active")}', 'false': '${action.getText("generic.properties.dialog.inactive", "Inactive")}'}/>
-<#assign activeHash={'5':'5','10':'10', '15':'15', '20':'20', '30':'30', '50':'50', '80':'80', '100':'100'}/> 
+<#assign activeHash={'-1':'all','5':'5','10':'10', '15':'15', '20':'20', '30':'30', '50':'50', '80':'80', '100':'100'}/> 
 <#assign appRoles=allRoles![]/>
 <#assign domainCards=domainCardIds![]/>
  
@@ -13,7 +13,7 @@
 }
 
 #propstabs-3_${cardId} .CodeMirror-scroll {
-	height : 350px;
+	height : 410px;
 }
 </style> 
  
@@ -79,6 +79,7 @@
             <div class="accordion-section">
                 <a class="accordion-section-title" href="#accordion-1">Parametri Vista 'Lista'</a>
                 <div id="accordion-1" class="accordion-section-content">
+                    <@prop.select label="${action.getText('crude.micronixnet.search_on_load', 'Search on load')}" name="search_on_load" value="${action.getCardParam('search_on_load')!'true'}" options=yes_noHash />
                     <@prop.text label="${action.getText('crude.micronixnet.result_limit', 'Limite numero risultati')}" name="result_limit" value="${action.getCardParam('result_limit')!''}" style="width:50px"/>
                     <@prop.select label="${action.getText('crude.micronixnet.aby_filter', 'Abilitazione filtro')}" name="aby_filter" value="${action.getCardParam('aby_filter')!'true'}" options=yes_noHash />
                     <@prop.select label="${action.getText('crude.micronixnet.autoselect', 'Autoselect')}" name="autoselect" value="${action.getCardParam('autoselect')!'false'}" options=yes_noHash />
@@ -89,7 +90,10 @@
             <div class="accordion-section">
                 <a class="accordion-section-title" href="#accordion-2">Parametri Vista 'Dettaglio'</a>
                 <div id="accordion-2" class="accordion-section-content">
-                    <@prop.select label="${action.getText('crude.micronixnet.directEdtit', 'Edit diretto')}" name="direct_edit" value="${action.getCardParam('direct_edit')!'false'}" options=yes_noHash />    
+                    <@prop.select label="${action.getText('crude.micronixnet.directEdtit', 'Edit diretto')}" name="direct_edit" value="${action.getCardParam('direct_edit')!'false'}" options=yes_noHash /> 
+                    <@prop.select label="${action.getText('crude.micronixnet.popup.gui', 'Popup GUI')}" name="popup_gui" value="${action.getCardParam('popup_gui')!'false'}" options=yes_noHash />  
+                    <@prop.text label="${action.getText('crude.micronixnet.dialog.width', 'Largezza popup')}" name="pop_width" value="${action.getCardParam('pop_width')!''}" style="width:50px"/>
+                    <@prop.text label="${action.getText('crude.micronixnet.dialog.height', 'Altezza popup')}" name="pop_height" value="${action.getCardParam('pop_height')!''}" style="width:50px"/>
                 </div>
             </div>
             <div class="accordion-section">
@@ -102,7 +106,6 @@
             </div>
             <@prop.select label="${action.getText('crude.micronixnet.prototype', 'Modello di View')}" name="prototype" value="${action.getCardParam('prototype')!''}" options=publischedObject force=true/>
             <@prop.select label="${action.getText('crude.micronixnet.type', 'Tipo')}" name="gui_type" value="${action.getCardParam('gui_type')!'n'}" options=typeHash />
-            <@prop.text label="${action.getText('crude.micronixnet.crud_controller', 'Controllore di (Solo dettaglio=No)')}" name="crud_controller" value="${action.getCardParam('crud_controller')!''}"  style="width:100px"/>
             <@prop.text label="${action.getText('crude.micronixnet.message_bundle', 'File dei testi')}" name="message_bundle" value="${action.getCardParam('message_bundle')!''}"  style="width:200px"/>
             <@prop.multi_select label="${action.getText('crude.micronixnet.crud_observers', 'Osservatori')}" name="crud_observers" value="${action.getCardParam('crud_observers')!''}" options=domainCards/>
         </div> 

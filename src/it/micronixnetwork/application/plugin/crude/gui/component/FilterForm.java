@@ -1,7 +1,7 @@
 package it.micronixnetwork.application.plugin.crude.gui.component;
 
 import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
-import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.helper.FieldUtil;
 import it.micronixnetwork.gaf.domain.RoledUser;
 import it.micronixnetwork.gaf.util.StringUtil;
@@ -24,13 +24,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 
 public class FilterForm extends CrudView {
 
-    private String resultNumber;
-
     int filteredFields = 0;
-
-    public void setResultNumber(String resultNumber) {
-        this.resultNumber = resultNumber;
-    }
 
     public FilterForm(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         super(stack, req, res);
@@ -51,20 +45,11 @@ public class FilterForm extends CrudView {
                 }
             }
 
-            Integer iResultNumber = 15;
-
-            if (resultNumber != null) {
-                try {
-                    iResultNumber = Integer.parseInt(resultNumber);
-                } catch (Exception e) {
-                    warn("Wrong result number: default setting to 15");
-                }
-            }
             writer.write("<td>");
 
             if (filteredFields > 0) {
-                writer.write("<button class=\"btn btn-mini btn-success " + cardId + "_search_btn\" style=\"margin:0;margin-left:3px\" id=\"" + cardId + "_filter_button\"><span>" + getText("crude.label.filter", "Filter") + "</span></button>");
-                writer.write("<button class=\"btn btn-mini btn-success " + cardId + "_reset_btn\" style=\"margin:0;margin-left:3px;\" id=\"" + cardId + "_reset_filter_button\"><span>" + getText("crude.label.reset", "Reset") + "</span></button>");
+                writer.write("<button class=\"btn btn-mini btn-success " + cardId + "_image_btn " + cardId + "_search_btn\" style=\"margin:0;margin-left:3px\" id=\"" + cardId + "_filter_button\"><span>" + getText("crude.label.filter", "Filter") + "</span></button>");
+                writer.write("<button class=\"btn btn-mini btn-success " + cardId + "_image_btn " + cardId + "_reset_btn\" style=\"margin:0;margin-left:3px;\" id=\"" + cardId + "_reset_filter_button\"><span>" + getText("crude.label.reset", "Reset") + "</span></button>");
             }
             writer.write("</td>");
             writer.write("</tr>");
@@ -92,8 +77,8 @@ public class FilterForm extends CrudView {
             inputClass = "integer_input ";
         }
 
-        if (field.isAnnotationPresent(SearchField.class)) {
-            SearchField sfa = field.getAnnotation(SearchField.class);
+        if (field.isAnnotationPresent(ToList.class)) {
+            ToList sfa = field.getAnnotation(ToList.class);
 
             String defValue = !sfa.defaultValue().equals("nill") ? sfa.defaultValue() : "";
 

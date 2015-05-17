@@ -33,7 +33,7 @@ public class YesNo extends FieldRenderer {
 	    real_values[1] = "0";
 	}
 	html.append(writeLabel(null, stack,true));
-	html.append("<select name=\"objState['" + fieldName + "']\"  class=\"tooltip "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
+	html.append("<select name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
 	for (int i = 0; i < real_values.length; i++) {
 	    html.append("<option value=\"" + real_values[i] + "\"");
 	    if (fieldValue != null) {

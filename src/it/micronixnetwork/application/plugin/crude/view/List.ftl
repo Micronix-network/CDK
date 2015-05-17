@@ -5,6 +5,7 @@
 <#assign autoselect_flag=action.getCardParam('autoselect')!'false'/>
 <#assign direct_edit=action.getCardParam('direct_edit')!'false'/>	
 <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
+<#assign popup_gui=action.getCardParam('popup_gui')!'false'/>
 
 <#import "macro/javascript.ftl" as js>	
 
@@ -17,7 +18,6 @@
 #${cardId}_${targetClassName}.${cardId}_gbtable .hide_column {
     display: none;
 }
-
 </style>
 
 <script type="text/javascript">	
@@ -116,26 +116,24 @@ $(document).ready(function(){
         ${cardId}_manageDeleteButton();
     });
 
-     $('#${cardId}_${targetClassName}_list_zone table thead th span.${cardId}_toorder').click(function (){
-        var toorder=$(this).attr("toorder");
-        var direction=$(this).attr("direction");
-        var actual=$('#${cardId}_${targetClassName}_form [name="toOrder"]').val();
-        var actual_a = actual.split(",");
-        var order_list=new Array();
-        if(direction!="none"){
-                order_list=[toorder+" "+direction];
-        }
-        for (var i = 0; i < actual_a.length; ++i){
-                if(actual_a[i].trim()!=""){
-                        var ordcmd=actual_a[i].split(" ");
-                        if(toorder!=ordcmd[0]){
-                                order_list.push(ordcmd[0]+" "+ordcmd[1]);
-                        }
+    $('#${cardId}_${targetClassName}_list_zone table thead th span.${cardId}_toorder').click(function (){
+       var toorder=$(this).attr("toorder");
+       var direction=$(this).attr("direction");
+       var actual=$('#${cardId}_${targetClassName}_form [name="toOrder"]').val();
+       var actual_a = actual.split(",");
+       var order_list=new Array();
+       order_list=[toorder+" "+direction];
+       for (var i = 0; i < actual_a.length; ++i){
+            if(actual_a[i].trim()!=""){
+                var ordcmd=actual_a[i].split(" ");
+                if(toorder!=ordcmd[0]){
+                        order_list.push(ordcmd[0]+" "+ordcmd[1]);
                 }
-        }
-        $('#${cardId}_${targetClassName}_form [name="toOrder"]').val(order_list.join());
-        callEvent('${cardId}_${targetClassName}_find_refresh');
-     });
+            }
+       }
+       $('#${cardId}_${targetClassName}_form [name="toOrder"]').val(order_list.join());
+       callEvent('${cardId}_${targetClassName}_find_refresh');
+    });
 
     //Click bottone seleziona tutti
     $('#${cardId}_${targetClassName}_sel_all_button').click(function(){
@@ -151,8 +149,11 @@ $(document).ready(function(){
         addHiddenToForm($('#${cardId}_view_object_form'),'targetClass','${targetClass}');
         addHiddenToForm($('#${cardId}_view_object_form'),"idObj['id']",$(this).attr('pk_id'));
         try{
-        ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${targetClassName}_view_object_pane'), 'right');
-        $('#${cardId}_${targetClassName}_view_ui_get_obj_action').show();
+        <#if popup_gui?boolean>
+            ${cardId}_view_update_dialog.show();
+        <#else>    
+            ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${targetClassName}_view_object_pane'), 'right');
+        </#if>
         <#if direct_edit='false'>
               $('#${cardId}_${targetClassName}_view_ui_info_obj_action').show();
               $('#${cardId}_${targetClassName}_view_ui_get_obj_action').hide();
@@ -171,17 +172,11 @@ $(document).ready(function(){
     //Gestione del click sulla riga nel caso esistano observer
     <#if crud_observers!=''>		
     $('.${cardId}_${targetClassName}_resultRow').click(function(){
+        ${cardId}_setSelected($(this));
         <@js.notify_observer crud_observers=crud_observers event_name='listrow_click'/>
         return false;
     });
     </#if>
-
-
-    //Gestione del click sulla riga per la chiamata del javascript definito
-    //nel pannello delle proprietà
-    $('.${cardId}_${targetClassName}_resultRow').click(function(){ 
-        ${cardId}_setSelected($(this));
-    });
 
     //Gestione del drag
     $('#${cardId}_${targetClassName} .draggable_cell').draggable({ 
@@ -193,7 +188,6 @@ $(document).ready(function(){
         start: function(evt,ui){},
         stop : function(evt,ui){},	 
     });
-
 
     //Getione download
     $('#${cardId}_${targetClassName} .down_link span span').click(function(e){

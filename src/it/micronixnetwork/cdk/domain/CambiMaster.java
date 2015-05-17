@@ -5,7 +5,7 @@
  */
 package it.micronixnetwork.cdk.domain;
 
-import it.micronixnetwork.application.plugin.crude.annotation.SearchField;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.model.AutoCreate;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import java.io.Serializable;
@@ -35,15 +35,15 @@ public class CambiMaster implements ViewModel,AutoCreate {
     @Column(name = "id")
     public Integer id;
     
-    @SearchField
+    @ToList
     @Column(name = "valuta")
     public String valuta;
     
-    @SearchField
+    @ToList
     @Column(name = "anno")
     public Integer anno;
     
-    @SearchField
+    @ToList
     @Column(name = "mese")
     public Integer mese;
 

@@ -6,6 +6,9 @@
 package it.micronixnetwork.cdk.domain;
 
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
+import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
+import it.micronixnetwork.application.plugin.crude.annotation.ToView;
+import it.micronixnetwork.application.plugin.crude.model.AutoCreate;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -18,26 +21,39 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "anagraficalayout")
+@Table(name = "anagraficaitem")
 
-public class Anagraficalayout implements ViewModel {
-    
+public class AnagraficaitemAll implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id
     @ToList(filtered = true)
-    @Column(name = "CodiceLayout")
+    @ToInput
+    @ToView
+    @Column(name = "CodiceItem")
     public String id;
-   
+    
     @ToList(filtered = true)
-    @Column(name = "DescrizioneLayout")
-    public String descrizioneLayout;
+    @ToInput
+    @ToView
+    @Column(name = "DescrizioneItem")
+    public String descrizioneItem;
     
+    @ToList(filtered = true)
+    @ToInput
+    @ToView
+    @Column(name = "ItemDescription")
+    public String itemDescription;
     
-    @Column(name = "LayoutDescription")
-    public String layoutDescription;
+    @ToList(filtered = true)
+    @ToInput
+    @ToView
+    @Column(name = "TipoItem")
+    public String tipoItem;
 
-
+    @ToList(filtered = true)
+    @ToInput
+    @ToView
     @Override
     public String toString() {
         return "[ " + id + " ]";

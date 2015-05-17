@@ -50,7 +50,7 @@ public class Text extends FieldRenderer {
 		html.append("type=\"text\"");
 	    }
 	    
-	    html.append("name=\"objState['" + fieldName + "']\"  class=\"tooltip "+getCardId(stack)+"_right_input_row");
+	    html.append("name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_row");
 	    
 	    if (TextRenderer.INT_TYPE.equals(input_type)) {
 		html.append(" input_integer");

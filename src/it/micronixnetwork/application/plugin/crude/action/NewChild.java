@@ -1,6 +1,5 @@
 package it.micronixnetwork.application.plugin.crude.action;
 
-import it.micronixnetwork.application.plugin.crude.model.FormModel;
 import it.micronixnetwork.gaf.exception.ActionException;
 import it.micronixnetwork.gaf.exception.ApplicationException;
 
@@ -31,14 +30,8 @@ public class NewChild extends CrudAction {
         return childFieldName;
     }
 
-    private FormModel formModel;
-
     public NewChild() {
         operation = OP_INSERT;
-    }
-
-    public FormModel getFormModel() {
-        return formModel;
     }
 
     /**
@@ -62,8 +55,6 @@ public class NewChild extends CrudAction {
         if (clazz == null) {
             throw new ActionException("Classe dell'oggetto non caricabile");
         }
-
-        formModel = createFormModel(clazz);
 
         target = compose(clazz, filters, true);
 

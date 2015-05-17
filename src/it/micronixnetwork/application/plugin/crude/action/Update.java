@@ -11,7 +11,13 @@ import it.micronixnetwork.gaf.exception.ApplicationException;
 public class Update extends EditAction {
 
     private static final long serialVersionUID = 1L;
+    
+    private Object updatedId;
 
+    public Object getUpdatedId() {
+        return updatedId;
+    }
+    
     public Update() {
         operation = OP_UPDATE;
     }
@@ -25,7 +31,7 @@ public class Update extends EditAction {
             if (!rulesControl(target, obj)) {
                 return INPUT;
             }
-            getCrudeService().update(getUser(), obj.getClass(), obj);
+            updatedId=getCrudeService().update(getUser(), obj.getClass(), obj);
         }
 
         return SUCCESS;

@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author kobo
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SearchField {
+public @interface ToList {
     boolean ordered() default false;
     boolean defaultOrdered() default false;
     boolean descendant() default false;
