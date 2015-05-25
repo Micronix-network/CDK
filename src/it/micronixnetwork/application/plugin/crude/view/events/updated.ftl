@@ -18,7 +18,8 @@ $(document).ready(function(){
     <#if uiid='view_ui'>
         $('#${cardId}_${targetClassName}_view_ui_info_obj_action_content').empty();
         $('#${cardId}_${targetClassName}_view_ui_info_obj_action').show();
-        $('#${cardId}_${targetClassName}_view_ui_get_obj_action_content').empty();
+        $("#${cardId}_view_ui_form").empty();
+        $('#${cardId}_${targetClassName}_view_ui_get_obj_action').hide();
         <#if direct_edit='false'>
                 callEvent("${cardId}_${targetClassName}_view_ui_info_object_refresh");		
         <#else>

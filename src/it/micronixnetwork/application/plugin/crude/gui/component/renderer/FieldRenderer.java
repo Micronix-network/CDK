@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.opensymphony.xwork2.util.ValueStack;
+import it.micronixnetwork.application.plugin.crude.annotation.Conditional;
+import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
+import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 
 public abstract class FieldRenderer {
     
@@ -22,6 +25,9 @@ public abstract class FieldRenderer {
     protected final Field field;
     protected final Class targetClass;
     protected final String fieldName;
+    protected final ToView toview;
+    protected final ToInput toinput;
+    protected final Conditional condition;
 
 
   
@@ -29,6 +35,10 @@ public abstract class FieldRenderer {
 	this.field = field;
 	this.fieldName = fieldName;
 	this.targetClass = targetClass;
+        this.toview = field.getAnnotation(ToView.class);
+	this.toinput = field.getAnnotation(ToInput.class);
+        this.condition= field.getAnnotation(Conditional.class);
+   
     }
 
     public abstract StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException;
@@ -131,7 +141,6 @@ public abstract class FieldRenderer {
 	result.append("}");
 	result.append("</script>");
 	return result;
-
     }
 
     protected String getCardId(ValueStack stack){
@@ -149,6 +158,28 @@ public abstract class FieldRenderer {
 	    style = direct.inputFieldStyle();
 	}
 	return style;
+    }
+    
+    protected StringBuffer appendFieldParagraph(StringBuffer compBuffer,ValueStack stack){
+        String uiid=(String) stack.findValue("uiid");
+        StringBuffer result=new StringBuffer("<p id=\""+getCardId(stack)+"_"+uiid+"_"+ fieldName + "_field_paragraph\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\" style=\"display:"+getDisplay(stack)+"\">");
+        result.append(compBuffer);
+        result.append("</p>");
+        return result;
+    }
+    
+    protected String getDisplay(ValueStack stack){
+        if(condition==null) return "";
+        Boolean hide=false;
+        try{
+            hide=!(Boolean)stack.findValue(condition.rule());
+        }catch(Exception ex){
+            hide=true;
+        }
+        if(hide){
+            return "none";
+        }
+        return "";
     }
 
     public Field getField() {

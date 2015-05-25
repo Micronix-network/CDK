@@ -5,9 +5,11 @@
  */
 package it.micronixnetwork.cdk.domain;
 
+import it.micronixnetwork.application.plugin.crude.annotation.Conditional;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.HiddenRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.SelectRenderer;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import java.io.Serializable;
@@ -36,22 +38,42 @@ public class MappingDetail implements ViewModel {
     @Column(name = "IdItem")
     public Integer id;
     
-    @Column(name = "VoceSpesa")
-    @ToList
-    public String voceSpesa;
     
-    @ToList(filtered = true,listed = false,filterRule="mapByQuery('select a.descrizione,a.id from MappingDetail$_Azienda a order by a.descrizione asc')")
+    @ToList(filtered = true,listed = false,filterRule="mapByQuery('select a.id,a.descrizione from MappingDetail$_Azienda a order by a.descrizione asc')")
     @ToInput
     @ToView
-    @SelectRenderer(activeOnChange = "sottoconto",map = "mapByQuery('select a.id,a.descrizione from MappingDetail$_Azienda a order by a.descrizione asc')",viewRule = "azienda.descrizione")
+    @SelectRenderer(activeOnChange = "sottoconto,centroCosto,voceSpesa",map = "mapByQuery('select a.id,a.descrizione,a.si from MappingDetail$_Azienda a order by a.descrizione asc')",viewRule = "azienda.descrizione",startValue = "{' ',''}")
     @Column(name = "IdAzienda")
     public Integer idAzienda;
+    
+    @ToList(cellRule = "_voceSpesa.descrizione")
+    @ToInput
+    @ToView
+    @SelectRenderer(map = "mapByQuery('select v.codice,v.descrizione from MappingDetail$_VociSpesa v where idAzienda=:idAzi order by v.descrizione asc',#{\"idAzi\":idAzienda})",viewRule = "_voceSpesa.descrizione",dependFrom = "idAzienda")
+    @Column(name = "VoceSpesa")
+    public String voceSpesa;
+    
+    @OneToOne
+    @JoinColumns({
+        @JoinColumn(name = "voceSpesa", referencedColumnName="codice",insertable = false, updatable = false),
+        @JoinColumn(name="idAzienda", referencedColumnName="idAzienda", insertable = false, updatable = false)
+    })
+    public _VociSpesa _voceSpesa;
+    
+    @ToList
+    @ToInput
+    @ToView
+    @SelectRenderer(map="#{'A':'A','B':'B','C':'C','D':'D','E':'E','F':'F','G':'G','H':'H','I':'I','L':'L','M':'M','N':'N','O':'O','P':'P','Q':'Q','R':'R','S':'S','T':'T','U':'U','V':'V','Z':'Z'}",startValue = "{' ',''}")
+    @Column(name = "Prefisso")
+    public String prefisso;
     
     @OneToOne
     @JoinColumn(name = "idAzienda", insertable = false, updatable = false)
     public _Azienda azienda;
    
     @ToList(filtered = true,hidden = true)
+    @ToInput
+    @HiddenRenderer
     @Column(name = "Item")
     public String item;
     
@@ -62,10 +84,6 @@ public class MappingDetail implements ViewModel {
     @ToList
     @Column(name = "Coefficiente")
     public Double coefficiente;
-    
-    @ToList
-    @Column(name = "Prefisso")
-    public Character prefisso;
     
     @Column(name = "patch")
     public Integer patch;
@@ -85,7 +103,7 @@ public class MappingDetail implements ViewModel {
     @ToList(cellRule = "_sottoconto.descrizione")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select s.codice,s.descrizione from MappingDetail$_Sottoconto s order by s.descrizione asc')",viewRule = "_sottoconto.descrizione",dependFrom = "idAzienda")
+    @SelectRenderer(map = "mapByQuery('select s.codice,s.descrizione from MappingDetail$_Sottoconto s where idAzienda=:idAzi order by s.descrizione asc',#{\"idAzi\":idAzienda})",viewRule = "_sottoconto.descrizione",dependFrom = "idAzienda")
     @Column(name = "Sottoconto")
     public String sottoconto;
     
@@ -96,8 +114,30 @@ public class MappingDetail implements ViewModel {
     })
     public _Sottoconto _sottoconto;
     
-    @Column(name = "CentroCostoUfficio")
-    public String centroCostoUfficio;
+    @Conditional(rule="azienda.si=='NAV'")
+    @ToInput
+    @ToView
+    @SelectRenderer(map = "mapByQuery('select c.codice,c.descrizione from MappingDetail$_CentriCosto c where idAzienda=:idAzi order by c.descrizione asc',#{\"idAzi\":idAzienda})",viewRule = "_centroCosto.descrizione",dependFrom = "idAzienda")
+    @Column(name = "CentroCosto")
+    public String centroCosto;
+    
+    @OneToOne
+    @JoinColumns({
+        @JoinColumn(name="CentroCosto", referencedColumnName="CodiceCentro", insertable = false, updatable = false),
+        @JoinColumn(name="idAzienda", referencedColumnName="idAzienda", insertable = false, updatable = false)
+    })
+    public _CentriCosto _centroCosto;
+    
+    @Conditional(rule="azienda.si=='ACG'")
+    @ToInput
+    @ToView
+    @SelectRenderer(map = "mapByQuery('select u.id,u.nome from MappingDetail$_Ufficio u order by u.nome asc')",viewRule = "_ufficio.nome")
+    @Column(name = "Ufficio")
+    public String ufficio;
+    
+    @OneToOne
+    @JoinColumn(name="ufficio",insertable = false, updatable = false)
+    public _Ufficio _ufficio;
     
     @Column(name = "Consociata")
     public boolean consociata;
@@ -118,9 +158,7 @@ public class MappingDetail implements ViewModel {
     public String toString() {
         return "MappingDetail[ idItem=" + id + " ]";
     }
-    
-    
-    
+
     @Entity
     @Table(name="aziende")
     public static class _Azienda implements Serializable {
@@ -133,8 +171,33 @@ public class MappingDetail implements ViewModel {
         @ToList(ordered = true,defaultOrdered = true)
     	@Column(name = "Descrizione")
         public String descrizione;
+        
+        @Column(name = "SistemaInformativo")
+        public String si;
 
     	public _Azienda() {
+    	}
+    }
+    
+    @Entity
+    @Table(name="centricosto")
+    public static class _CentriCosto implements Serializable {
+    	private static final long serialVersionUID = 1L;
+
+    	@Id
+        @Column(name = "IdCentro")
+        public Integer id;
+        
+        @Column(name = "IdAzienda")
+        public Integer idAzienda;
+
+    	@Column(name = "DescrizioneCentro")
+        public String descrizione;
+        
+        @Column(name = "CodiceCentro")
+        public String codice;
+
+    	public _CentriCosto() {
     	}
     }
     
@@ -165,7 +228,41 @@ public class MappingDetail implements ViewModel {
             public String codice;
             
             @Column(name = "DescrizioneConto")
-            public String descrizione;
+            public String descrizione;     
+    }
+    
+    @Entity
+    @Table(name = "vocispesa")
+    public static class _VociSpesa implements Serializable {
+            
+            @Id
+            @Column(name = "idVoceSpesa")
+            public Integer id;
+        
+            @Column(name = "Codice")
+            public String codice;
+            
+            @Column(name = "Descrizione")
+            public String descrizione;    
+            
+            @Column(name = "IdAzienda")
+            public Integer idAzienda;
+    }
+    
+    @Entity
+    @Table(name="uffici")
+    public static class _Ufficio implements Serializable {
+    	private static final long serialVersionUID = 1L;
+
+    	@Id
+        @Column(name = "IdUfficio")
+        public String id;
+        
+        @Column(name = "NomeUfficio")
+        public String nome;
+
+    	public _Ufficio() {
+    	}
     }
     
 }

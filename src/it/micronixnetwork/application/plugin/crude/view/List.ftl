@@ -135,17 +135,19 @@ $(document).ready(function(){
        callEvent('${cardId}_${targetClassName}_find_refresh');
     });
 
-    //Click bottone seleziona tutti
+    <#--Click bottone seleziona tutti-->
     $('#${cardId}_${targetClassName}_sel_all_button').click(function(){
               $('.${cardId}_${targetClassName}_selectable').trigger('click');
               return false;
     });
 
-    //Click riga tabella
+    <#--Click riga tabella che porta all'interfaccia di update viene inserito solo nel caso 
+        di crud di tipo "Tutto in uno"/n -->
     <#if type_flag=='n'>		
     $('.${cardId}_${targetClassName}_resultRow').click(function(){
         ${cardId}_setSelected($(this));   
         clearForm($('#${cardId}_view_object_form'));
+        clearForm($('#${cardId}_view_ui_form'));
         addHiddenToForm($('#${cardId}_view_object_form'),'targetClass','${targetClass}');
         addHiddenToForm($('#${cardId}_view_object_form'),"idObj['id']",$(this).attr('pk_id'));
         try{
@@ -164,7 +166,7 @@ $(document).ready(function(){
               $('#${cardId}_${targetClassName}_view_ui_update_object_action_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
               callEvent("${cardId}_${targetClassName}_view_ui_get_object_refresh");
         </#if>
-        }catch(err){};
+        }catch(err){console.log(err)};
         return false;
     });
     </#if>

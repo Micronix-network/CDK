@@ -29,7 +29,13 @@
     
     <action name="autocompleteQuery" class="it.micronixnetwork.application.plugin.crude.action.renderer.AutocompleteQuery">
       <result name="success" type="string">
-      	<param name="stringValue">${infoString}</param>
+      	<param name="stringValue">${jsonOutData}</param>
+      </result>
+    </action>
+    
+    <action name="asincSelectQuery" class="it.micronixnetwork.application.plugin.crude.action.renderer.SelectQuery">
+      <result name="success" type="string">
+      	<param name="stringValue">${jsonOutData}</param>
       </result>
     </action>
     

@@ -1,10 +1,10 @@
 <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
 <#assign direct_edit=action.getCardParam('direct_edit')!'false'/>
-<style>
+<#assign crud_observers=action.getCardParam('crud_observers')!''/>
 
-</style>
 
 <#import "macro/validation.ftl" as valid>
+<#import "macro/javascript.ftl" as js>	
 
 <script type="text/javascript">
     
@@ -58,6 +58,7 @@
         //Gestione check modifica valori
         $('.${cardId}_input_field').change(function(){
                 ${cardId}_chaged_values=true;
+                <@js.notify_observer crud_observers=crud_observers event_name='input_changed'/>
         });
         
 

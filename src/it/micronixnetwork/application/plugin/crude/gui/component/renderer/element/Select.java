@@ -18,23 +18,20 @@ import it.micronixnetwork.gaf.util.StringUtil;
 public class Select extends FieldRenderer {
 
     private final SelectRenderer select;
-    private final ToView toview;
-    private final ToInput toinput;
+    
 
     public Select(Class targetClass, String fieldName, Field field) {
 	super(targetClass, fieldName, field);
 	select = field.getAnnotation(SelectRenderer.class);
-	toview = field.getAnnotation(ToView.class);
-	toinput = field.getAnnotation(ToInput.class);
     }
 
     public StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer result = new StringBuffer();
 	String cardId = (String) stack.findValue("cardId");
 	String uiid = (String) stack.findValue("uiid");
+        
 	if (select != null) {
-	    result.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
-
+	    
 	    String map = select.map();
 
 	    Object values = null;
@@ -50,23 +47,20 @@ public class Select extends FieldRenderer {
 	    if (!startValue.equals("nill")) {
 		startValue_option = (List) stack.findValue(startValue);
 	    }
-	    
 	    String suffix=fieldName.replaceAll("\\.", "_");
-	    
 	    String selectId=cardId + "_" + uiid +"_"+targetClass.getSimpleName()+"_"+suffix+"_input";
-	    
 	    result.append(writeLabel(null, stack,true));
 	    result.append("<select id=\""+selectId+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
 	    if (values != null && values instanceof LinkedHashMap) {
 		if (startValue_option != null) {
-		    result.append(writeOption(startValue_option.get(0), startValue_option.get(1), fieldValue, stack));
+		    result.append(writeOption(startValue_option.get(1), startValue_option.get(0), fieldValue, stack));
 		}
-		for (Object label : ((LinkedHashMap) values).keySet()) {
-		    result.append(writeOption(label, ((LinkedHashMap) values).get(label), fieldValue, stack));
+		for (Object code : ((LinkedHashMap) values).keySet()) {
+                    result.append(writeOption(((LinkedHashMap) values).get(code), code, fieldValue, stack));
 		}
 	    }
 	    result.append("</select>");
-	    result.append("</p>");
+	    result=appendFieldParagraph(result, stack);
 	    AsincInfo asincInfo = (AsincInfo) field.getAnnotation(AsincInfo.class);
             List<String> activeOnChange=StringUtil.stringToList(select.activeOnChange());
             String depend= select.dependFrom();
@@ -78,34 +72,67 @@ public class Select extends FieldRenderer {
                 result.append("}catch(error){alert(error);}");
             }
             if(activeOnChange.size()>0){
-                for (String  fieldName: activeOnChange) {
+                for (String  toCall: activeOnChange) {
                     result.append("try{");
-                    result.append(cardId + "_active_"+fieldName+"('" + fieldName + "',$(this).val(),'" + targetClass.getName() + "','" + uiid + "');");
+                    result.append(cardId + "_active_"+toCall+"('" + fieldName + "',$(this).val(),'" + targetClass.getName() + "','" + uiid + "');");
                     result.append("}catch(error){alert(error);}");
                 }
             }
             result.append("});");
             if(!depend.equals("nill")){
-                result.append("function "+cardId + "_active_"+fieldName+"(fieldName,value,targetClass,uiid){");
+                result.append("function "+cardId + "_active_"+fieldName+"(caller,value,targetClass,uiid){");
+                //result.append("alert('"+selectId+"');");
+                result.append("var waiting='"+depend+"';");
+                result.append("if(waiting==caller){");
+                result.append("$.ajax({");
+                result.append("url: \""+stack.findValue("calcAction('asincSelectQuery','crude',null)")+"\",");
+                result.append("dataType: \"json\",");
+                result.append("data: {fieldValue: value,fieldName:\""+fieldName+"\",className:\""+targetClass.getName()+"\"},");
+                result.append("success: function( data ) {");
+                result.append("var options = '';");
+                result.append("for (var i=0; i<data.length; i++) {" +
+                              "    options +='<option value=\"' + data[i].value + '\">' + data[i].label + '</option>';" +
+                              "}");
+                result.append("$('#"+selectId+"').html(options);");
+                result.append("},");
+                result.append("error : function (richiesta,stato,errori) {");
+                result.append("alert(\"Error: \"+errori);");
+                result.append("}");
+                result.append("})");
+                result.append("};");
                 result.append("};");
             }
             result.append("</script>");
-	    
 	}
 	return result;
     }
     
-    private StringBuffer writeOption(Object label, Object value, Object actual, ValueStack stack) throws IOException {
+    private StringBuffer writeOption(Object attributes, Object value, Object actual, ValueStack stack) throws IOException {
 	StringBuffer html = new StringBuffer();
-	if (value != null && label != null) {
+	if (value != null && attributes != null) {
+            String label=null;
+            String[] attrs=null;
+            if((attributes instanceof String[])){
+                attrs=(String[])attributes;
+                label=attrs[0];
+            }else{
+                 label=attributes+"";
+            }
 	    html.append("<option value='");
 	    html.append(value.toString());
 	    html.append("'");
+            if(attrs!=null){
+                for(int i=1;i<attrs.length;i++){   
+                    html.append(" attr"+i+"='"+attrs[i]+"'");
+                }
+            }
 	    if (actual != null && actual.toString().trim().equals(value.toString().trim())) {
 		html.append(" selected");
 	    }
 	    html.append(">");
-	    html.append(I18n.getText(targetClass.getSimpleName() + "." + label, label.toString(), stack));
+            if(label instanceof String){
+                html.append(I18n.getText(targetClass.getSimpleName() + "." + label, label.toString(), stack));
+            }
 	    html.append("</option>");
 	}
 	return html;
@@ -113,16 +140,15 @@ public class Select extends FieldRenderer {
 
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(null, stack,false));
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, select.viewRule(), stack,getCardId(stack)+"_right_view_row"));
-	html.append("</p>");
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, select.viewRule(), stack,getCardId(stack)+"_right_view_row"));
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
     
     public StringBuffer renderCell(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, select.viewRule(), stack,""));
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, select.viewRule(), stack,""));
 	return html;
     }
     

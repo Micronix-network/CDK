@@ -17,6 +17,5 @@ public @interface ToInput
 {
     boolean active() default true;
     boolean encoded() default false;
-    String roles() default "";
-    
+    String roles() default "";   
 }

@@ -13,8 +13,8 @@ import java.lang.annotation.RetentionPolicy;
  * @author kobo
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ToView {
-    String roles() default "";
-    boolean masked() default false;
-    String hide() default "true";
+public @interface Conditional
+{
+    String rule() default "true";
+    
 }

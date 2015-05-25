@@ -15,30 +15,33 @@
     z-index: 2000;
 }
 
-.${cardId}_topDownDialog{
-    position:absolute;
+.${cardId}_Dialog{
     background-color:#fffffe;
     box-shadow: 0px 2px 3px  #333333;
     -webkit-box-shadow: 0px 2px 3px  #333333;
     -moz-box-shadow: 0px 2px 3px  #333333;
+    max-width: 630px;
+    height: auto;
+    z-index: 10000;  
+}
+
+.${cardId}_topDownDialog{
+    position:absolute;
     top: -100%;
     left:50%;
     width: 50%;
-    max-width: 630px;
-    height: auto;
-    z-index: 2000;  
 }
 
-.${cardId}_topDownDialog .form_title{
+.${cardId}_Dialog .form_title{
     padding: 5px;
     line-height :25px;
 }
 
-.${cardId}_topDownDialog .diag_message{
+.${cardId}_Dialog .diag_message{
     padding: 10px;
 }
 
-.${cardId}_child_form h3,.${cardId}_topDownDialog h3{
+.${cardId}_child_form h3,.${cardId}_Dialog h3{
     -moz-box-shadow: inset 0 0 3px #bbb;
     -webkit-box-shadow: inset 0 0 3px #bbb;
     box-shadow: inner 0 0 3px #bbb;
@@ -56,7 +59,7 @@
     font-size:12px;
 }
 
-.${cardId}_topDownDialog .diag_message{
+.${cardId}_Dialog .diag_message{
     text-align:center;
     font-size: 16px;
     font-weight: 300;
@@ -442,6 +445,19 @@ input[disabled].${cardId}_right_input_row{
 
 
 #${cardId}_overlay_crude_ui {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    opacity: 0;
+    background: rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+#${cardId}_overlay_popup_ui {
     position: absolute;
     width: 100%;
     height: 100%;

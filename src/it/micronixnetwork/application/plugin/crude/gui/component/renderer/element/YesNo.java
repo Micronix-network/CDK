@@ -21,7 +21,6 @@ public class YesNo extends FieldRenderer {
     @Override
     public StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	String values = yesNo.values();
 	String[] a_values = values.split("\\|");
 	String[] real_values = new String[2];
@@ -50,17 +49,16 @@ public class YesNo extends FieldRenderer {
 	    html.append("</option>");
 	}
 	html.append("</select>");
-	html.append("</p>");
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
 
     @Override
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(null, stack,false));
 	html.append(drawDefaultView(targetClass, field, fieldValue, false, yesNo.viewRule(), stack,getCardId(stack)+"_right_view_row"));
-	html.append("</p>");
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
 

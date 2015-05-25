@@ -9,6 +9,8 @@ import it.micronixnetwork.application.plugin.crude.annotation.AsincInfo;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.AutocompleteRenderer;
 import it.micronixnetwork.gaf.exception.ActionException;
 import it.micronixnetwork.gaf.exception.ApplicationException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Command per il recupero di una commessa dal DB
@@ -26,10 +28,10 @@ public class AutocompleteQuery extends CrudAction {
     
     private String className;
     
-    private String infoString;
+    private String jsonOutData;
     
-    public String getInfoString() {
-	return infoString;
+    public String getjsonOutData() {
+	return jsonOutData;
     }
     
     public void setFieldName(String fieldName) {
@@ -47,7 +49,7 @@ public class AutocompleteQuery extends CrudAction {
     
     @Override
     protected String doIt() throws ApplicationException {
-	StringBuffer out=new StringBuffer("[");
+	JSONArray array=new JSONArray();
 	
 	if (fieldName == null)
 	    throw new ActionException("Assert: No fieldName difined");
@@ -83,21 +85,15 @@ public class AutocompleteQuery extends CrudAction {
 	    
 	    List<Object[]> qresult=(List<Object[]>)queryService.search(query, params, false);
 	    
-	    out=new StringBuffer("[");
-	    
-	    for(int i=0;i<qresult.size();i++){
-		Object[] row=qresult.get(i);
-		out.append("{\"label\":\""+row[0].toString()+"\",\"value\":\""+row[1].toString()+"\"}");
-		if(i<qresult.size()-1){
-		    out.append(",");
-		}
-	    }
-	   
+            for(int i=0;i<qresult.size();i++){
+                   Object[] row=qresult.get(i);
+                   JSONObject obj=new JSONObject();
+                   obj.put("label", row[1]);
+                   obj.put("value", row[0]);
+                   array.put(obj);
+            } 
 	}
-	
-	out.append("]");
-	
-	infoString=out.toString();
+	jsonOutData=array.toString();
 	
 	return SUCCESS;
     }

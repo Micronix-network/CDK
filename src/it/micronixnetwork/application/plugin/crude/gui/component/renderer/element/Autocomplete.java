@@ -13,20 +13,17 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class Autocomplete extends FieldRenderer {
 
     private final AutocompleteRenderer autoc;
-    private final ToView toview;
-    private final ToInput toinput;
+    
 
     public Autocomplete(Class targetClass, String fieldName, Field field) {
 	super(targetClass, fieldName, field);
 	autoc = field.getAnnotation(AutocompleteRenderer.class);
-	toview = field.getAnnotation(ToView.class);
-	toinput = field.getAnnotation(ToInput.class);
     }
 
     public StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer result = new StringBuffer();
 	if (autoc != null) {
-	    result.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
+	    
 	    String autocId=calcInputId(stack);
 	    result.append(writeLabel(null, stack,true));
 	    result.append("<input id=\""+autocId+"\" class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_row\" style=\"" + getFieldStyle(field) + "\"");
@@ -47,7 +44,7 @@ public class Autocomplete extends FieldRenderer {
 	    }
 	    result.append(">");
 	    result.append("</input>");
-	    result.append("</p>");
+	    result=appendFieldParagraph(result, stack);
 	    result.append("<script type=\"text/javascript\">");
 	    result.append("$('#"+autocId+"').autocomplete({");
 	    result.append("source: function( request, response ) {");
@@ -91,16 +88,15 @@ public class Autocomplete extends FieldRenderer {
 
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(null, stack,false));
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, autoc.viewRule(), stack,getCardId(stack)+"_right_view_row"));
-	html.append("</p>");
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, autoc.viewRule(), stack,getCardId(stack)+"_right_view_row"));
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
     
     public StringBuffer renderCell(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, autoc.viewRule(), stack,""));
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, autoc.viewRule(), stack,""));
 	return html;
     }
     

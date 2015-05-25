@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package it.micronixnetwork.application.plugin.crude.annotation;
+package it.micronixnetwork.application.plugin.crude.annotation.renderer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,8 +13,5 @@ import java.lang.annotation.RetentionPolicy;
  * @author kobo
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ToView {
-    String roles() default "";
-    boolean masked() default false;
-    String hide() default "true";
+public @interface HiddenRenderer{
 }

@@ -1,6 +1,5 @@
 package it.micronixnetwork.application.plugin.crude.action;
 
-import it.micronixnetwork.application.plugin.crude.annotation.Form;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 import it.micronixnetwork.application.plugin.crude.exception.CrudException;
@@ -157,11 +156,35 @@ public abstract class CrudAction extends CardAction {
         return Format.realDeformatter(value, stack);
     }
 
-    public LinkedHashMap<String, String> mapByQuery(String query) {
-        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
-        List<Object[]> qresult = (List<Object[]>) executeHQLQuery(query, false);
-        for (Object[] row : (List<Object[]>) qresult) {
-            result.put(row[1].toString(), row[0].toString());
+    public LinkedHashMap<String, Object> mapByQuery(String query) {
+        return mapByQuery(query, null);
+    }
+
+    public LinkedHashMap<String, Object> mapByQuery(String query, HashMap param) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap();
+
+        List<Object[]> qresult = null;
+        try {
+            qresult = queryService.search(query, param, false);
+        } catch (Exception ex) {
+            error("mapQuery error: ",ex);
+        }
+
+        if (qresult != null) {
+            for (Object[] row : (List<Object[]>) qresult) {
+                String[] more=null;
+                if(row.length>2){
+                    more=new String[row.length-1];
+                }
+                if(more==null){
+                    result.put(row[0].toString(), row[1].toString());
+                }else{
+                    for(int i=0;i<more.length;i++){
+                        more[i]=row[i+1].toString();
+                    }
+                    result.put(row[0].toString(), more);
+                }
+            }
         }
         return result;
     }
@@ -276,7 +299,6 @@ public abstract class CrudAction extends CardAction {
         }
     }
 
-
     protected Object ognlEvaluation(String rule, Object model) {
         Object result = null;
         ActionContext context = ActionContext.getContext();
@@ -370,23 +392,23 @@ public abstract class CrudAction extends CardAction {
 
     protected void setLocalProvider(String className) {
 
-        final Locale locale = (Locale) ActionContext.getContext().getLocale();
+        if (className != null) {
+            final Locale locale = (Locale) ActionContext.getContext().getLocale();
+            ResourceBundle bundle = null;
+            try {
+                bundle = ResourceBundle.getBundle(className.toLowerCase(), locale);
+            } catch (Exception ex) {
+                warn(ex.getMessage());
+            }
 
-        ResourceBundle bundle = null;
-
-        try {
-            bundle = ResourceBundle.getBundle(className.toLowerCase(), locale);
-        } catch (Exception ex) {
-            warn(ex.getMessage());
-        }
-
-        if (bundle != null) {
-            TextProviderFactory tpf = new TextProviderFactory();
-            localProvider = tpf.createInstance(bundle, new LocaleProvider() {
-                public Locale getLocale() {
-                    return locale;
-                }
-            });
+            if (bundle != null) {
+                TextProviderFactory tpf = new TextProviderFactory();
+                localProvider = tpf.createInstance(bundle, new LocaleProvider() {
+                    public Locale getLocale() {
+                        return locale;
+                    }
+                });
+            }
         }
 
     }

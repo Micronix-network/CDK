@@ -6,10 +6,7 @@ import it.micronixnetwork.gaf.exception.ApplicationException;
 import java.util.Map;
 
 /**
- *
- *
  * @author kobo
- *
  */
 public class Create extends EditAction {
 

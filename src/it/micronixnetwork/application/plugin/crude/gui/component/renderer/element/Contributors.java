@@ -51,8 +51,6 @@ public class Contributors extends FieldRenderer {
 		throw new IOException(ex);
 	    }
 	}
-
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(""+getCardId(stack)+"_full_label", stack,true));
 	html.append("<div style=\"border: 1px solid silver\">");	
 	html.append("<select id=\""+getCardId(stack)+"_"+fieldName+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" right_input_multiselect multiselect\" style=\"" + getFieldStyle(field) + "\" size=\"6\" multiple=\"true\">");
@@ -65,13 +63,12 @@ public class Contributors extends FieldRenderer {
 	html.append("<div style=\"clear: both;\">");
 	html.append("</div>");
 	html.append("</div>");
-	html.append("</p>");
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
 
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(""+getCardId(stack)+"_full_label", stack,false));
 	if (fieldValue != null) {
 	    if (fieldValue instanceof Iterable) {
@@ -82,7 +79,7 @@ public class Contributors extends FieldRenderer {
 		html.append("</ul>");
 	    }
 	}
-	html.append("</p>");
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
     

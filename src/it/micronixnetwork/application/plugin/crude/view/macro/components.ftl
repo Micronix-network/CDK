@@ -79,6 +79,7 @@
             ${cardId}_modified_object_confirm_dialog.show();
         }else{
             $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
+            $("#${cardId}_view_ui_form").empty();
             $('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
             <#if direct_edit="false">
                 callEvent("${cardId}_${prototypeName}_view_ui_info_object_refresh");
@@ -286,8 +287,8 @@
     $('#${cardId}_create_button').click(function(){
         $('#${cardId}_${prototypeName}_new_ui_new_object_action').show();
         clearForm($('#${cardId}_get_object_form'));
+        clearForm($('#${cardId}_new_ui_form'));
         copyForm($("#${cardId}_get_object_form"), $("#${cardId}_${prototypeName}_form"));
-        //addHiddenToForm($('#${cardId}_get_object_form'),'targetClass','${prototype}');
         $('#${cardId}_${prototypeName}_new_ui_insert_object_action_content').empty();
         $('#${cardId}_${prototypeName}_new_ui_get_obj_action_content').empty();
         $('#${cardId}_${prototypeName}_new_ui_insert_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
@@ -320,75 +321,7 @@
 </script>
 </#macro>
 
-<#macro confirm_dialog id message cardId="${cardId}">
-<div id="${cardId}_${id}_confirm_dialog" class="${cardId}_topDownDialog" style="width:300px">
-    <h3>
-    ?
-    </h3>
-    <div class="diag_message">${message}</div>
-    <div class="form_title">
-    <table style="width:100%">
-        <tr>
-            <td style="text-align:left;">
-            <button id="${cardId}_${id}_cancel_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-denied">
-                <span>
-                    ${action.getText("crude.button.cancel")}
-                </span>
-            </button>
-            </td>
-            <td style="text-align:right;">
-            <button id="${cardId}_${id}_apply_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check">
-                <span>
-                    ${action.getText("crude.button.delete")}
-                </span>    
-            </button>
-            </td>
-        </tr>
-    </table>
-    </div>
-</div>
-<script type="text/javascript">
-    var ${cardId}_${id}_confirm_dialog = new (function() {
-			
-        function init() {
-            $('#${cardId}_${id}_cancel_button').click(function(){
-                hide();
-            });
-            
-            $('#${cardId}_${id}_apply_button').click(function(){
-                try{
-                    hide();
-                    ${cardId}_${id}_confirm_dialog_apply();
-                }catch(error){
-                    alert(error);
-                    hide();
-                }
-            });
-            
-        };
 
-        this.hide=hide;
-        function hide() {
-            $('#${cardId}_${id}_confirm_dialog').animate({top: "-100%"}, 500,function(){
-                $('#${cardId}_overlay_crude_ui').css('visibility','hidden');
-                $('#${cardId}_overlay_crude_ui').css('opacity','0');
-            });
-        }
-
-        this.show=show;
-        function show() {
-            $('#${cardId}_overlay_crude_ui').css('visibility','visible');
-            $('#${cardId}_overlay_crude_ui').css('opacity','1');
-            var card_width=$("#${cardId}_card").width();
-            $trg=$('#${cardId}_${id}_confirm_dialog');
-            var left=(card_width-$trg.width())/2;
-            $trg.css('left',left);
-            $trg.animate({top: "0"}, 500);
-        }
-        init();	
-    })(); 
-</script>
-</#macro>
 
 <#macro view_update_dialog roleModi=true cardId="${cardId}">
     <#assign direct_edit=action.getCardParam('direct_edit')!'false'/>
@@ -406,6 +339,15 @@
     <#else>
         <#assign origin_class=""/>
     </#if>
+
+    <#if pop_height==''>
+        <#assign pop_height='400'/>
+    </#if>
+
+    <#if pop_width==''>
+        <#assign pop_width='550'/>
+    </#if>
+    
 
     <#if prototypeName??>
     <div id="${cardId}_view_update_dialog" class="md-modal md-effect-1">
@@ -479,6 +421,7 @@
                     ${cardId}_modified_object_confirm_dialog.show();
                 }else{
                     $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
+                    $("#${cardId}_view_ui_form").empty();
                     $('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
                     <#if direct_edit="false">
                         callEvent("${cardId}_${prototypeName}_view_ui_info_object_refresh");
@@ -528,9 +471,20 @@
 
 <#macro insert_update_dialog cardId="${cardId}">
 <#assign prototype=action.getCardParam('prototype')!''/>
+<#assign pop_width=action.getCardParam('pop_width')!'550'/>
+<#assign pop_height=action.getCardParam('pop_height')!'400'/>
 <#if prototype!=''>
     <#assign prototypeName=prototype.substring(prototype.lastIndexOf('.')+1)!''/>
 </#if>
+
+<#if pop_height==''>
+        <#assign pop_height='400'/>
+    </#if>
+
+<#if pop_width==''>
+    <#assign pop_width='550'/>
+</#if>
+
 <#if prototypeName??>
 <div id="${cardId}_insert_update_dialog" class="md-modal md-effect-1">
     <div class="md-content" style="width:${pop_width}px;height:${pop_height}px;overflow: hidden;">
@@ -635,4 +589,132 @@
 </#macro>
 
 
+<#macro confirm_dialog id message cardId="${cardId}">
+<div id="${cardId}_${id}_confirm_dialog" class="${cardId}_Dialog ${cardId}_topDownDialog" style="position:fixed:left:50%;width:300px;-webkit-transform: translateX(-50%);-moz-transform: translateX(-50%);-ms-transform: translateX(-50%);transform: translateX(-50%)">
+    <h3>
+    ?
+    </h3>
+    <div class="diag_message">${message}</div>
+    <div class="form_title">
+    <table style="width:100%">
+        <tr>
+            <td style="text-align:left;">
+            <button id="${cardId}_${id}_cancel_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-denied">
+                <span>
+                    ${action.getText("crude.button.cancel")}
+                </span>
+            </button>
+            </td>
+            <td style="text-align:right;">
+            <button id="${cardId}_${id}_apply_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check">
+                <span>
+                    ${action.getText("crude.button.delete")}
+                </span>    
+            </button>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var ${cardId}_${id}_confirm_dialog = new (function() {
+			
+        function init() {
+            $('#${cardId}_${id}_cancel_button').click(function(){
+                hide();
+            });
+            
+            $('#${cardId}_${id}_apply_button').click(function(){
+                try{
+                    hide();
+                    ${cardId}_${id}_confirm_dialog_apply();
+                }catch(error){
+                    alert(error);
+                    hide();
+                }
+            });
+            
+        };
 
+        this.hide=hide;
+        function hide() {
+            $('#${cardId}_${id}_confirm_dialog').animate({top: "-100%"}, 500,function(){
+                $('#${cardId}_overlay_crude_ui').css('visibility','hidden');
+                $('#${cardId}_overlay_crude_ui').css('opacity','0');
+            });
+        }
+
+        this.show=show;
+        function show() {
+            $('#${cardId}_overlay_crude_ui').css('visibility','visible');
+            $('#${cardId}_overlay_crude_ui').css('opacity','1');
+            $trg=$('#${cardId}_${id}_confirm_dialog');
+            $trg.animate({top: "0"}, 500);
+        }
+        init();	
+    })(); 
+</script>
+</#macro>
+
+
+<#macro confirm_dialog_popup id message cardId="${cardId}">
+<div id="${cardId}_${id}_confirm_dialog" class="${cardId}_Dialog md-modal" style="width:300px;">
+    <h3>
+    ?
+    </h3>
+    <div class="diag_message">${message}</div>
+    <div class="form_title">
+    <table style="width:100%">
+        <tr>
+            <td style="text-align:left;">
+            <button id="${cardId}_${id}_cancel_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-denied">
+                <span>
+                    ${action.getText("crude.button.cancel")}
+                </span>
+            </button>
+            </td>
+            <td style="text-align:right;">
+            <button id="${cardId}_${id}_apply_button" class="btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check">
+                <span>
+                    ${action.getText("crude.button.delete")}
+                </span>    
+            </button>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var ${cardId}_${id}_confirm_dialog = new (function() {
+			
+        function init() {
+            $('#${cardId}_${id}_cancel_button').click(function(){
+                hide();
+            });
+            
+            $('#${cardId}_${id}_apply_button').click(function(){
+                try{
+                    hide();
+                    ${cardId}_${id}_confirm_dialog_apply();
+                }catch(error){
+                    alert(error);
+                    hide();
+                }
+            });
+        };
+
+        this.hide=hide;
+        function hide() {
+            $('.md-overlay').css('z-index','1000');
+            $('#${cardId}_${id}_confirm_dialog').removeClass('md-show');
+        }
+
+        this.show=show;
+        function show() {
+            $('.md-overlay').css('z-index','3000');
+            $('#${cardId}_${id}_confirm_dialog').addClass('md-show');
+        }
+        init();	
+    })(); 
+</script>
+</#macro>

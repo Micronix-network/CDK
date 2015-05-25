@@ -61,7 +61,7 @@ public class AziendaDetail implements ViewModel{
     @Column(name = "UtenteConnessione")
     public String utenteConnessione;
     
-    @ToView(hidden = true)
+    @ToView(masked = true)
     @ToInput
     @Column(name = "PasswordConnessione")
     @TextRenderer(type = "password")
@@ -82,7 +82,7 @@ public class AziendaDetail implements ViewModel{
     @Column(name = "UtenteDB")
     public String utenteDB;
     
-    @ToView(hidden = true)
+    @ToView(masked = true)
     @ToInput
     @Column(name = "PasswordDB")
     @TextRenderer(type = "password")

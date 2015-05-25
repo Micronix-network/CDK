@@ -2,12 +2,14 @@ package it.micronixnetwork.application.plugin.crude.gui.component.renderer;
 
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.AutocompleteRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.ContributorsRenderer;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.HiddenRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.SelectRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextAreaRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.YesNoRenderer;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Autocomplete;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Contributors;
+import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Hidden;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Select;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Text;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.TextArea;
@@ -92,6 +94,15 @@ public class RendererFactory {
 		rendererCache.put(keyCache, result);
 	    }
 	}
+        
+        HiddenRenderer hi=field.getAnnotation(HiddenRenderer.class);
+        if(hi!=null){
+            result=getFromCache(keyCache,HiddenRenderer.class);
+	    if(result==null){
+		result= new Hidden(targetClass, fieldname, field);
+		rendererCache.put(keyCache, result);
+	    }
+        }
 	
 	if(result==null){
 	    result=getFromCache(keyCache,Text.class);

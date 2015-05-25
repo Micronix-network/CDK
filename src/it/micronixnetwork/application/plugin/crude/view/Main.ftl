@@ -129,7 +129,11 @@ $(document).ready(function(){
     
 </#if>
 
+<#if popup_gui?boolean>
+<@comp.confirm_dialog_popup id="modified_object" message="${action.getText('crude.update.modified')}"/>
+<#else>
 <@comp.confirm_dialog id="modified_object" message="${action.getText('crude.update.modified')}"/>
+</#if>
 <script type="text/javascript">
     function ${cardId}_modified_object_confirm_dialog_apply(){
         $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
@@ -145,7 +149,7 @@ $(document).ready(function(){
             </#if>
         </#if>
     }
-</script> 
+</script>
 
 
 <@comp.confirm_dialog id="remove_selected_objects" message="${action.getText('crude.remove.confirm')}"/>

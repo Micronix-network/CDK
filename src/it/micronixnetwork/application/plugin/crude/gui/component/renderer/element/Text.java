@@ -17,14 +17,11 @@ public class Text extends FieldRenderer {
     private boolean disabled;
     
     private final TextRenderer text;
-    
-    private final ToView toview;
 
     public Text(Class targetClass, String fieldName, Field field, boolean disabled) {
 	super(targetClass, fieldName, field);
 	this.disabled=disabled;
 	this.text=field.getAnnotation(TextRenderer.class);
-	toview = field.getAnnotation(ToView.class);
     }
 
     @Override
@@ -32,7 +29,6 @@ public class Text extends FieldRenderer {
 	StringBuffer html=new StringBuffer();
 	Object value=fieldValue;
 	String textId=calcInputId(stack);
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	String input_type ="";
 	String defaultValue =""; 
 	
@@ -94,7 +90,7 @@ public class Text extends FieldRenderer {
 		html.append(" disabled");
 	    }
 	    html.append(">");
-	    html.append("</p>");
+	    html=appendFieldParagraph(html, stack);
 	    if(text!=null){
 	    html.append("<script type=\"text/javascript\">");
     	    if(!text.droppableFrom().equals("")){
@@ -115,17 +111,16 @@ public class Text extends FieldRenderer {
     @Override
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append("<p style=\"\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\">");
 	html.append(writeLabel(null, stack,false));
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, text!=null?text.viewRule():"nill", stack,getCardId(stack)+"_right_view_row"));
-	html.append("</p>");
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, text!=null?text.viewRule():"nill", stack,getCardId(stack)+"_right_view_row"));
+	html=appendFieldParagraph(html, stack);
 	return html;
     }
 
     @Override
     public StringBuffer renderCell(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.hidden():false, text!=null?text.viewRule():"nill", stack,""));
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, text!=null?text.viewRule():"nill", stack,""));
 	return html;
     }
 

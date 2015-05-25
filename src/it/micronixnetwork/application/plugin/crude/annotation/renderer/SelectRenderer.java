@@ -13,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author kobo
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SelectRenderer {
+public @interface SelectRenderer{
     String map() default "nill";
     String viewRule() default "nill";
     String startValue() default "nill";
