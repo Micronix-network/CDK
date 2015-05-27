@@ -167,20 +167,20 @@ public abstract class CrudAction extends CardAction {
         try {
             qresult = queryService.search(query, param, false);
         } catch (Exception ex) {
-            error("mapQuery error: ",ex);
+            error("mapQuery error: ", ex);
         }
 
         if (qresult != null) {
             for (Object[] row : (List<Object[]>) qresult) {
-                String[] more=null;
-                if(row.length>2){
-                    more=new String[row.length-1];
+                String[] more = null;
+                if (row.length > 2) {
+                    more = new String[row.length - 1];
                 }
-                if(more==null){
+                if (more == null) {
                     result.put(row[0].toString(), row[1].toString());
-                }else{
-                    for(int i=0;i<more.length;i++){
-                        more[i]=row[i+1].toString();
+                } else {
+                    for (int i = 0; i < more.length; i++) {
+                        more[i] = row[i + 1].toString();
                     }
                     result.put(row[0].toString(), more);
                 }
@@ -318,24 +318,27 @@ public abstract class CrudAction extends CardAction {
 
         StatefulKnowledgeSession session = droolsService.createSession(rules);
 
-        if (queryService != null) {
-            debug("Setting : queryService");
-            session.setGlobal("queryService", queryService);
+        if (session != null) {
+
+            if (queryService != null) {
+                debug("Setting : queryService");
+                session.setGlobal("queryService", queryService);
+            }
+
+            if (crudeService != null) {
+                debug("Setting : crudeService");
+                session.setGlobal("crudeService", crudeService);
+            }
+
+            List<Object> facts = new ArrayList<Object>();
+
+            facts.add(fact);
+            facts.add(msg);
+
+            droolsService.addFactsToSession(session, facts);
+
+            droolsService.fireRules(session);
         }
-
-        if (crudeService != null) {
-            debug("Setting : crudeService");
-            session.setGlobal("crudeService", crudeService);
-        }
-
-        List<Object> facts = new ArrayList<Object>();
-
-        facts.add(fact);
-        facts.add(msg);
-
-        droolsService.addFactsToSession(session, facts);
-
-        droolsService.fireRules(session);
     }
 
     protected Map<String, String> childFields(Class targetClass) {

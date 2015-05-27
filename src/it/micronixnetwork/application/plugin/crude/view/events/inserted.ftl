@@ -1,3 +1,4 @@
+<#assign popup_gui=action.getCardParam('popup_gui')!'false'/>
 <#if targetClass??>
 <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
 
@@ -20,7 +21,12 @@ $(document).ready(function(){
 		$('#${cardId}_${targetClassName}_insert_object_action').hide();
 		callEvent("${cardId}_${targetClassName}_${uiid}_get_object_refresh");
 	<#else>
-		${cardId}_slideToPage($('#${cardId}_${targetClassName}_new_object_pane'),$('#${cardId}_list_slide'), 'left');
+            <#if popup_gui?boolean>
+                ${cardId}_insert_update_dialog.hide();
+            <#else>
+                ${cardId}_slideToPage($('#${cardId}_${targetClassName}_new_object_pane'),$('#${cardId}_list_slide'), 'left');
+            </#if> 
+		
 	</#if>
 });
 </script>

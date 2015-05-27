@@ -5,6 +5,7 @@ import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 import it.micronixnetwork.application.plugin.crude.annotation.ValidField;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.SelectRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextAreaRenderer;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 
@@ -24,8 +25,9 @@ public class GafConfigCRUD implements ViewModel{
 
     @ToView
     @ToInput
-    @ToList(filtered=true,filterRule="mapByQuery('select distinct gc.section,gc.section from GafConfigCrud gc order by gc.section asc')")
+    @ToList(filtered=true,filterRule="#{'1':'Sec. 1','2':'Sec. 2','3':'Sec. 3','4':'Sec. 4','5':'Sec. 5'}",cellRule = "#{1:'Sec. 1',2:'Sec. 2',3:'Sec. 3',4:'Sec. 4',5:'Sec. 5'}")
     @FieldStyleDirective(tableCellStyle = "width:80px;background-color:rgba(100,255,100,0.1);text-align:center;font-weight:bold")
+    @SelectRenderer(map="#{'1':'Sec. 1','2':'Sec. 2','3':'Sec. 3','4':'Sec. 4','5':'Sec. 5'}")
     @ValidField(type=ValidField.INT_VALIDATION)
     public Integer section;
 

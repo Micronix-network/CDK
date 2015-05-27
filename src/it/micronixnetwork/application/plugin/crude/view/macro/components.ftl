@@ -122,11 +122,9 @@
             <tr>
                 <td style="text-align:left;">
                 <button id="${cardId}_${prototypeName}_new_cancel_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-arrow-left-alt1" style="display:none"><span>${action.getText("crude.button.cancel","Cancel")}</span></button>
-                <button id="${cardId}_${prototypeName}_new_end_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-arrow-left-alt1" style="display:none"><span>${action.getText("crude.button.finish","Finish")}</span></button>
                 </td>
                 <td style="text-align:right;">
                 <button id="${cardId}_${prototypeName}_new_save_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check" style="display:none"><span>${action.getText("crude.button.save","Save")}</span></button>
-                <button id="${cardId}_${prototypeName}_new_update_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check" style="display:none"><span>${action.getText("crude.button.update","Update")}</span></button>
                 </td>
             </tr>
         </table>
@@ -141,27 +139,7 @@
             startOnLoad="false" 
             style=";min-height:200px">
         </@gaf.div>
-
-        <@gaf.div id="${cardId}_${prototypeName}_new_ui_get_obj_action" 
-            action="insertGet"
-            namespace="crude"
-            loadImage="true" 
-            formId="${cardId}_get_object_form" 
-            listen="${cardId}_${prototypeName}_new_ui_get_object_refresh" 
-            startOnLoad="false" 
-            style="width:100%;">
-        </@gaf.div>
     </div>
-    <@gaf.div id="${cardId}_${prototypeName}_new_ui_update_object_action" 
-        action="insertUpdate"
-        namespace="crude" 
-        loadImage="spinner-7 normal" 
-        formId="${cardId}_object_form_post" 
-        listen="${cardId}_${prototypeName}_new_ui_update_object_refresh" 
-        startOnLoad="false" 
-        style="height:35px;text-align:center;width:100%;overflow:hidden;position:absolute;top:0px;z-index:-1">
-    </@gaf.div>
-
     <@gaf.div id="${cardId}_${prototypeName}_new_ui_insert_object_action" 
         action="insertCreate" 
         namespace="crude" 
@@ -174,16 +152,8 @@
     </@gaf.div>
 </div>
 <script type="text/javascript">
-    $('#${cardId}_${prototypeName}_new_cancel_button,#${cardId}_${prototypeName}_new_end_button').click(function(){
+    $('#${cardId}_${prototypeName}_new_cancel_button').click(function(){
         ${cardId}_slideToPage($('#${cardId}_${prototypeName}_new_object_pane'),$('#${cardId}_list_slide'), 'left');
-    });
-    
-    $('#${cardId}_${prototypeName}_new_update_button').click(function(){
-        $('#${cardId}_${prototypeName}_new_ui_update_object_action').show();
-        clearForm($("#${cardId}_object_form_post"));
-        copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
-        addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
-        callEvent("${cardId}_${prototypeName}_new_ui_update_object_refresh");
     });
 		
     $('#${cardId}_${prototypeName}_new_save_button').click(function(){
@@ -290,7 +260,6 @@
         clearForm($('#${cardId}_new_ui_form'));
         copyForm($("#${cardId}_get_object_form"), $("#${cardId}_${prototypeName}_form"));
         $('#${cardId}_${prototypeName}_new_ui_insert_object_action_content').empty();
-        $('#${cardId}_${prototypeName}_new_ui_get_obj_action_content').empty();
         $('#${cardId}_${prototypeName}_new_ui_insert_object_action .div_asinc_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
         callEvent("${cardId}_${prototypeName}_new_ui_new_object_refresh");
         <#if popup_gui?boolean>
@@ -318,6 +287,19 @@
         return false;
     });
 </#if>    
+
+${cardId}_card.listRefresh= function(){
+    callEvent('${cardId}_${prototypeName}_find_refresh');
+}
+
+${cardId}_card.setFilter= function(name,val){
+    $('#${cardId}_filter_'+name).val(val);
+}
+
+${cardId}_card.setTitle= function(message){
+    crud2_set_list_message(message);
+}
+
 </script>
 </#macro>
 
@@ -498,27 +480,7 @@
             startOnLoad="false" 
             style=";min-height:200px">
         </@gaf.div>
-
-        <@gaf.div id="${cardId}_${prototypeName}_new_ui_get_obj_action" 
-            action="insertGet"
-            namespace="crude"
-            loadImage="true" 
-            formId="${cardId}_get_object_form" 
-            listen="${cardId}_${prototypeName}_new_ui_get_object_refresh" 
-            startOnLoad="false" 
-            style="width:100%;">
-        </@gaf.div>
     </div>
-    <@gaf.div id="${cardId}_${prototypeName}_new_ui_update_object_action" 
-        action="insertUpdate"
-        namespace="crude" 
-        loadImage="spinner-7 normal" 
-        formId="${cardId}_object_form_post" 
-        listen="${cardId}_${prototypeName}_new_ui_update_object_refresh" 
-        startOnLoad="false" 
-        style="height: 35px;text-align: center;width: 100%;overflow: hidden;position: absolute;bottom: 35px;z-index: -1;border: 1px solid #eee;padding: 0px;">
-    </@gaf.div>
-
     <@gaf.div id="${cardId}_${prototypeName}_new_ui_insert_object_action" 
         action="insertCreate" 
         namespace="crude" 
@@ -534,11 +496,9 @@
             <tr>
                 <td style="text-align:left;">
                 <button id="${cardId}_${prototypeName}_new_cancel_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-arrow-left-alt1" style="display:none"><span>${action.getText("crude.button.cancel","Cancel")}</span></button>
-                <button id="${cardId}_${prototypeName}_new_end_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-arrow-left-alt1" style="display:none"><span>${action.getText("crude.button.finish","Finish")}</span></button>
                 </td>
                 <td style="text-align:right;">
                 <button id="${cardId}_${prototypeName}_new_save_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check" style="display:none"><span>${action.getText("crude.button.save","Save")}</span></button>
-                <button id="${cardId}_${prototypeName}_new_update_button" class="${cardId}_insert_button btn btn-small btn-primary ${cardId}_image_btn icon-cole-townsend-check" style="display:none"><span>${action.getText("crude.button.update","Update")}</span></button>
                 </td>
             </tr>
         </table>
@@ -549,16 +509,8 @@
     var ${cardId}_insert_update_dialog = new (function() {
 
         function init() {
-            $('#${cardId}_${prototypeName}_new_cancel_button,#${cardId}_${prototypeName}_new_end_button').click(function(){
+            $('#${cardId}_${prototypeName}_new_cancel_button').click(function(){
                 hide();
-            });
-    
-            $('#${cardId}_${prototypeName}_new_update_button').click(function(){
-                $('#${cardId}_${prototypeName}_new_ui_update_object_action').show();
-                clearForm($("#${cardId}_object_form_post"));
-                copyForm($("#${cardId}_object_form_post"), $("#${cardId}_new_ui_form"));
-                addHiddenToForm($('#${cardId}_object_form_post'),'targetClass','${prototype}');
-                callEvent("${cardId}_${prototypeName}_new_ui_update_object_refresh");
             });
 		
             $('#${cardId}_${prototypeName}_new_save_button').click(function(){

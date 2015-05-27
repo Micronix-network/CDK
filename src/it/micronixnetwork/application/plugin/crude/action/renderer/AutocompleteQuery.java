@@ -9,6 +9,7 @@ import it.micronixnetwork.application.plugin.crude.annotation.AsincInfo;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.AutocompleteRenderer;
 import it.micronixnetwork.gaf.exception.ActionException;
 import it.micronixnetwork.gaf.exception.ApplicationException;
+import it.micronixnetwork.gaf.struts2.action.JSONAction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  * @author kobo
  * 
  */
-public class AutocompleteQuery extends CrudAction {
+public class AutocompleteQuery extends CrudAction implements JSONAction{
 
     private static final long serialVersionUID = 1L;
     

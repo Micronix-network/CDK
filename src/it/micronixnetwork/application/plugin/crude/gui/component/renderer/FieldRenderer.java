@@ -162,7 +162,8 @@ public abstract class FieldRenderer {
     
     protected StringBuffer appendFieldParagraph(StringBuffer compBuffer,ValueStack stack){
         String uiid=(String) stack.findValue("uiid");
-        StringBuffer result=new StringBuffer("<p id=\""+getCardId(stack)+"_"+uiid+"_"+ fieldName + "_field_paragraph\" class=\"" + fieldName + "_field "+getCardId(stack)+"_crud_field\" style=\"display:"+getDisplay(stack)+"\">");
+        String cardId=getCardId(stack);
+        StringBuffer result=new StringBuffer("<p id=\""+cardId+"_"+uiid+"_"+ fieldName + "_field_paragraph\" class=\"" + fieldName + "_field "+cardId+"_crud_field\" style=\"display:"+getDisplay(stack)+"\">");
         result.append(compBuffer);
         result.append("</p>");
         return result;

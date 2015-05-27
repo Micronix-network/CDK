@@ -8,6 +8,7 @@ import it.micronixnetwork.application.plugin.crude.action.CrudAction;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.SelectRenderer;
 import it.micronixnetwork.gaf.exception.ActionException;
 import it.micronixnetwork.gaf.exception.ApplicationException;
+import it.micronixnetwork.gaf.struts2.action.JSONAction;
 import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  * @author kobo
  *
  */
-public class SelectQuery extends CrudAction {
+public class SelectQuery extends CrudAction implements JSONAction{
 
     private static final long serialVersionUID = 1L;
 

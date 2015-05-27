@@ -45,22 +45,11 @@
       	<param name="stringValue">${infoString}</param>
       </result>
     </action>
-
-    <action name="insertGet" class="it.micronixnetwork.application.plugin.crude.action.Get">
-      <param name="uiid">new_ui</param>
-      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
-    </action>
     
     <action name="insertNew" class="it.micronixnetwork.application.plugin.crude.action.New">
       <param name="uiid">new_ui</param>
       <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
       <result name="save_and_go" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/save_and_go.ftl</result>
-    </action>
-    
-    <action name="insertUpdate" class="it.micronixnetwork.application.plugin.crude.action.Update">
-      <param name="uiid">new_ui</param>
-      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/updated.ftl</result>
-      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_error.ftl</result>
     </action>
     
     <action name="insertCreate" class="it.micronixnetwork.application.plugin.crude.action.Create">

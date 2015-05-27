@@ -6,6 +6,7 @@
 package it.micronixnetwork.cdk.domain;
 
 import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
+import it.micronixnetwork.application.plugin.crude.annotation.GlobalFilter;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import java.io.Serializable;
@@ -20,8 +21,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "anagraficaitem")
-
-public class MappingMaster implements ViewModel {
+@GlobalFilter(filter = "tipoItem='d'")
+public class MappingDerivatiMaster implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -38,7 +39,7 @@ public class MappingMaster implements ViewModel {
     public String itemDescription;
     
     @Column(name = "TipoItem")
-    @ToList(filtered = true,filterRule="#{'d':'Derivato','b':'Base'}")
+    @ToList(filtered = true,filterRule="#{'d':'Derivato','b':'Base'}",hidden = true)
     @FieldStyleDirective(tableCellStyle = "width:30px;text-align:center")
     public String tipoItem;
 

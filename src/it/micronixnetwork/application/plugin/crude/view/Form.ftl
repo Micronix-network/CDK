@@ -20,6 +20,14 @@
             ${cardId}_fillPrimarykeyData($pkele,$getChildForm);
         }
     }	
+    
+    ${cardId}_card.hideField=function(name){
+        $('#crud2_${uiid}_'+name+'_field_paragraph').hide();
+    }
+    
+    ${cardId}_card.showField=function(name){
+        $('#crud2_${uiid}_'+name+'_field_paragraph').show();
+    }
 	
     $(document).ready(function(){
         
@@ -29,8 +37,6 @@
 
         <#if operation='update'>
             $('.${cardId}_view_button').hide();
-            $('#${cardId}_${targetClassName}_new_update_button').show();
-            $('#${cardId}_${targetClassName}_new_end_button').show();
             $('#${cardId}_${targetClassName}_info_update_button').show();
             $('#${cardId}_${targetClassName}_info_cancel_button').show();
             $('.${cardId}_${uiid}_form_resultRow').hover(function () {$(this).addClass('highlight');}, function () {$(this).removeClass('highlight');});  

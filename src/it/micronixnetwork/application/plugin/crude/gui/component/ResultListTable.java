@@ -225,7 +225,7 @@ public class ResultListTable extends CrudView {
 	    Object ognlComputed = findValue(rule);
 	    if (ognlComputed != null) {
 		if (ognlComputed instanceof LinkedHashMap) {
-		    Object toShow = ((LinkedHashMap) ognlComputed).get(paramValue.toString());
+		    Object toShow = ((LinkedHashMap) ognlComputed).get(paramValue);
 		    String clazz = "";
 		    if (toShow instanceof List) {
 			cssClass = (String) ((List) toShow).get(1);

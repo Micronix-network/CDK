@@ -47,7 +47,7 @@ var ${cardId}_row_selected;
 <@js.general prototype=prototype/>
 
 //Gestione della notifica di un evento da parte di una CARD osservata
-function ${cardId}_controller_event(parentCardId,param,name){
+function ${cardId}_controller_event(rise,param,name){
     <#if gui_type=='d'>
     if(name=="listrow_click" ){
         //Il parametro è l'oggetto jquery della riga selezionata
@@ -136,6 +136,7 @@ $(document).ready(function(){
 </#if>
 <script type="text/javascript">
     function ${cardId}_modified_object_confirm_dialog_apply(){
+        $("#${cardId}_view_ui_form").empty();
         $('#${cardId}_${prototypeName}_view_ui_info_obj_action').show();
         $('#${cardId}_${prototypeName}_view_ui_get_obj_action').hide();
         <#if direct_edit="false">
