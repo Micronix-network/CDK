@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+  <bean name="crude" type="org.apache.struts2.views.TagLibrary" class="it.micronixnetwork.application.plugin.crude.gui.ftl.CRUDETagLibrary" />
+  
+  <package name="crude_plugin" extends="gaf" namespace="/crude">
+  
+    <action name="crude_entry" class="it.micronixnetwork.application.plugin.crude.action.CrudEntry">
+       <param name="uiid">search_ui</param>
+       <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Main.ftl</result>
+    </action>
+    
+    <action name="find" class="it.micronixnetwork.application.plugin.crude.action.Find">
+      <param name="uiid">search_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/List.ftl</result>
+    </action>
+    
+    <action name="remove" class="it.micronixnetwork.application.plugin.crude.action.Remove">
+      <param name="uiid">search_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/removed.ftl</result>
+    </action>
+    
+    <action name="propertiesRetrive" class="it.micronixnetwork.application.plugin.crude.action.CrudProperties">
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/properties/Form.ftl</result>
+    </action>
+    
+    <action name="autocompleteQuery" class="it.micronixnetwork.application.plugin.crude.action.renderer.AutocompleteQuery">
+      <result name="success" type="string">
+      	<param name="stringValue">${jsonOutData}</param>
+      </result>
+    </action>
+    
+    <action name="asincSelectQuery" class="it.micronixnetwork.application.plugin.crude.action.renderer.SelectQuery">
+      <result name="success" type="string">
+      	<param name="stringValue">${jsonOutData}</param>
+      </result>
+    </action>
+    
+    <action name="insertFieldInfo" class="it.micronixnetwork.application.plugin.crude.action.GetAsincInfo">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="string">
+      	<param name="stringValue">${infoString}</param>
+      </result>
+    </action>
+
+    <action name="insertGet" class="it.micronixnetwork.application.plugin.crude.action.Get">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
+    </action>
+    
+    <action name="insertNew" class="it.micronixnetwork.application.plugin.crude.action.New">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
+      <result name="save_and_go" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/save_and_go.ftl</result>
+    </action>
+    
+    <action name="insertUpdate" class="it.micronixnetwork.application.plugin.crude.action.Update">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/updated.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_error.ftl</result>
+    </action>
+    
+    <action name="insertCreate" class="it.micronixnetwork.application.plugin.crude.action.Create">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/inserted.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_error.ftl</result>
+    </action>
+    
+    <action name="insertGetChild" class="it.micronixnetwork.application.plugin.crude.action.GetChild">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/ChildForm.ftl</result>
+    </action>
+    
+    <action name="insertUpdateChild" class="it.micronixnetwork.application.plugin.crude.action.UpdateChild">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/updatedChild.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_child_error.ftl</result>
+    </action>
+    
+    <action name="insertNewChild" class="it.micronixnetwork.application.plugin.crude.action.NewChild">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/ChildForm.ftl</result>
+    </action>
+    
+     <action name="insertCreateChild" class="it.micronixnetwork.application.plugin.crude.action.CreateChild">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/insertedChild.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_child_error.ftl</result>
+    </action>
+    
+    <action name="insertRemoveChild" class="it.micronixnetwork.application.plugin.crude.action.RemoveChild">
+      <param name="uiid">new_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/removedChild.ftl</result>
+    </action>
+    
+    <action name="viewFieldInfo" class="it.micronixnetwork.application.plugin.crude.action.GetAsincInfo">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="string">
+      	<param name="stringValue">${infoString}</param>
+      </result>
+    </action>
+    
+    <action name="viewInfo" class="it.micronixnetwork.application.plugin.crude.action.Info">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
+    </action>
+    
+    <action name="viewGet" class="it.micronixnetwork.application.plugin.crude.action.Get">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/Form.ftl</result>
+    </action>
+    
+    <action name="viewUpdate" class="it.micronixnetwork.application.plugin.crude.action.Update">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/updated.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_error.ftl</result>
+    </action>
+    
+    <action name="viewGetChild" class="it.micronixnetwork.application.plugin.crude.action.GetChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/ChildForm.ftl</result>
+    </action>
+    
+    <action name="viewUpdateChild" class="it.micronixnetwork.application.plugin.crude.action.UpdateChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/updatedChild.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_child_error.ftl</result>
+    </action>
+    
+    <action name="viewNewChild" class="it.micronixnetwork.application.plugin.crude.action.NewChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/ChildForm.ftl</result>
+    </action>
+    
+     <action name="viewCreateChild" class="it.micronixnetwork.application.plugin.crude.action.CreateChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/insertedChild.ftl</result>
+      <result name="input" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/input_child_error.ftl</result>
+    </action>
+    
+    <action name="viewRemoveChild" class="it.micronixnetwork.application.plugin.crude.action.RemoveChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/removedChild.ftl</result>
+    </action>
+    
+    <action name="download" class="it.micronixnetwork.application.plugin.crude.action.Download">
+      <result name="success" type="stream">
+        <param name="contentType">application/pdf</param>
+        <param name="contentLength">${documentoFileSize}</param>
+        <param name="inputName">download</param>
+        <param name="contentDisposition">attachment;filename="${documentoFileName}"</param>
+        <param name="bufferSize">1024</param>
+      </result>
+      <result name="download_error" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/download_error.ftl</result>
+    </action>
+    
+    <action name="viewRemoveChild" class="it.micronixnetwork.application.plugin.crude.action.RemoveChild">
+      <param name="uiid">view_ui</param>
+      <result name="success" type="freemarker">/it/micronixnetwork/application/plugin/crude/view/events/removedChild.ftl</result>
+    </action>
+
+  </package>
+  
+</struts>

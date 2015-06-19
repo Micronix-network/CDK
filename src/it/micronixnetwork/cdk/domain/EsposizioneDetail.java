@@ -7,6 +7,7 @@ package it.micronixnetwork.cdk.domain;
 
 import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
+import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
 import javax.persistence.Column;
@@ -30,11 +31,13 @@ public class EsposizioneDetail implements ViewModel {
     @Column(name = "IdLayout")
     public Integer id;
     
+    @ToList(filtered = true, hidden = true)
     @ToView
     @ToInput
     @Column(name = "CodiceLayout")
     public String codiceLayout;
     
+    @ToList
     @ToView
     @ToInput
     @Column(name = "CodiceOggetto")
@@ -45,6 +48,7 @@ public class EsposizioneDetail implements ViewModel {
     @Column(name = "Sequenza")
     public Integer sequenza;
     
+    @ToList(filtered = true)
     @ToView
     @ToInput
     @FieldStyleDirective(inputFieldStyle="width:300px;font-size:12px")

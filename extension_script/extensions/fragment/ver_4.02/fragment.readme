@@ -1,0 +1,11 @@
+Versione 4
+
+
+Versione 4.01
+
+- Corretta la visualizzazione del messaggio di errore nel template Main.ftl:
+		Aggiunto overflow-x: scroll; nella classe CSS fragment_error
+
+- Corretto il recupero dei fragment nel metodo getFragments di Properties:
+                Aggiunto il '/' prima di WEB-INF stranamente con tomcat 7 funzionava
+  
