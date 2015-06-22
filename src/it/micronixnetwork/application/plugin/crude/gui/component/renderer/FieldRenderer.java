@@ -99,7 +99,11 @@ public abstract class FieldRenderer {
 	    ognlComputed = stack.findValue(rule);
 	    if (ognlComputed != null) {
 		if (ognlComputed instanceof Map) {
-		    Object toShow = ((Map) ognlComputed).get(value.toString());
+                    String key=value.toString();
+		    Object toShow = ((Map) ognlComputed).get(key);
+                    if(toShow==null && key.length()==1){
+                        toShow=((Map) ognlComputed).get(key.toCharArray()[0]);
+                    }
 		    if (toShow instanceof List) {
 			clazz = (String) ((List) toShow).get(1);
 			value = ((List) toShow).get(0);
@@ -134,7 +138,11 @@ public abstract class FieldRenderer {
 			    }
 			result.append("}");
 		    }
-		    Object toShow = ((Map) ognlComputed).get(value.toString()); 
+		    String key=value.toString();
+		    Object toShow = ((Map) ognlComputed).get(key);
+                    if(toShow==null && key.length()==1){
+                        toShow=((Map) ognlComputed).get(key.toCharArray()[0]);
+                    } 
 	    }
 	}
 	result.append("$(\"#"+cardId+"_"+uiid+"_"+targetClass.getSimpleName()+"_"+suffix+" [name=\\\"objState['"+fieldName+"']\\\"]\").text(val);");

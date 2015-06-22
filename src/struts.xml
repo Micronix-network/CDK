@@ -8,8 +8,6 @@
 	<constant name="struts.custom.i18n.resources" value="lang,menu" />
 	<include file="it/micronixnetwork/application/plugin/crude/plugin.xml"/>
 	<include file="it/micronixnetwork/application/plugin/fragment/plugin.xml"/>
-	<include file="it/micronixnetwork/tcd/plugin/enginemonitor/plugin.xml"/>
-	<include file="it/micronixnetwork/tcd/plugin/suspend/plugin.xml"/>
 	<package name="application" extends="gaf"> 
 		
 	</package>

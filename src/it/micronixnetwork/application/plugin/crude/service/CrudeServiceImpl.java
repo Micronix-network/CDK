@@ -222,15 +222,15 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
             Class collectionType = null;
 
             if (field.isAnnotationPresent(ToList.class)) {
-                ToList sfa = field.getAnnotation(ToList.class);
-                if (sfa.filtered() && sfa.fixValue().equals("nill")) {
+                ToList toList = field.getAnnotation(ToList.class);
+                if (toList.filtered() && toList.fixValue().equals("nill")) {
                     if (Collection.class.isAssignableFrom(fieldType)) {
                         ParameterizedType type = (ParameterizedType) field.getGenericType();
                         collectionType = (Class) type.getActualTypeArguments()[0];
                     }
 
                     if (field.isAnnotationPresent(Transient.class)) {
-                        String rule = sfa.filterRule();
+                        String rule = toList.filterRule();
                         if (!rule.equals("nill")) {
                             if (rule.matches("([^\\.]*)|([^\\.]*\\.[^\\.]*)|([^\\.]*\\.[^\\.]*\\.[^\\.]*)|([^\\.]*\\.[^\\.]*\\.[^\\.]*\\.[^\\.]*)")) {
                                 fieldName = rule;
@@ -282,11 +282,11 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
                     }
                 }
 
-                if (!sfa.fixValue().equals("nill")) {
+                if (!toList.fixValue().equals("nill")) {
                     ActionContext context = ActionContext.getContext();
                     ValueStack stack = context.getValueStack();
-                    if (!StringUtil.EmptyOrNull(sfa.fixValue())) {
-                        Object value = Format.convert(fieldType, sfa.fixValue(), stack);
+                    if (!StringUtil.EmptyOrNull(toList.fixValue())) {
+                        Object value = Format.convert(fieldType, toList.fixValue(), stack);
                         if (value != null) {
                             String dbField = tbAlias + "." + fieldName;
                             wheres.put(field.getName(), dbField + "=:0");
@@ -295,10 +295,10 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
                     }
                 }
 
-                if (sfa.defaultOrdered()) {
+                if (toList.defaultOrdered()) {
                     String toOrd = tbAlias + "." + fieldName;
                     String direc = "asc";
-                    if (sfa.descendant()) {
+                    if (toList.descendant()) {
                         direc = "desc";
                     }
                     if (!(orderBy.contains(toOrd + " desc") || orderBy.contains(toOrd + " asc") || orderBy.contains(toOrd + " none"))) {

@@ -78,15 +78,15 @@ public class FilterForm extends CrudView {
         }
 
         if (field.isAnnotationPresent(ToList.class)) {
-            ToList sfa = field.getAnnotation(ToList.class);
+            ToList toList = field.getAnnotation(ToList.class);
 
-            String defValue = !sfa.defaultValue().equals("nill") ? sfa.defaultValue() : "";
+            String defValue = !toList.defaultValue().equals("nill") ? toList.defaultValue() : "";
 
             if (Collection.class.isAssignableFrom(fieldType)) {
                 fieldName = fieldName + ".id";
             }
 
-            if (sfa.hidden()) {
+            if (toList.hidden()) {
                 writer.write("<input class=\"filter_field\" id=\"" + cardId + "_filter_" + fieldName + "\" type=\"hidden\" name=\"filters['" + fieldName + "']\" value=\"" + defValue + "\"/>");
                 return false;
             }
@@ -95,10 +95,10 @@ public class FilterForm extends CrudView {
             if (fdir != null) {
                 cellStyle = fdir.tableCellStyle();
             }
-            List<String> roles = StringUtil.stringToList(sfa.roles());
+            List<String> roles = StringUtil.stringToList(toList.roles());
             boolean checkRole = checkRole(user.getRoles(), roles) || roles.size() == 0;
-            if (sfa.filtered() && checkRole && sfa.fixValue().equals("nill")) {
-                String rule = sfa.filterRule();
+            if (toList.filtered() && checkRole && toList.fixValue().equals("nill")) {
+                String rule = toList.filterRule();
                 writer.write("<td class=\"" + cardId + "_filter_box\">");
                 writer.write("<label>" + getText(getPrototypeSimpleName() + "." + fieldName, field.getName()) + ":" + "</label>");
                 if (!rule.equals("nill")) {

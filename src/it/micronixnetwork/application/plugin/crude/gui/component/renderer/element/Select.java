@@ -33,6 +33,8 @@ public class Select extends FieldRenderer {
 	if (select != null) {
 	    
 	    String map = select.map();
+            
+            boolean append=select.append();
 
 	    Object values = null;
 
@@ -53,10 +55,10 @@ public class Select extends FieldRenderer {
 	    result.append("<select id=\""+selectId+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
 	    if (values != null && values instanceof LinkedHashMap) {
 		if (startValue_option != null) {
-		    result.append(writeOption(startValue_option.get(1), startValue_option.get(0), fieldValue, stack));
+		    result.append(writeOption(startValue_option.get(1), startValue_option.get(0), fieldValue, stack,append));
 		}
 		for (Object code : ((LinkedHashMap) values).keySet()) {
-                    result.append(writeOption(((LinkedHashMap) values).get(code), code, fieldValue, stack));
+                    result.append(writeOption(((LinkedHashMap) values).get(code), code, fieldValue, stack,append));
 		}
 	    }
 	    result.append("</select>");
@@ -107,7 +109,7 @@ public class Select extends FieldRenderer {
 	return result;
     }
     
-    private StringBuffer writeOption(Object attributes, Object value, Object actual, ValueStack stack) throws IOException {
+    private StringBuffer writeOption(Object attributes, Object value, Object actual, ValueStack stack,boolean append) throws IOException {
 	StringBuffer html = new StringBuffer();
 	if (value != null && attributes != null) {
             String label=null;
@@ -131,7 +133,11 @@ public class Select extends FieldRenderer {
 	    }
 	    html.append(">");
             if(label instanceof String){
-                html.append(I18n.getText(targetClass.getSimpleName() + "." + label, label.toString(), stack));
+                if(append){
+                    html.append(value.toString()+" - "+I18n.getText(targetClass.getSimpleName() + "." + label, label.toString(), stack));
+                }else{
+                    html.append(I18n.getText(targetClass.getSimpleName() + "." + label, label.toString(), stack));
+                }
             }
 	    html.append("</option>");
 	}
@@ -141,7 +147,10 @@ public class Select extends FieldRenderer {
     public StringBuffer renderView(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer html = new StringBuffer();
 	html.append(writeLabel(null, stack,false));
-	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, select.viewRule(), stack,getCardId(stack)+"_right_view_row"));
+        String rule=select.viewRule();
+        if(rule.equals("nill"))
+            rule=select.map();
+	html.append(drawDefaultView(targetClass, field, fieldValue, toview!=null?toview.masked():false, rule, stack,getCardId(stack)+"_right_view_row"));
 	html=appendFieldParagraph(html, stack);
 	return html;
     }

@@ -19,4 +19,5 @@ public @interface SelectRenderer{
     String startValue() default "nill";
     String dependFrom() default "nill";
     String activeOnChange() default "";
+    boolean append() default false;
 }
