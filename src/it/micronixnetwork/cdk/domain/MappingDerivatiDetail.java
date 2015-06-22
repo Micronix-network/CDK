@@ -6,6 +6,7 @@
 package it.micronixnetwork.cdk.domain;
 
 
+import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
@@ -79,6 +80,7 @@ public class MappingDerivatiDetail implements ViewModel {
     public Boolean diretto;
     
     @ToList(cellRule = "getText('{0,number,percent}',{coefficiente})")
+    @FieldStyleDirective(tableCellStyle = "width:80px;text-align:center")
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.FLOAT_VALIDATION)
@@ -122,6 +124,7 @@ public class MappingDerivatiDetail implements ViewModel {
         public Integer id;
 
         @ToList(ordered = true, defaultOrdered = true)
+        @FieldStyleDirective(tableCellStyle = "width:80px;text-align:center")
         @Column(name = "Descrizione")
         public String descrizione;
 

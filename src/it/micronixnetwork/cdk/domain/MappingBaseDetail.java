@@ -23,6 +23,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,11 +44,18 @@ public class MappingBaseDetail implements ViewModel {
     @Column(name = "IdItem")
     public Integer id;
 
-    @ToList(filtered = true, listed = false, filterRule = "mapByQuery('select a.id,a.descrizione from MappingBaseDetail$_Azienda a order by a.descrizione asc')")
+    @ToList(filtered = true, 
+            listed = false, 
+            filterRule = "mapByQuery('select a.id,a.descrizione from MappingBaseDetail$_Azienda a order by a.descrizione asc')")
     @ToInput
     @ToView
     @ValidField(empty = false, type = "")
-    @SelectRenderer(activeOnChange = "sottoconto,centroCosto,voceSpesa", map = "mapByQuery('select a.id,a.descrizione,a.si from MappingBaseDetail$_Azienda a order by a.descrizione asc')", viewRule = "azienda.descrizione", startValue = "{' ',''}")
+    @SelectRenderer(
+            activeOnChange = "sottoconto,centroCosto,voceSpesa", 
+            map = "mapByQuery('select a.id,a.descrizione,a.si from MappingBaseDetail$_Azienda a order by a.descrizione asc')", 
+            viewRule = "azienda.descrizione", 
+            startValue = "{' ',''}",
+            append = true)
     @Column(name = "IdAzienda")
     public Integer idAzienda;
     
@@ -57,14 +66,18 @@ public class MappingBaseDetail implements ViewModel {
     @ToList(cellRule = "_voceSpesa.descrizione")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select v.codice,v.descrizione from MappingBaseDetail$_VociSpesa v where idAzienda=:idAzi order by v.descrizione asc',#{\"idAzi\":idAzienda})", viewRule = "_voceSpesa.descrizione", dependFrom = "idAzienda")
+    @SelectRenderer(map = "mapByQuery('select v.codice,v.descrizione from MappingBaseDetail$_VociSpesa v where idAzienda=:idAzi order by v.descrizione asc',#{\"idAzi\":idAzienda})", 
+            viewRule = "_voceSpesa.descrizione", 
+            dependFrom = "idAzienda",
+            startValue = "{' ',''}")
     @Column(name = "VoceSpesa")
     public String voceSpesa;
 
     @ToList
     @ToInput
     @ToView
-    @SelectRenderer(map = "#{'A':'A','B':'B','C':'C','D':'D','E':'E','F':'F','G':'G','H':'H','I':'I','L':'L','M':'M','N':'N','O':'O','P':'P','Q':'Q','R':'R','S':'S','T':'T','U':'U','V':'V','Z':'Z'}", startValue = "{' ',''}")
+    @SelectRenderer(map = "#{'A':'A','B':'B','C':'C','D':'D','E':'E','F':'F','G':'G','H':'H','I':'I','L':'L','M':'M','N':'N','O':'O','P':'P','Q':'Q','R':'R','S':'S','T':'T','U':'U','V':'V','Z':'Z'}", 
+            startValue = "{' ',''}")
     @Column(name = "Prefisso")
     public String prefisso;
 
@@ -74,7 +87,6 @@ public class MappingBaseDetail implements ViewModel {
     @Column(name = "Item")
     public String item;
 
-    
     @Column(name = "Moltiplicatore")
     public String moltiplicatore;
 
@@ -85,48 +97,63 @@ public class MappingBaseDetail implements ViewModel {
     @ToList(cellRule = "_sottoconto.descrizione")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select s.codice,s.descrizione from MappingBaseDetail$_Sottoconto s where idAzienda=:idAzi order by s.descrizione asc',#{\"idAzi\":idAzienda})", viewRule = "_sottoconto.descrizione", dependFrom = "idAzienda")
+    @SelectRenderer(
+            map = "mapByQuery('select s.codice,s.descrizione from MappingBaseDetail$_Sottoconto s where idAzienda=:idAzi order by s.descrizione asc',#{\"idAzi\":idAzienda})", 
+            viewRule = "_sottoconto.descrizione", 
+            dependFrom = "idAzienda", 
+            startValue = "{' ',''}")
     @Column(name = "Sottoconto")
     public String sottoconto;
 
     @Conditional(rule = "azienda.si=='NAV'")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select c.codice,c.descrizione from MappingBaseDetail$_CentriCosto c where idAzienda=:idAzi order by c.descrizione asc',#{\"idAzi\":idAzienda})", viewRule = "_centroCosto.descrizione", dependFrom = "idAzienda")
+    @SelectRenderer(
+            map = "mapByQuery('select c.codice,c.descrizione from MappingBaseDetail$_CentriCosto c where idAzienda=:idAzi order by c.descrizione asc',#{\"idAzi\":idAzienda})", 
+            viewRule = "_centroCosto.descrizione", 
+            dependFrom = "idAzienda", 
+            startValue = "{' ',''}")
     @Column(name = "CentroCosto")
     public String centroCosto;
 
     @Conditional(rule = "azienda.si=='ACG'")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select u.id,u.nome from MappingBaseDetail$_Ufficio u order by u.nome asc')", viewRule = "_ufficio.nome")
+    @SelectRenderer(map = "mapByQuery('select u.id,u.nome from MappingBaseDetail$_Ufficio u order by u.nome asc')", 
+            viewRule = "_ufficio.nome", 
+            startValue = "{' ',''}")
     @Column(name = "Ufficio")
     public String ufficio;
 
     
-
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select m.id,m.descrizione from MappingBaseDetail$_Marchio m order by m.descrizione asc')", viewRule = "_marchio.descrizione")
+    @SelectRenderer(map = "mapByQuery('select m.id,m.descrizione from MappingBaseDetail$_Marchio m order by m.descrizione asc')", 
+            viewRule = "_marchio.descrizione", 
+            startValue = "{' ',''}")
     @Column(name = "Brand")
-    public String brand;
+    public Integer brand;
 
     @ToInput
     @ToView
     @Column(name = "Genere")
     //@SelectRenderer(map = "#{'0':'Generico','1':'Uomo','2':'Donna','B':'Bags','M':'Men','P':'Precollezione','U':'Unisex','W':'Women','WN':'Women Navy'}")
-    @SelectRenderer(map = "mapByQuery('select g.id,g.nome from MappingBaseDetail$_Genere g order by g.nome asc')", viewRule = "_genere.nome")
+    @SelectRenderer(map = "mapByQuery('select g.id,g.nome from MappingBaseDetail$_Genere g order by g.nome asc')", 
+            viewRule = "_genere.nome", 
+            startValue = "{' ',''}")
     public String genere;
-    
+    /*
     @ToInput
     @ToView
     @SelectRenderer(map = "mapByQuery('select t.id,t.nome from MappingBaseDetail$_TipoProdotto t order by t.nome asc')", viewRule = "_tipoProdotto.nome")
     @Column(name = "TipoProdotto")
     public String tipoProdotto;
-    
+    */
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select s.id,s.nome from MappingBaseDetail$_Stagione s order by s.nome asc')", viewRule = "_stagione.nome")
+    @SelectRenderer(map = "mapByQuery('select s.id,s.nome from MappingBaseDetail$_Stagione s order by s.nome asc')", 
+            viewRule = "_stagione.nome", 
+            startValue = "{' ',''}")
     @Column(name = "Stagione")
     public String stagione;
     
@@ -140,35 +167,33 @@ public class MappingBaseDetail implements ViewModel {
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.FLOAT_VALIDATION)
-    @TextRenderer(viewRule = "getText('{0,number,percent}',{coefficiente})",type =TextRenderer.REAL_TYPE )
+    @TextRenderer(viewRule = "getText('{0,number,percent}',{coefficiente})",type =TextRenderer.REAL_TYPE ,initValue = "1")
     @Column(name = "Coefficiente")
     public Double coefficiente;
     
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.INT_VALIDATION)
-    @TextRenderer(type =TextRenderer.INT_TYPE )
+    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "0")
     @Column(name = "Priorita")
     public Integer priorita;
     
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.INT_VALIDATION)
-    @TextRenderer(type =TextRenderer.INT_TYPE )
+    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "1")
     @Column(name = "patch")
     public Integer patch;
 
     @Override
     public String toString() {
-        return "MappingDetail[ idItem=" + id + " ]";
+        return "";
     }
     
     
     /**
      * Tabelle di decodifica
      */
-    
-    
     @Entity
     @Table(name = "aziende")
     public static class _Azienda implements Serializable {
@@ -188,7 +213,7 @@ public class MappingBaseDetail implements ViewModel {
 
     }
     
-    @OneToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "brand", insertable = false, updatable = false)
     public _Marchio _marchio;    
 
@@ -333,7 +358,7 @@ public class MappingBaseDetail implements ViewModel {
         @Column(name = "NomeGenere")
         public String nome;
     }
-    
+    /*
     @OneToOne
     @JoinColumn(name = "tipoProdotto", insertable = false, updatable = false)
     public _TipoProdotto _tipoProdotto;
@@ -351,7 +376,7 @@ public class MappingBaseDetail implements ViewModel {
         @Column(name = "NomeProdotto")
         public String nome;
     }
-    
+    */
     @OneToOne
     @JoinColumn(name = "stagione", insertable = false, updatable = false)
     public _Stagione _stagione;

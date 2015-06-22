@@ -5,6 +5,7 @@
  */
 package it.micronixnetwork.cdk.domain;
 
+import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.model.AutoCreate;
 import it.micronixnetwork.application.plugin.crude.model.ViewModel;
@@ -26,10 +27,13 @@ public class AziendaMaster implements ViewModel, AutoCreate {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ToList
+    @FieldStyleDirective(tableCellStyle = "width:40px;text-align:center")
     @Column(name = "IdAzienda")
     public Integer id;
 
     @ToList
+    @FieldStyleDirective(tableCellStyle = "width:60px;text-align:center")
     @Column(name = "CodiceAzienda")
     public String codiceAzienda;
     

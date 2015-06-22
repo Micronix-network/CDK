@@ -32,6 +32,7 @@ import javax.persistence.Table;
 public class AziendaDetail implements ViewModel{
     private static final long serialVersionUID = 1L;
     @Id
+    @ToView
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "IdAzienda")
     public Integer id;

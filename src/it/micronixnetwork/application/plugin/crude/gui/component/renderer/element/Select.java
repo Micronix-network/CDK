@@ -55,7 +55,7 @@ public class Select extends FieldRenderer {
 	    result.append("<select id=\""+selectId+"\" name=\"objState['" + fieldName + "']\"  class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_select\" style=\"" + getFieldStyle(field) + "\">");
 	    if (values != null && values instanceof LinkedHashMap) {
 		if (startValue_option != null) {
-		    result.append(writeOption(startValue_option.get(1), startValue_option.get(0), fieldValue, stack,append));
+		    result.append(writeOption(startValue_option.get(0), startValue_option.get(1), fieldValue, stack,append));
 		}
 		for (Object code : ((LinkedHashMap) values).keySet()) {
                     result.append(writeOption(((LinkedHashMap) values).get(code), code, fieldValue, stack,append));
@@ -91,7 +91,10 @@ public class Select extends FieldRenderer {
                 result.append("dataType: \"json\",");
                 result.append("data: {fieldValue: value,fieldName:\""+fieldName+"\",className:\""+targetClass.getName()+"\"},");
                 result.append("success: function( data ) {");
-                result.append("var options = '';");
+                result.append("var options = '';");  
+                if (startValue_option != null) {
+		    result.append("options +='<option value=\"" + startValue_option.get(1) + "\">" + startValue_option.get(0) + "</option>';");
+		}
                 result.append("for (var i=0; i<data.length; i++) {" +
                               "    options +='<option value=\"' + data[i].value + '\">' + data[i].label + '</option>';" +
                               "}");

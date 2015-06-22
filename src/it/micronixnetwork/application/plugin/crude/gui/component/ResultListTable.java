@@ -231,9 +231,11 @@ public class ResultListTable extends CrudView {
             Object ognlComputed = findValue(rule);
             if (ognlComputed != null) {
                 if (ognlComputed instanceof Map) {
-                    String key = paramValue.toString();
+                    String key=null;
+                    if(paramValue!=null) 
+                        key = paramValue.toString();
                     Object toShow = ((Map) ognlComputed).get(key);
-                    if (toShow == null && key.length() == 1) {
+                    if (toShow == null && key!=null && key.length() == 1) {
                         toShow = ((Map) ognlComputed).get(key.toCharArray()[0]);
                     }
                     String clazz = "";
@@ -244,7 +246,7 @@ public class ResultListTable extends CrudView {
                         if(toShow!=null)    
                             toView = toShow.toString();
                         else
-                            toView="Error";
+                            toView="";
                     }
                 } else {
                     toView = Format.formatValue(ognlComputed, field, stack);

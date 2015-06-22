@@ -69,7 +69,7 @@ public class EsposizioneDetail implements ViewModel {
     @ToInput
     @Column(name = "Andamento")
     @FieldStyleDirective(tableCellStyle = "width:30px;text-align:center")
-    @SelectRenderer(map = "#{'0':'A','1':'B','2':'C','3':'D','4':'E'}")
+    @SelectRenderer(map = "#{'0':'Crescente','1':'Decrescente'}")
     @ToList
     @ValidField(type = ValidField.INT_VALIDATION)
     public Integer andamento;
@@ -94,7 +94,7 @@ public class EsposizioneDetail implements ViewModel {
 
     @Override
     public String toString() {
-        return codiceLayout;
+        return codiceOggetto;
     }
     
     @Entity

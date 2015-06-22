@@ -39,7 +39,7 @@ public class Marchi implements ViewModel,AutoCreate {
     @Column(name = "idacg")
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.id from Marchi$_MarchioACG m order by m.nome asc')",viewRule = "_marchioAcg.nome")
+    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchi$_MarchioACG m order by m.nome asc')",viewRule = "_marchioAcg.nome")
     public String idacg;
     
     @OneToOne
@@ -64,10 +64,17 @@ public class Marchi implements ViewModel,AutoCreate {
 
     @Override
     public void initializeState() {
-        idacg="020";
+        idacg="000";
         idnav="99";
         descrizione="NEW";
     } 
+
+    @Override
+    public String toString() {
+        return descrizione;
+    }
+    
+    
     
     
     @Entity
