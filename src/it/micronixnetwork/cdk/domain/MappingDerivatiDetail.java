@@ -42,11 +42,20 @@ public class MappingDerivatiDetail implements ViewModel {
     @Column(name = "IdItem")
     public Integer id;
 
-    @ToList(filtered = true, listed = false, filterRule = "mapByQuery('select a.id,a.descrizione from MappingDerivatiDetail$_Azienda a order by a.descrizione asc')")
+    @ToList(filtered = true, 
+            listed = false, 
+            filterRule = "mapByQuery('select a.id,a.descrizione from MappingDerivatiDetail$_Azienda a order by a.descrizione asc')",
+            append=true
+    )
     @ToInput
     @ToView
     @ValidField(empty = false, type = "")
-    @SelectRenderer(map = "mapByQuery('select a.id,a.descrizione from MappingDerivatiDetail$_Azienda a order by a.descrizione asc')", viewRule = "azienda.descrizione", startValue = "{' ',''}")
+    @SelectRenderer(
+            map = "mapByQuery('select a.id,a.descrizione from MappingDerivatiDetail$_Azienda a order by a.descrizione asc')", 
+            viewRule = "azienda.descrizione", 
+            startValue = "{' ',''}",
+            append = true
+    )
     @Column(name = "IdAzienda")
     public Integer idAzienda;
     
@@ -57,7 +66,9 @@ public class MappingDerivatiDetail implements ViewModel {
     @ToList(cellRule = "_origine.descrizione")
     @ToInput
     @ToView
-    @SelectRenderer(map = "mapByQuery('select i.id,i.descrizione from MappingDerivatiDetail$_Item i order by i.descrizione asc')", viewRule = "_origine.descrizione")
+    @SelectRenderer(
+            map = "mapByQuery('select i.id,i.descrizione from MappingDerivatiDetail$_Item i order by i.descrizione asc')", 
+            viewRule = "_origine.descrizione")
     @Column(name = "VoceSpesa")
     public String origine;
     
@@ -84,21 +95,21 @@ public class MappingDerivatiDetail implements ViewModel {
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.FLOAT_VALIDATION)
-    @TextRenderer(viewRule = "getText('{0,number,percent}',{coefficiente})",type =TextRenderer.REAL_TYPE )
+    @TextRenderer(viewRule = "getText('{0,number,percent}',{coefficiente})",type =TextRenderer.REAL_TYPE,initValue = "1" )
     @Column(name = "Coefficiente")
     public Double coefficiente;
     
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.INT_VALIDATION)
-    @TextRenderer(type =TextRenderer.INT_TYPE )
+    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "0" )
     @Column(name = "Priorita")
     public Integer priorita;
     
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.INT_VALIDATION)
-    @TextRenderer(type =TextRenderer.INT_TYPE )
+    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "1" )
     @Column(name = "patch")
     public Integer segnaposto;
 
@@ -111,8 +122,6 @@ public class MappingDerivatiDetail implements ViewModel {
     /**
      * Tabelle di decodifica
      */
-    
-    
     @Entity
     @Table(name = "aziende")
     public static class _Azienda implements Serializable {
@@ -120,6 +129,8 @@ public class MappingDerivatiDetail implements ViewModel {
         private static final long serialVersionUID = 1L;
 
         @Id
+        @ToList(ordered = true)
+        @FieldStyleDirective(tableCellStyle = "width:110px;text-align:center")
         @Column(name = "IdAzienda")
         public Integer id;
 

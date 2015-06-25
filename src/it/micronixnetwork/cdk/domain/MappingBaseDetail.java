@@ -6,6 +6,7 @@
 package it.micronixnetwork.cdk.domain;
 
 import it.micronixnetwork.application.plugin.crude.annotation.Conditional;
+import it.micronixnetwork.application.plugin.crude.annotation.FieldStyleDirective;
 import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
 import it.micronixnetwork.application.plugin.crude.annotation.ToList;
 import it.micronixnetwork.application.plugin.crude.annotation.ToView;
@@ -46,7 +47,7 @@ public class MappingBaseDetail implements ViewModel {
 
     @ToList(filtered = true, 
             listed = false, 
-            filterRule = "mapByQuery('select a.id,a.descrizione from MappingBaseDetail$_Azienda a order by a.descrizione asc')")
+            filterRule = "mapByQuery('select a.id,a.descrizione from MappingBaseDetail$_Azienda a order by a.descrizione asc')",append=true)
     @ToInput
     @ToView
     @ValidField(empty = false, type = "")
@@ -137,11 +138,10 @@ public class MappingBaseDetail implements ViewModel {
     @ToInput
     @ToView
     @Column(name = "Genere")
-    //@SelectRenderer(map = "#{'0':'Generico','1':'Uomo','2':'Donna','B':'Bags','M':'Men','P':'Precollezione','U':'Unisex','W':'Women','WN':'Women Navy'}")
     @SelectRenderer(map = "mapByQuery('select g.id,g.nome from MappingBaseDetail$_Genere g order by g.nome asc')", 
             viewRule = "_genere.nome", 
             startValue = "{' ',''}")
-    public String genere;
+    public Integer genere;
     /*
     @ToInput
     @ToView
@@ -181,7 +181,7 @@ public class MappingBaseDetail implements ViewModel {
     @ToInput
     @ToView
     @ValidField(empty = false, type = ValidField.INT_VALIDATION)
-    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "1")
+    @TextRenderer(type =TextRenderer.INT_TYPE,initValue = "0")
     @Column(name = "patch")
     public Integer patch;
 
@@ -201,6 +201,8 @@ public class MappingBaseDetail implements ViewModel {
         private static final long serialVersionUID = 1L;
 
         @Id
+        @ToList(ordered = true)
+        @FieldStyleDirective(tableCellStyle = "width:110px;text-align:center")
         @Column(name = "IdAzienda")
         public Integer id;
 
@@ -213,7 +215,7 @@ public class MappingBaseDetail implements ViewModel {
 
     }
     
-    @ManyToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "brand", insertable = false, updatable = false)
     public _Marchio _marchio;    
 
@@ -352,12 +354,13 @@ public class MappingBaseDetail implements ViewModel {
         private static final long serialVersionUID = 1L;
         
         @Id
-        @Column(name = "IdGenere")
-        public String id;
+        @Column(name = "Id")
+        public Integer id;
 
-        @Column(name = "NomeGenere")
+        @Column(name = "Descrizione")
         public String nome;
     }
+    
     /*
     @OneToOne
     @JoinColumn(name = "tipoProdotto", insertable = false, updatable = false)

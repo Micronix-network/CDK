@@ -26,8 +26,8 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "marchi")
-public class Marchi implements ViewModel,AutoCreate {
+@Table(name = "generi")
+public class Genere implements ViewModel,AutoCreate {
     
     private static final long serialVersionUID = 1L;
     
@@ -36,36 +36,36 @@ public class Marchi implements ViewModel,AutoCreate {
     @Column(name = "id")
     public Integer id;
     
-    @Column(name = "idacg")
+    @Column(name = "idACG")
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchi$_MarchioACG m order by m.nome asc')",viewRule = "_marchioAcg.nome")
+    @SelectRenderer(map = "mapByQuery('select g.id,g.nome from Genere$_GenereACG g order by g.nome asc')",viewRule = "_marchioAcg.nome",startValue = "{' ',''}")
     public String idacg;
     
     @OneToOne
-    @JoinColumn(name = "idacg", insertable = false, updatable = false)
-    public _MarchioACG _marchioAcg;
+    @JoinColumn(name = "idACG", insertable = false, updatable = false)
+    public _GenereACG _genereAcg;
  
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchi$_MarchioNAV m order by m.nome asc')",viewRule = "_marchioNav.nome")
-    @Column(name = "idnav")
+    @SelectRenderer(map = "mapByQuery('select g.id,g.nome from Genere$_GenereNAV g order by g.nome asc')",viewRule = "_marchioNav.nome",startValue = "{' ',''}")
+    @Column(name = "idNav")
     public String idnav;
     
     @OneToOne
-    @JoinColumn(name = "idnav", insertable = false, updatable = false)
-    public _MarchioNAV _marchioNav;
+    @JoinColumn(name = "idNav", insertable = false, updatable = false)
+    public _GenereNAV _genereNav;
     
     @ToList
     @ToInput
     @ToView
-    @Column(name = "descrizione")
+    @Column(name = "Descrizione")
     public String descrizione;
 
     @Override
     public void initializeState() {
-        idacg="000";
-        idnav="99";
+        idacg=null;
+        idnav=null;
         descrizione="NEW";
     } 
 
@@ -74,39 +74,36 @@ public class Marchi implements ViewModel,AutoCreate {
         return descrizione;
     }
     
-    
-    
-    
     @Entity
-    @Table(name="marchiacg")
-    public static class _MarchioACG implements Serializable {
+    @Table(name="generiacg")
+    public static class _GenereACG implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdGenere")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeGenere")
         public String nome;
 
-    	public _MarchioACG() {
+    	public _GenereACG() {
     	}
     }
     
      
     @Entity
-    @Table(name="marchinav")
-    public static class _MarchioNAV implements Serializable {
+    @Table(name="generinav")
+    public static class _GenereNAV implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdGenere")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeGenere")
         public String nome;
 
-    	public _MarchioNAV() {
+    	public _GenereNAV() {
     	}
     }
     
