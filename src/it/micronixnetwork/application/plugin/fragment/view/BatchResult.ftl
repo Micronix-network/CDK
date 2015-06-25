@@ -4,11 +4,13 @@ ${shell_out}
 </#if>
 </div>
 
-<div class="shell_err" style="display:none">
+<#if showError>
+<div class="shell_err">
 <#if shell_err??>
 ${shell_err}
 </#if>
 </div>
+</#if>
 
 
 

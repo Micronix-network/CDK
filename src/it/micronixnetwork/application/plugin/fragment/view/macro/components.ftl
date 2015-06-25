@@ -1,19 +1,21 @@
-<#macro callBatch testo id batch message="">
-<form id="${cardId}_batch_${id}">
+<#macro callBatch testo id batch message="" dir="" showError="false" height="50">
+<form id="${cardId}_batch_${id}_form">
     <input type="hidden" name="batchName" value="${batch}">
+    <input type="hidden" name="dir" value="${dir}">
+    <input type="hidden" name="showError" value="${showError}">
 </form>
   
 <div style="border: 1px solid #eee;padding:5px">
-    <span style="font-size:20px">${testo}</span>
+    <span style="font-size:15px">${testo}</span>
     <button id="${cardId}_exe_batch_${id}" class="btn btn-small btn-primary" style="float:right">Esegui</button>
     <@gaf.div id="${cardId}_batch_${id}" 
               action="runbatch"
               namespace="fragment"
               loadImage="true" 
-              formId="${cardId}_batch_${id}" 
+              formId="${cardId}_batch_${id}_form" 
               listen="${cardId}_batch_${id}_refresh" 
               startOnLoad="false" 
-    style="height:100px;background-color: #eee;margin-top:4px;clear:both">
+    style="height:${height}px;background-color: #eee;margin-top:4px;clear:both">
     </@gaf.div>
 </div>
 
@@ -27,15 +29,15 @@
             <tr>
                 <td style="text-align:left;">
                     <button id="${cardId}_${id}_cancel_button" class="btn btn-small btn-primary image_btn icon-denied">
-                        <span>
-                    Cancel
+                        <span style="display:none">
+                            Cancel
                         </span>
                     </button>
                 </td>
                 <td style="text-align:right;">
                     <button id="${cardId}_${id}_apply_button" class="btn btn-small btn-primary image_btn icon-cole-townsend-check">
-                        <span>
-                    OK
+                        <span style="display:none">
+                            OK
                         </span>    
                     </button>
                 </td>
@@ -59,6 +61,7 @@
           $('#${cardId}_${id}_apply_button').click(function(){
               try{
                   hide();
+                  $('#${cardId}_batch_${id}_content').empty();
                   callEvent("${cardId}_batch_${id}_refresh");
               }catch(error){
                   alert(error);
