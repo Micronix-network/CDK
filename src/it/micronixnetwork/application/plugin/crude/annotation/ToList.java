@@ -22,4 +22,5 @@ public @interface ToList {
     boolean hidden() default false;
     String draggable() default "";
     boolean downlink() default false;
+    boolean append() default false;
 }

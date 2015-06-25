@@ -1,5 +1,6 @@
 <#assign rolesRemove=action.getCardParam('rolesRemove')!''/>
 <#assign aby_delete_flag=action.getCardParam('aby_delete')!'true'/>	
+<#assign aby_edit_flag=action.getCardParam('aby_edit')!'true'/>
 <#assign type_flag=action.getCardParam('gui_type')!'n'/>
 <#assign crud_observers=action.getCardParam('crud_observers')!''/>
 <#assign autoselect_flag=action.getCardParam('autoselect')!'false'/>
@@ -146,27 +147,30 @@ $(document).ready(function(){
     <#if type_flag=='n'>		
     $('.${cardId}_${targetClassName}_resultRow').click(function(){
         ${cardId}_setSelected($(this));   
-        clearForm($('#${cardId}_view_object_form'));
-        clearForm($('#${cardId}_view_ui_form'));
-        addHiddenToForm($('#${cardId}_view_object_form'),'targetClass','${targetClass}');
-        addHiddenToForm($('#${cardId}_view_object_form'),"idObj['id']",$(this).attr('pk_id'));
-        try{
-        <#if popup_gui?boolean>
-            ${cardId}_view_update_dialog.show();
-        <#else>    
-            ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${targetClassName}_view_object_pane'), 'right');
-        </#if>
-        <#if direct_edit='false'>
-              $('#${cardId}_${targetClassName}_view_ui_info_obj_action').show();
-              $('#${cardId}_${targetClassName}_view_ui_get_obj_action').hide();
-              callEvent("${cardId}_${targetClassName}_view_ui_info_object_refresh");
+        <#if (direct_edit?boolean && !aby_edit_flag?boolean)>
         <#else>
-              $('#${cardId}_${targetClassName}_view_ui_info_obj_action').hide();
-              $('#${cardId}_${targetClassName}_view_ui_get_obj_action').show();
-              $('#${cardId}_${targetClassName}_view_ui_update_object_action_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
-              callEvent("${cardId}_${targetClassName}_view_ui_get_object_refresh");
+            clearForm($('#${cardId}_view_object_form'));
+            clearForm($('#${cardId}_view_ui_form'));
+            addHiddenToForm($('#${cardId}_view_object_form'),'targetClass','${targetClass}');
+            addHiddenToForm($('#${cardId}_view_object_form'),"idObj['id']",$(this).attr('pk_id'));
+            try{
+            <#if popup_gui?boolean>
+                ${cardId}_view_update_dialog.show();
+            <#else>    
+                ${cardId}_slideToPage($('#${cardId}_list_slide'),$('#${cardId}_${targetClassName}_view_object_pane'), 'right');
+            </#if>
+            <#if direct_edit?boolean>
+                    $('#${cardId}_${targetClassName}_view_ui_info_obj_action').hide();
+                    $('#${cardId}_${targetClassName}_view_ui_get_obj_action').show();
+                    $('#${cardId}_${targetClassName}_view_ui_update_object_action_content').html('<span class="${cardId}_event_message animated flash">${action.getText("crude.form.rquired")}</span>');
+                    callEvent("${cardId}_${targetClassName}_view_ui_get_object_refresh");   
+            <#else>
+                $('#${cardId}_${targetClassName}_view_ui_info_obj_action').show();
+                $('#${cardId}_${targetClassName}_view_ui_get_obj_action').hide();
+                callEvent("${cardId}_${targetClassName}_view_ui_info_object_refresh"); 
+            </#if>
+            }catch(err){console.log(err)};
         </#if>
-        }catch(err){console.log(err)};
         return false;
     });
     </#if>

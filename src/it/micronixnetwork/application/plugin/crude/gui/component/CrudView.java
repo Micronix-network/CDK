@@ -70,19 +70,7 @@ public abstract class CrudView extends GAFGuiComponent {
 	}
 }
  
-    protected void writeOption(Writer writer, Object label, Object value, Object actual) throws IOException {
-	if (value != null && label != null) {
-	    writer.write("<option value='");
-	    writer.write(value.toString());
-	    writer.write("'");
-	    if (actual != null && actual.toString().trim().equals(value.toString().trim())) {
-		writer.write(" selected");
-	    }
-	    writer.write(">");
-	    writer.write(getText(getPrototypeSimpleName() + "." + label, "'" + label.toString() + "'"));
-	    writer.write("</option>");
-	}
-    }
+    
 
     protected Field getPrimaryKeyField(Class type) {
 	if (type == null)

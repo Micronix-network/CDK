@@ -79,6 +79,8 @@ public class FilterForm extends CrudView {
 
         if (field.isAnnotationPresent(ToList.class)) {
             ToList toList = field.getAnnotation(ToList.class);
+            
+            boolean append=toList.append();
 
             String defValue = !toList.defaultValue().equals("nill") ? toList.defaultValue() : "";
 
@@ -106,13 +108,13 @@ public class FilterForm extends CrudView {
                     if (values != null) {
                         if (values instanceof LinkedHashMap) {
                             writer.write("<select class=\"filter_field\" id=\"" + cardId + "_filter_" + fieldName + "\" name=\"filters['" + fieldName + "']\">");
-                            writeOption(writer, "all", "", defValue);
+                            writeOption(writer, "all", "", defValue,false);
                             for (Object value : ((LinkedHashMap) values).keySet()) {
                                 Object label = ((LinkedHashMap) values).get(value);
                                 if (label instanceof List) {
                                     label = ((List) label).get(0);
                                 }
-                                writeOption(writer, label, value, defValue);
+                                writeOption(writer, label, value, defValue,append);
                             }
                             writer.write("</select>");
                             writer.write("</td>");
@@ -159,6 +161,24 @@ public class FilterForm extends CrudView {
         } finally {
         }
         return false;
+    }
+    
+    private void writeOption(Writer writer, Object label, Object value, Object actual,boolean append) throws IOException {
+	if (value != null && label != null) {
+	    writer.write("<option value='");
+	    writer.write(value.toString());
+	    writer.write("'");
+	    if (actual != null && actual.toString().trim().equals(value.toString().trim())) {
+		writer.write(" selected");
+	    }
+	    writer.write(">");
+            if(append){
+                writer.write(value.toString()+" - "+getText(getPrototypeSimpleName() + "." + label, "'" + label.toString() + "'"));
+            }else{
+                writer.write(getText(getPrototypeSimpleName() + "." + label, "'" + label.toString() + "'"));
+            }
+	    writer.write("</option>");
+	}
     }
 
 }
