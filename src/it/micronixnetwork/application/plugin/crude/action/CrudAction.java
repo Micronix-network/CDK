@@ -176,13 +176,15 @@ public abstract class CrudAction extends CardAction {
                 if (row.length > 2) {
                     more = new String[row.length - 1];
                 }
-                if (more == null) {
-                    result.put(row[0].toString(), row[1].toString());
-                } else {
-                    for (int i = 0; i < more.length; i++) {
-                        more[i] = row[i + 1].toString();
+                if (row[0] != null) {
+                    if (more == null) {
+                        result.put(row[0].toString(), row[1]==null?row[0].toString():row[1].toString());
+                    } else {
+                        for (int i = 0; i < more.length; i++) {
+                            more[i] = row[i + 1]==null?row[0].toString():row[i + 1].toString();
+                        }
+                        result.put(row[0].toString(), more);
                     }
-                    result.put(row[0].toString(), more);
                 }
             }
         }
