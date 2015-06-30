@@ -1,4 +1,5 @@
 <#assign external_file = action.getCardParam('external_file')!'false'/>
+<#assign js_observed_event=action.getCardParam('observed_event')!""/>
 
 <#import "macro/components.ftl" as comp>
 
@@ -23,6 +24,16 @@
         box-shadow: inner 0 0 3px #aaa;
     }
 </style>
+
+<script type="text/javascript">
+//Gestione della notifica di un evento da parte di una CARD osservata
+function ${cardId}_controller_event(rise,param,name){
+    try{${js_observed_event}}catch(err){
+        alert(err);
+    }
+    return false;
+}    
+</script>   
 
 <#attempt>
 <#if external_file='true'>

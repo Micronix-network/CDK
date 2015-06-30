@@ -1,10 +1,3 @@
-<#macro notify_observer crud_observers event_name cardId="${cardId}" param="$(this)">
-    <#list crud_observers?split(",") as observer>
-        try{${observer}_controller_event('${cardId}',${param},'${event_name}');
-        }catch(err){};
-    </#list>
-</#macro>
-
 <#macro formatFunctions cardId="${cardId}">		
 /**
  * Formatta un campo di input di tipo valuta

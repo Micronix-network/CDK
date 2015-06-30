@@ -8,7 +8,7 @@
 <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
 <#assign popup_gui=action.getCardParam('popup_gui')!'false'/>
 
-<#import "macro/javascript.ftl" as js>	
+<#import "/template/gaf/macro/events.ftl" as events>
 
 <style>
 .highlight{
@@ -179,7 +179,7 @@ $(document).ready(function(){
     <#if crud_observers!=''>		
     $('.${cardId}_${targetClassName}_resultRow').click(function(){
         ${cardId}_setSelected($(this));
-        <@js.notify_observer crud_observers=crud_observers event_name='listrow_click'/>
+        <@events.notify_observer observers=crud_observers event_name='listrow_click'/>
         return false;
     });
     </#if>

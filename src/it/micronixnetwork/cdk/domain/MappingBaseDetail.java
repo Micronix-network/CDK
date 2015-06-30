@@ -142,13 +142,13 @@ public class MappingBaseDetail implements ViewModel {
             viewRule = "_genere.nome", 
             startValue = "{' ',''}")
     public Integer genere;
-    /*
+    
     @ToInput
     @ToView
     @SelectRenderer(map = "mapByQuery('select t.id,t.nome from MappingBaseDetail$_TipoProdotto t order by t.nome asc')", viewRule = "_tipoProdotto.nome")
     @Column(name = "TipoProdotto")
     public String tipoProdotto;
-    */
+    
     @ToInput
     @ToView
     @SelectRenderer(map = "mapByQuery('select s.id,s.nome from MappingBaseDetail$_Stagione s order by s.nome asc')", 
@@ -159,7 +159,7 @@ public class MappingBaseDetail implements ViewModel {
     
     @ToInput
     @ToView
-    @YesNoRenderer(values = "1|0",viewRule = "#{\"1\":{'Si','img_green'}, \"0\":{'No','img_red'}}")
+    @YesNoRenderer(values = "1|0",viewRule = "#{'1':'Si', '0':'No'}")
     @Column(name = "Consociata")
     public Short consociata;
     
@@ -361,7 +361,7 @@ public class MappingBaseDetail implements ViewModel {
         public String nome;
     }
     
-    /*
+    
     @OneToOne
     @JoinColumn(name = "tipoProdotto", insertable = false, updatable = false)
     public _TipoProdotto _tipoProdotto;
@@ -373,13 +373,13 @@ public class MappingBaseDetail implements ViewModel {
         private static final long serialVersionUID = 1L;
         
         @Id
-        @Column(name = "IdProdotto")
+        @Column(name = "id")
         public String id;
 
-        @Column(name = "NomeProdotto")
+        @Column(name = "descrizione")
         public String nome;
     }
-    */
+    
     @OneToOne
     @JoinColumn(name = "stagione", insertable = false, updatable = false)
     public _Stagione _stagione;
@@ -391,10 +391,10 @@ public class MappingBaseDetail implements ViewModel {
         private static final long serialVersionUID = 1L;
         
         @Id
-        @Column(name = "IdStagione")
+        @Column(name = "id")
         public String id;
 
-        @Column(name = "NomeStagione")
+        @Column(name = "descrizione")
         public String nome;
     }
 

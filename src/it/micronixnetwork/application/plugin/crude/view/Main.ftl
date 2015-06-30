@@ -28,6 +28,7 @@
 <#import "macro/style.ftl" as style>
 <#import "macro/javascript.ftl" as js>
 <#import "macro/components.ftl" as comp>
+<#import "/template/gaf/macro/events.ftl" as events>
 
 <style type="text/css">
     <@style.main/>	
@@ -44,8 +45,7 @@ var ${cardId}_row_selected;
 <@js.formatFunctions/>
 <@js.general prototype=prototype/>
 
-//Gestione della notifica di un evento da parte di una CARD osservata
-function ${cardId}_controller_event(rise,param,name){
+function ${cardId}_crude_event(rise,param,name){
     <#if gui_type=='d'>
     if(name=="listrow_click" ){
         //Il parametro è l'oggetto jquery della riga selezionata
@@ -54,12 +54,19 @@ function ${cardId}_controller_event(rise,param,name){
         ${cardId}_load_detail(id,direct_edit);
     }
     </#if>
+    
     <#if gui_type=='l'>
     if(name=="obj_updated" ){
         //Il parametro è l'id dell'oggetto modificato
         ${cardId}_listRefresh();
     }
     </#if>
+return false;
+}
+
+//Gestione della notifica di un evento da parte di una CARD osservata
+function ${cardId}_controller_event(rise,param,name){
+    ${cardId}_crude_event(rise,param,name);
     try{${js_observed_event}}catch(err){
         alert(err);
     }
@@ -85,7 +92,7 @@ $(document).ready(function(){
     
     //Ridimensionamento pannelli di view e new
     ${cardId}_resizeView();
-	${cardId}_resizeNew();
+    ${cardId}_resizeNew();
 		   
     <@js.filterEvents prototype=prototype/> 			
 });

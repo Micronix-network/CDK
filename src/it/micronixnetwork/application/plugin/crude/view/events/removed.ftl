@@ -1,4 +1,4 @@
-<#import "../macro/javascript.ftl" as js>
+<#import "/template/gaf/macro/events.ftl" as events>
 
 <#if targetClass!=''>
     <#assign targetClassName=targetClass.substring(targetClass.lastIndexOf('.')+1)!''/>
@@ -8,7 +8,7 @@
 <script type="text/javascript">
 $(document).ready(function(){		 
     <#if crud_observers!=''>
-        <@js.notify_observer crud_observers=crud_observers event_name='object_deleted'/>
+        <@events.notify_observer observers=crud_observers event_name='object_deleted'/>
     </#if>
     callEvent('${cardId}_${targetClassName}_find_refresh');
     setTimeout(function(){

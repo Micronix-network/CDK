@@ -26,8 +26,8 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "marchi")
-public class Marchio implements ViewModel,AutoCreate {
+@Table(name = "tipoprodotto")
+public class TipoProdotto implements ViewModel,AutoCreate {
     
     private static final long serialVersionUID = 1L;
     
@@ -36,30 +36,30 @@ public class Marchio implements ViewModel,AutoCreate {
     @Column(name = "id")
     public Integer id;
     
-    @Column(name = "idacg")
+    @Column(name = "idACG")
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchio$_MarchioACG m order by m.nome asc')",viewRule = "_marchioAcg.nome")
+    @SelectRenderer(map = "mapByQuery('select t.id,t.nome from TipoProdotto$_TipoProdottoACG t order by t.nome asc')",viewRule = "_tipoProdottoAcg.nome",startValue = "{' ',''}")
     public String idacg;
     
     @OneToOne
-    @JoinColumn(name = "idacg", insertable = false, updatable = false)
-    public _MarchioACG _marchioAcg;
+    @JoinColumn(name = "idACG", insertable = false, updatable = false)
+    public _TipoProdottoACG _tipoProdottoAcg;
  
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchio$_MarchioNAV m order by m.nome asc')",viewRule = "_marchioNav.nome")
-    @Column(name = "idnav")
+    @SelectRenderer(map = "mapByQuery('select t.id,t.nome from TipoProdotto$_TipoProdottoNAV t order by t.nome asc')",viewRule = "_tipoProdottoNav.nome",startValue = "{' ',''}")
+    @Column(name = "idNav")
     public String idnav;
     
     @OneToOne
-    @JoinColumn(name = "idnav", insertable = false, updatable = false)
-    public _MarchioNAV _marchioNav;
+    @JoinColumn(name = "idNav", insertable = false, updatable = false)
+    public _TipoProdottoNAV _tipoProdottoNav;
     
     @ToList
     @ToInput
     @ToView
-    @Column(name = "descrizione")
+    @Column(name = "Descrizione")
     public String descrizione;
 
     @Override
@@ -74,39 +74,36 @@ public class Marchio implements ViewModel,AutoCreate {
         return descrizione;
     }
     
-    
-    
-    
     @Entity
-    @Table(name="marchiacg")
-    public static class _MarchioACG implements Serializable {
+    @Table(name="tipoprodottoacg")
+    public static class _TipoProdottoACG implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdProdotto")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeProdotto")
         public String nome;
 
-    	public _MarchioACG() {
+    	public _TipoProdottoACG() {
     	}
     }
     
      
     @Entity
-    @Table(name="marchinav")
-    public static class _MarchioNAV implements Serializable {
+    @Table(name="tipoprodottonav")
+    public static class _TipoProdottoNAV implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdProdotto")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeProdotto")
         public String nome;
 
-    	public _MarchioNAV() {
+    	public _TipoProdottoNAV() {
     	}
     }
     

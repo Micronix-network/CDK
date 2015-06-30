@@ -13,37 +13,46 @@
 #propstabs-3_${cardId} .CodeMirror-scroll {
 	height : 330px;
 }
+
+#propstabs-2_${cardId} .CodeMirror-scroll {
+	height : 410px;
+}
 </style>
 
 <script type="text/javascript">
 var jsEditor1_${cardId}=null;
+var jsEditor2_${cardId}=null;
 var htmlEditor_${cardId}=null;
 $(document).ready(function(){
-	<@prop.codeMirror var="jsEditor1_${cardId}" areaId="prop_${cardId}_card_actived_event" mode="text/javascript"/>	
-	var $tabs_${cardId}=$( "#propstabs_${cardId}" ).gaftabs({
-		show: function() {
-			if(this.attr('id')=='propstabs-3_${cardId}'){
-				<@prop.codeMirror var="htmlEditor_${cardId}" areaId="prop_${cardId}_code" mode="text/html"/>	
-			}	
-		}
-	});
-	
-	$("#${cardId}_properties_form [name=\"props['external_file']\"]").change(function(e){
-			if($(this).val()=='true'){
-				$("#${cardId}_external_file").show('fast');
-				$("#${cardId}_freemarker_editor").hide('fast');
-			}else{
-				$("#${cardId}_external_file").hide('fast');
-				$("#${cardId}_freemarker_editor").show('fast');
-				htmlEditor_${cardId}.refresh();
-			}
-		});
+    <@prop.codeMirror var="jsEditor1_${cardId}" areaId="prop_${cardId}_card_actived_event" mode="text/javascript"/>	
+    var $tabs_${cardId}=$( "#propstabs_${cardId}" ).gaftabs({
+        show: function() {
+            if(this.attr('id')=='propstabs-3_${cardId}'){
+                <@prop.codeMirror var="htmlEditor_${cardId}" areaId="prop_${cardId}_code" mode="text/html"/>	
+            }	
+            if(this.attr('id')=='propstabs-2_${cardId}'){
+                <@prop.codeMirror var="jsEditor2_${cardId}" areaId="prop_${cardId}_observed_event" mode="text/javascript"/>
+            }
+        }
+    });
+
+    $("#${cardId}_properties_form [name=\"props['external_file']\"]").change(function(e){
+        if($(this).val()=='true'){
+            $("#${cardId}_external_file").show('fast');
+            $("#${cardId}_freemarker_editor").hide('fast');
+        }else{
+            $("#${cardId}_external_file").hide('fast');
+            $("#${cardId}_freemarker_editor").show('fast');
+            htmlEditor_${cardId}.refresh();
+        }
+    });
 });
 
 
 ${cardId}_properties_dialog.prepare_submit=function(){
-			if(jsEditor1_${cardId}!=null){jsEditor1_${cardId}.save();}
-			if(htmlEditor_${cardId}!=null){htmlEditor_${cardId}.save();}
+        if(jsEditor1_${cardId}!=null){jsEditor1_${cardId}.save();}
+        if(jsEditor2_${cardId}!=null){jsEditor2_${cardId}.save();}
+        if(htmlEditor_${cardId}!=null){htmlEditor_${cardId}.save();}
 }
 		
 </script>
@@ -62,17 +71,21 @@ ${cardId}_properties_dialog.prepare_submit=function(){
 	<ul class='tabs'>
 		<li><a href="#propstabs-5_${cardId}">${action.getText('generic.properties.dialog', 'Generic')}</a></li>
 		<li><a href="#propstabs-3_${cardId}">Fragment</a></li>
+                <li><a href="#propstabs-2_${cardId}">Events</a></li>
 	</ul>
 	<@prop.commons id="propstabs-5_${cardId}"/>
 	<div id="propstabs-3_${cardId}" style="overflow:hidden;">
-	<@prop.select label="${action.getText('fragment.micronixnet.external_file', 'External file')}" name="external_file" value="${action.getCardParam('external_file')!'false'}" options=yes_noHash />
-	<div id="${cardId}_external_file" style="display:${show_file_prop}">
-		<@prop.select label="${action.getText('fragment.micronixnet.fragment', 'Fragment to load')}" name="fragment" value="${action.getCardParam('fragment')!''}" options=fragments/>
+            <@prop.select label="${action.getText('fragment.micronixnet.external_file', 'External file')}" name="external_file" value="${action.getCardParam('external_file')!'false'}" options=yes_noHash />
+            <div id="${cardId}_external_file" style="display:${show_file_prop}">
+                    <@prop.select label="${action.getText('fragment.micronixnet.fragment', 'Fragment to load')}" name="fragment" value="${action.getCardParam('fragment')!''}" options=fragments/>
+            </div>
+            <div id="${cardId}_freemarker_editor" style="display:${show_editor_prop}">
+                    <@prop.textarea label="${action.getText('helloworld.micronixnet.code', 'Code')}" name="code" value="${action.getCardParam('code')!''}" style="height:330px"/>
+            </div>
 	</div>
-	<div id="${cardId}_freemarker_editor" style="display:${show_editor_prop}">
-		<@prop.textarea label="${action.getText('helloworld.micronixnet.code', 'Code')}" name="code" value="${action.getCardParam('code')!''}" style="height:330px"/>
-	</div>
-	</div>
+        <div id="propstabs-2_${cardId}">
+            <@prop.textarea label="${action.getText('crude.micronixnet.events', 'Gestione eventi')}" name="observed_event" value="${action.getCardParam('observed_event')!''}" style="height:400px"/>
+        </div>
 </div>
 </form>
 

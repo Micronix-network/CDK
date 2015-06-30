@@ -70,7 +70,7 @@
     $('#${cardId}_${prototypeName}_info_list_button').click(function(){
         ${cardId}_slideToPage($('#${cardId}_${prototypeName}_view_object_pane'),$('#${cardId}_list_slide'), 'left');
         <#if crud_observers!=''>		 
-            <@js.notify_observer crud_observers=crud_observers event_name='back_to_list'/>
+            <@events.notify_observer observers=crud_observers event_name='back_to_list'/>
         </#if>
     });
     
@@ -394,7 +394,7 @@ ${cardId}_card.setTitle= function(message){
             $('#${cardId}_${prototypeName}_info_list_button').click(function(){
                 hide();
                 <#if crud_observers!=''>		 
-                    <@js.notify_observer crud_observers=crud_observers event_name='back_to_list'/>
+                    <@events.notify_observer observers=crud_observers event_name='back_to_list'/>
                 </#if>
             });
     

@@ -63,12 +63,13 @@ public class MappingDerivatiDetail implements ViewModel {
     @JoinColumn(name = "idAzienda", insertable = false, updatable = false)
     public _Azienda azienda;
 
-    @ToList(cellRule = "_origine.descrizione")
+    @ToList(cellRule = "_origine.id+' - '+_origine.descrizione")
     @ToInput
     @ToView
+    @FieldStyleDirective(tableCellStyle = "width:200px;text-align:center")
     @SelectRenderer(
             map = "mapByQuery('select i.id,i.descrizione from MappingDerivatiDetail$_Item i order by i.descrizione asc')", 
-            viewRule = "_origine.descrizione")
+            viewRule = "_origine.id+' - '+_origine.descrizione",append = true)
     @Column(name = "VoceSpesa")
     public String origine;
     

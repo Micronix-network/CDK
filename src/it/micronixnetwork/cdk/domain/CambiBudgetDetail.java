@@ -22,8 +22,8 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "cambi")
-public class CambiDetail implements ViewModel {
+@Table(name = "cambibudget")
+public class CambiBudgetDetail implements ViewModel {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -41,12 +41,6 @@ public class CambiDetail implements ViewModel {
     @Column(name = "anno")
     @ValidField(empty = false,type = ValidField.DOUBLE_VALIDATION)
     public Integer anno;
-    
-    @ToView
-    @ToInput
-    @Column(name = "mese")
-    @ValidField(empty = false,type = ValidField.DOUBLE_VALIDATION)
-    public Integer mese;
     
     @ToView
     @ToInput

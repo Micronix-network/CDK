@@ -26,8 +26,8 @@ import javax.persistence.Table;
  * @author kobo
  */
 @Entity
-@Table(name = "marchi")
-public class Marchio implements ViewModel,AutoCreate {
+@Table(name = "stagioni")
+public class Stagione implements ViewModel,AutoCreate {
     
     private static final long serialVersionUID = 1L;
     
@@ -39,22 +39,22 @@ public class Marchio implements ViewModel,AutoCreate {
     @Column(name = "idacg")
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchio$_MarchioACG m order by m.nome asc')",viewRule = "_marchioAcg.nome")
+    @SelectRenderer(map = "mapByQuery('select s.id,s.nome from Stagione$_StagioneACG s order by s.nome asc')",viewRule = "_stagioneAcg.nome")
     public String idacg;
     
     @OneToOne
     @JoinColumn(name = "idacg", insertable = false, updatable = false)
-    public _MarchioACG _marchioAcg;
+    public _StagioneACG _stagioneAcg;
  
     @ToView
     @ToInput
-    @SelectRenderer(map = "mapByQuery('select m.id,m.nome from Marchio$_MarchioNAV m order by m.nome asc')",viewRule = "_marchioNav.nome")
+    @SelectRenderer(map = "mapByQuery('select s.id,s.nome from Stagione$_StagioneNAV s order by s.nome asc')",viewRule = "_stagioneNav.nome")
     @Column(name = "idnav")
     public String idnav;
     
     @OneToOne
     @JoinColumn(name = "idnav", insertable = false, updatable = false)
-    public _MarchioNAV _marchioNav;
+    public _StagioneNAV _stagioneNav;
     
     @ToList
     @ToInput
@@ -78,35 +78,35 @@ public class Marchio implements ViewModel,AutoCreate {
     
     
     @Entity
-    @Table(name="marchiacg")
-    public static class _MarchioACG implements Serializable {
+    @Table(name="stagioniacg")
+    public static class _StagioneACG implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdStagione")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeStagione")
         public String nome;
 
-    	public _MarchioACG() {
+    	public _StagioneACG() {
     	}
     }
     
      
     @Entity
-    @Table(name="marchinav")
-    public static class _MarchioNAV implements Serializable {
+    @Table(name="stagioninav")
+    public static class _StagioneNAV implements Serializable {
     	private static final long serialVersionUID = 1L;
 
     	@Id
-        @Column(name = "IdMarchio")
+        @Column(name = "IdStagione")
         public String id;
         
-        @Column(name = "NomeMarchio")
+        @Column(name = "NomeStagione")
         public String nome;
 
-    	public _MarchioNAV() {
+    	public _StagioneNAV() {
     	}
     }
     

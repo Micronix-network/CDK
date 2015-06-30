@@ -4,7 +4,7 @@
 <#assign crud_observers=action.getCardParam('crud_observers')!''/>
 <#assign type_flag=action.getCardParam('gui_type')!'n'/>
 <#assign popup_gui=action.getCardParam('popup_gui')!'false'/>
-<#import "../macro/javascript.ftl" as js>
+<#import "/template/gaf/macro/events.ftl" as events>
 <script type="text/javascript">
 $(document).ready(function(){	
     <#if type_flag=='n'>
@@ -33,7 +33,7 @@ $(document).ready(function(){
     </#if>
 
     <#if crud_observers!=''>
-        <@js.notify_observer crud_observers=crud_observers event_name='obj_updated' param=updatedId/>
+        <@events.notify_observer observers=crud_observers event_name='obj_updated' param=updatedId/>
     </#if>
 });
 </script>

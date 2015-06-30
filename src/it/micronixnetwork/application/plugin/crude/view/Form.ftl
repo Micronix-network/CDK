@@ -4,7 +4,7 @@
 
 
 <#import "macro/validation.ftl" as valid>
-<#import "macro/javascript.ftl" as js>	
+<#import "/template/gaf/macro/events.ftl" as events>	
 
 <script type="text/javascript">
     
@@ -64,7 +64,7 @@
         //Gestione check modifica valori
         $('.${cardId}_input_field').change(function(){
                 ${cardId}_chaged_values=true;
-                <@js.notify_observer crud_observers=crud_observers event_name='input_changed'/>
+                <@events.notify_observer observers=crud_observers event_name='input_changed'/>
         });
         
 
