@@ -42,7 +42,7 @@ public class Monitor implements ViewModel {
     @Column(name="Progressivo")
     public Integer id;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @FieldStyleDirective(tableCellStyle = "text-align:center")
     public String nomejob;
     

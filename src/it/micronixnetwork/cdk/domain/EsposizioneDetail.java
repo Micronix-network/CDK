@@ -35,7 +35,7 @@ public class EsposizioneDetail implements ViewModel {
     @Column(name = "IdLayout")
     public Integer id;
     
-    @ToList(filtered = true, hidden = true)
+    @ToList(filtered = true, hidden = true,fullTextSearch = false)
     @ToView
     @ToInput
     @HiddenRenderer
@@ -50,7 +50,7 @@ public class EsposizioneDetail implements ViewModel {
     @Column(name = "CodiceOggetto")
     public String codiceOggetto;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToView
     @ToInput
     @FieldStyleDirective(inputFieldStyle="width:300px;font-size:12px")

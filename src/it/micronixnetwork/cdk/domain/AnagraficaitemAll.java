@@ -27,21 +27,21 @@ public class AnagraficaitemAll implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToInput
     @ToView
     @Column(name = "CodiceItem")
     @ValidField(empty = false)
     public String id;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToInput
     @ToView
     @Column(name = "DescrizioneItem")
     @ValidField(empty = false)
     public String descrizioneItem;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToInput
     @ToView
     @Column(name = "ItemDescription")
@@ -55,10 +55,7 @@ public class AnagraficaitemAll implements ViewModel {
     @ValidField(empty = false)
     public String tipoItem;
 
-    @ToList(filtered = true)
-    @ToInput
-    @ToView
-    @Override
+  
     public String toString() {
         return "[ " + id + " ]";
     }

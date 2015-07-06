@@ -31,7 +31,7 @@ public class MappingDerivatiMaster implements ViewModel {
     @FieldStyleDirective(tableCellStyle = "width:70px")
     public String id;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @Column(name = "DescrizioneItem")
     public String descrizioneItem;
     

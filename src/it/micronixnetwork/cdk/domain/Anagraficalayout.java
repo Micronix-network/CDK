@@ -28,7 +28,7 @@ public class Anagraficalayout implements ViewModel {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToView
     @ToInput
     @FieldStyleDirective(tableCellStyle = "width:50px;text-align:center")
@@ -36,14 +36,14 @@ public class Anagraficalayout implements ViewModel {
     @Column(name = "CodiceLayout")
     public String id;
    
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToInput
     @ValidField(empty = false)
     @FieldStyleDirective(inputFieldStyle = "width:330px",tableCellStyle = "width:110px;text-align:left")
     @Column(name = "DescrizioneLayout")
     public String descrizioneLayout;
     
-    @ToList(filtered = true)
+    @ToList(filtered = true,fullTextSearch = false)
     @ToInput
     @ValidField(empty = false)
     @FieldStyleDirective(inputFieldStyle = "width:330px",tableCellStyle = "width:110px;text-align:left")
