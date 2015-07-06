@@ -5,6 +5,7 @@
 
 package it.micronixnetwork.application.plugin.crude.annotation.renderer;
 
+import it.micronixnetwork.application.plugin.crude.annotation.NULLClass;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -20,4 +21,5 @@ public @interface SelectRenderer{
     String dependFrom() default "nill";
     String activeOnChange() default "";
     boolean append() default false;
+    Class mappedObject() default NULLClass.class;
 }

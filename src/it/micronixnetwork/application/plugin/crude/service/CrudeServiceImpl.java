@@ -342,11 +342,11 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
             values.put("valenza", 0);
         }
 
-        return produceResult(query, wheres, values, orderBy, page, size, limit);
+        return produceResult(query, wheres, values, orderBy, page, size, limit,fields);
     }
 
     private SearchResult produceResult(final String query, final HashMap<String, String> wheres, final HashMap<String, Object> values, final List<String> orderBy, Integer page, Integer size,
-            final Integer limit) throws ServiceException {
+            final Integer limit,final Map<String, Field> fields) throws ServiceException {
         Session session = getCurrentSession();
 
         // Creazione del SearchEngine specifico per la ricerca
@@ -362,12 +362,22 @@ public class CrudeServiceImpl extends HibernateSupport implements CrudeService {
                 for (String key : values.keySet()) {
                     Object value = values.get(key);
                     if (value != null) {
+                        Field field=fields.get(key);
+                        ToList tolist=field.getAnnotation(ToList.class);
+                        
                         if (value instanceof String) {
                             String where = wheres.get(key);
                             if (where != null && where.indexOf("like") != -1) {
-                                addFieldPattern(key, "%#u%");
+                                value=((String)value).replace("%", "");
+                                if(tolist==null || tolist.fullTextSearch()){
+                                    addFieldPattern(key, "%#u%");
+                                }else{
+                                    
+                                    value=((String)value).replace("*", "%");
+                                }
                             }
                         }
+                        
                         setValue(key, value);
                     }
                 }

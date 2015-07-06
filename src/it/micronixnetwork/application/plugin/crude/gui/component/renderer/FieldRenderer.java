@@ -28,6 +28,7 @@ public abstract class FieldRenderer {
     protected final ToView toview;
     protected final ToInput toinput;
     protected final Conditional condition;
+ 
 
 
   
@@ -38,7 +39,6 @@ public abstract class FieldRenderer {
         this.toview = field.getAnnotation(ToView.class);
 	this.toinput = field.getAnnotation(ToInput.class);
         this.condition= field.getAnnotation(Conditional.class);
-   
     }
 
     public abstract StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException;

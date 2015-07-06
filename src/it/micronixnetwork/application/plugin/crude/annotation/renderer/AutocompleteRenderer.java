@@ -5,10 +5,11 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AutocompleteRenderer {
-    String map() default "nill";
     String jsonQuery() default "nill";
     String viewRule() default "nill";
-    String startValue() default "nill";
     String droppableFrom() default "";
+    String dependFrom() default "nill";
+    String activeOnChange() default "";
+    boolean append() default false;
 
 }

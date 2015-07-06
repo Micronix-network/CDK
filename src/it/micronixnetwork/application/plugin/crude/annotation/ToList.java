@@ -23,4 +23,5 @@ public @interface ToList {
     String draggable() default "";
     boolean downlink() default false;
     boolean append() default false;
+    boolean fullTextSearch() default true;
 }

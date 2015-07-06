@@ -1,7 +1,5 @@
 package it.micronixnetwork.application.plugin.crude.gui.component.renderer.element;
 
-import it.micronixnetwork.application.plugin.crude.annotation.ToInput;
-import it.micronixnetwork.application.plugin.crude.annotation.ToView;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.AutocompleteRenderer;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.FieldRenderer;
 
@@ -23,8 +21,9 @@ public class Autocomplete extends FieldRenderer {
     public StringBuffer renderInput(ValueStack stack,Object fieldValue) throws IOException {
 	StringBuffer result = new StringBuffer();
 	if (autoc != null) {
-	    
+	    String cardId = (String) stack.findValue("cardId");
 	    String autocId=calcInputId(stack);
+            String depend=autoc.dependFrom();
 	    result.append(writeLabel(null, stack,true));
 	    result.append("<input id=\""+autocId+"\" class=\""+TIP_FIELD+" "+getCardId(stack)+INPUT_FIELD+" "+getCardId(stack)+"_right_input_row\" style=\"" + getFieldStyle(field) + "\"");
 	    if(!autoc.viewRule().equals("nill")){
@@ -44,6 +43,12 @@ public class Autocomplete extends FieldRenderer {
 	    }
 	    result.append(">");
 	    result.append("</input>");
+            if(!depend.equals("nill")){
+                result.append("<input type=\"hidden\" id=\""+autocId+"_"+depend+"_id\"");  
+                result.append("value=\""+stack.findValue(depend)+"\"");	   
+                result.append(">");      
+                result.append("</input>");
+            }
 	    result=appendFieldParagraph(result, stack);
 	    result.append("<script type=\"text/javascript\">");
 	    result.append("$('#"+autocId+"').autocomplete({");
@@ -51,13 +56,17 @@ public class Autocomplete extends FieldRenderer {
 	    result.append("$.ajax({");
             result.append("url: \""+stack.findValue("calcAction('autocompleteQuery','crude',null)")+"\",");
             result.append("dataType: \"json\",");
-            result.append("data: {fieldValue: request.term,fieldName:\""+fieldName+"\",className:\""+targetClass.getName()+"\"},");
+            result.append("data: {fieldValue: request.term,fieldName:\""+fieldName+"\",className:\""+targetClass.getName()+"\"");
+            if(!depend.equals("nill")){
+                result.append(",dependValue:$('#"+autocId+"_"+depend+"_id').val()");
+            }
+            result.append("},");
             result.append("success: function( data ) {");
-            result.append("response(data)");
+            result.append("response(data);");
             result.append("}");
             result.append("})");
             result.append("},");
-            result.append("minLength: 2,");
+            result.append("minLength: 1,");
             result.append("focus: function( event, ui ) {");
             result.append("$('#"+autocId+"').val( ui.item.label );");
             result.append("return false;");
@@ -81,6 +90,12 @@ public class Autocomplete extends FieldRenderer {
                 result.append("$('#"+autocId+"').val(ui.draggable.attr('toDrop'));");
                 result.append("} });");
             }
+            
+            result.append("function "+cardId + "_active_"+targetClass.getSimpleName()+"_"+fieldName+"(caller,value,targetClass,uiid){");
+            result.append("$('#"+autocId+"_"+depend+"_id').val(value);");
+            result.append("$('#"+autocId+"_id').val('');");
+            result.append("$('#"+autocId+"').val('');");
+            result.append("}");
 	    result.append("</script>");
 	}
 	return result;

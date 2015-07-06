@@ -6,14 +6,12 @@ import it.micronixnetwork.application.plugin.crude.annotation.renderer.HiddenRen
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.SelectRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextAreaRenderer;
 import it.micronixnetwork.application.plugin.crude.annotation.renderer.TextRenderer;
-import it.micronixnetwork.application.plugin.crude.annotation.renderer.YesNoRenderer;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Autocomplete;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Contributors;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Hidden;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Select;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.Text;
 import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.TextArea;
-import it.micronixnetwork.application.plugin.crude.gui.component.renderer.element.YesNo;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -53,16 +51,6 @@ public class RendererFactory {
 	    result=getFromCache(keyCache,TextAreaRenderer.class);
 	    if(result==null){
 		result= new TextArea(targetClass, fieldname, field);
-		rendererCache.put(keyCache, result);
-	    }
-	}
-	
-
-	YesNoRenderer yni = field.getAnnotation(YesNoRenderer.class);
-	if (yni != null){
-	    result=getFromCache(keyCache,YesNo.class);
-	    if(result==null){
-		result= new YesNo(targetClass, fieldname, field);
 		rendererCache.put(keyCache, result);
 	    }
 	}

@@ -35,6 +35,11 @@ import com.opensymphony.xwork2.TextProvider;
 import com.opensymphony.xwork2.TextProviderFactory;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ValueStack;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.MapAttribute;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.MapDependKey;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.MapKey;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.MapLabel;
+import it.micronixnetwork.application.plugin.crude.annotation.renderer.MapOrder;
 import it.micronixnetwork.gaf.util.StringUtil;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -188,6 +193,88 @@ public abstract class CrudAction extends CardAction {
                 }
             }
         }
+        return result;
+    }
+    
+    public List listByClass(Class clazz,String depend,String dependValue){
+        List result=new ArrayList();
+        
+        ActionContext context = ActionContext.getContext();
+        ValueStack stack = context.getValueStack();
+        
+        MapField mapF=getMappedField(clazz);
+
+        if (mapF.keyF != null) {
+            
+            String query = "From " + clazz.getName();
+            
+            HashMap<String, String> wheres = null;
+            HashMap<String, Object> values = null;
+            
+            if(depend!=null && mapF.dependF!=null){
+                wheres = new LinkedHashMap<String, String>();
+                wheres.put(mapF.dependF.getName(), mapF.dependF.getName()+"=:"+mapF.dependF.getName());
+                Object value=null;
+                if(dependValue==null)
+                    value=stack.findValue(depend);
+                else
+                    value=Format.convert(mapF.dependF.getType(), dependValue, stack);
+                values = new LinkedHashMap<String, Object>();
+                values.put(mapF.dependF.getName(), value);
+                query=QueryAutoCompose.composeQueryString(query, wheres);
+            }
+            
+            if(mapF.orderF!=null){
+                MapOrder order_a = mapF.orderF.getAnnotation(MapOrder.class);
+                boolean des=order_a.descendant();
+                query+=" order by "+mapF.orderF.getName();
+                if(des){
+                    query+=" DESC";
+                }else{
+                    query+=" ASC";
+                }
+            }
+
+            result=(List)executeHQLQuery(query,values, false);
+        }
+        
+        return result;
+    }
+    
+    public MapField getMappedField(Class clazz){
+        MapField result=new MapField();
+        Map<String, Field> fields = FieldUtil.retriveWorkFields(clazz);
+        if (!fields.isEmpty()) {
+            for (String fieldName : fields.keySet()) {
+                Field field = fields.get(fieldName);
+
+                MapAttribute att_a = field.getAnnotation(MapAttribute.class);
+                if (att_a != null) {
+                    result.attributesF.add(field);
+                }
+
+                MapKey key_a = field.getAnnotation(MapKey.class);
+                if (key_a != null) {
+                    result.keyF = field;
+                }
+
+                MapLabel label_a = field.getAnnotation(MapLabel.class);
+                if (label_a != null) {
+                    result.labelF = field;
+                }
+
+                MapOrder order_a = field.getAnnotation(MapOrder.class);
+                if (order_a != null) {
+                    result.orderF = field;
+                }
+                
+                MapDependKey depend_a = field.getAnnotation(MapDependKey.class);
+                if (depend_a != null) {
+                    result.dependF = field;
+                }
+            }
+        }
+        
         return result;
     }
 
@@ -439,6 +526,8 @@ public abstract class CrudAction extends CardAction {
             throw new UnauthorizedUser("User without right role");
         }
     }
+    
+    
 
     public String getText(String aTextName) {
         if (localProvider != null) {
@@ -525,5 +614,14 @@ public abstract class CrudAction extends CardAction {
     abstract protected boolean checkRole();
 
     abstract protected String doIt() throws ApplicationException;
+    
+    
+    public static class MapField{
+        public Field keyF = null;
+        public Field labelF = null;
+        public Field orderF = null;
+        public Field dependF = null;
+        public List<Field> attributesF = new ArrayList<>();
+    }
 
 }
